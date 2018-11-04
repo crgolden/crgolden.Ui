@@ -43,6 +43,6 @@ export abstract class AppService {
   }
 
   protected get baseUrl(): string {
-    return 'https://ceflicensing.azurewebsites.net';
+    return 'https://clarity-api.azurewebsites.net';
   }
 }
