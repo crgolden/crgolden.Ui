@@ -9,7 +9,7 @@ import { AccountService } from '../account/account.service';
 })
 export class NavMenuComponent implements OnInit {
 
-  isLoggedIn = false;
+  isLoggedIn: boolean;
 
   constructor(
     private readonly router: Router,
