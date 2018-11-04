@@ -1,6 +1,7 @@
 import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs/index';
+import { environment } from '../environments/environment';
 
 export abstract class AppService {
 
@@ -34,7 +35,6 @@ export abstract class AppService {
   }
 
   protected get baseUrl(): string {
-    // return 'https://clarity-api.azurewebsites.net';
-    return 'https://localhost:5001';
+    return environment.apiUrl;
   }
 }
