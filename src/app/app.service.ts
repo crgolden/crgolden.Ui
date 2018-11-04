@@ -1,12 +1,8 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs/index';
 
-@Injectable()
 export abstract class AppService {
-
-  @Output() isLoggedIn = new EventEmitter<boolean>();
 
   protected constructor(protected readonly router: Router) {
   }
@@ -31,15 +27,8 @@ export abstract class AppService {
   protected get headers(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.token}`
+      //'Authorization': `Bearer ${this.token}`
     });
-  }
-
-  protected get token(): string {
-    if (typeof window === 'undefined') {
-      return null;
-    }
-    return localStorage.getItem('token');
   }
 
   protected get baseUrl(): string {

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
+  NavigationExtras,
+  Params,
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot
@@ -15,11 +17,14 @@ export class AppCanActivate implements CanActivate {
     private readonly accountService: AccountService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
     if (this.accountService.hasToken()) {
       return true;
     } else {
-      this.router.navigate(['Account/Login'], { queryParams: { returnUrl: state.url } });
+      this.router.navigate(['Account/Login'], {
+        queryParams: {
+          returnUrl: state.url
+        } as Params
+      } as NavigationExtras);
       return false;
     }
   }

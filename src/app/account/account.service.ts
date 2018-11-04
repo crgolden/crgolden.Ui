@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/index';
+import { BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators/index';
 import { AppService } from '../app.service';
 import { Login } from './login/login';
@@ -9,6 +10,8 @@ import { Login } from './login/login';
 @Injectable()
 export class AccountService extends AppService {
 
+  isLoggedIn: BehaviorSubject<boolean>;
+  email: string;
   returnUrl: string;
 
   constructor(
@@ -17,10 +20,11 @@ export class AccountService extends AppService {
     protected readonly router: Router) {
     super(router);
     route.queryParams.subscribe((params: Params) => this.returnUrl = params['returnUrl'] || params['ReturnUrl']);
+    this.isLoggedIn = new BehaviorSubject<boolean>(this.hasToken());
   }
 
-  login(value: Login): Observable<boolean> {
-    const body = JSON.stringify(value);
+  login(model: Login): Observable<boolean> {
+    const body = JSON.stringify(model);
     const options = { headers: this.headers };
 
     return this.http
@@ -29,7 +33,8 @@ export class AccountService extends AppService {
         (res: string) => {
           this.token = res;
           this.expiration = new Date();
-          this.isLoggedIn.emit(true);
+          this.email = model.email;
+          this.isLoggedIn.next(true);
           return true;
         }),
         catchError<boolean, never>(this.handleError));
@@ -38,17 +43,27 @@ export class AccountService extends AppService {
   logout(): void {
     this.token = undefined;
     this.expiration = undefined;
-    this.isLoggedIn.emit(false);
+    this.email = undefined;
+    this.isLoggedIn.next(false);
   }
 
   hasToken = (): boolean => {
-    const tokenExists = typeof this.token === 'string' && this.token.length > 0;
-    const tokenNotExpired = typeof(this.expiration) !== 'undefined' && this.expiration.getTime() >= Date.now();
-    return (tokenExists && tokenNotExpired);
+    const token = this.token;
+    const expiration = this.expiration;
+    const tokenExists = typeof token === 'string' && token.length > 0;
+    const tokenNotExpired = expiration != null && expiration.getTime() >= Date.now();
+    return tokenExists && tokenNotExpired;
   }
 
-  protected set token(token: string) {
-    if (typeof window === 'undefined'){
+  get token(): string {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+    return localStorage.getItem('token');
+  }
+
+  set token(token: string) {
+    if (typeof window === 'undefined') {
       return;
     }
     if (typeof token !== 'undefined') {
@@ -58,23 +73,23 @@ export class AccountService extends AppService {
     }
   }
 
-  private get expiration(): Date {
-    const expiration = new Date();
-    if (typeof window !== 'undefined') {
-      const expirationString = localStorage.getItem('expiration');
-      let expirationNumber = 0;
-      if (expirationString != null) {
-        expirationNumber = parseFloat(expirationString);
-      }
-      if (expirationNumber > 0) {
-        expiration.setTime(expirationNumber);
-      }
+  get expiration(): Date {
+    if (typeof window === 'undefined') {
+      return undefined;
     }
-    return expiration;
+    const expirationString = localStorage.getItem('expiration');
+    if (typeof expirationString !== 'string' || expirationString.length <= 0) {
+      return undefined;
+    }
+    const expirationNumber = parseFloat(expirationString);
+    if (expirationNumber <= 0) {
+      return undefined;
+    }
+    return new Date(expirationNumber);
   }
 
-  private set expiration(time: Date) {
-    if (typeof window === 'undefined'){
+  set expiration(time: Date) {
+    if (typeof window === 'undefined') {
       return;
     }
     if (typeof time !== 'undefined') {
