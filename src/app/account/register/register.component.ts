@@ -3,32 +3,32 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppComponent } from '../../app.component';
-import { AccountService } from '../account.service';
-import { Login } from './login';
+import { AccountService } from '../account.service'
+import { Register } from './register'
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
 })
-export class LoginComponent extends AppComponent {
+export class RegisterComponent extends AppComponent {
 
-  model: Login;
+  model: Register;
 
   constructor(
     protected readonly titleService: Title,
     private readonly accountService: AccountService,
     private readonly router: Router) {
     super(titleService);
-    this.titleService.setTitle('Clarity: Login');
-    this.model = new Login();
+    this.titleService.setTitle('Clarity: Register');
+    this.model = new Register();
   }
 
-  login(form: NgForm): void {
+  register(form: NgForm) {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
     this.accountService
-      .login(this.model)
+      .register(this.model)
       .subscribe(
         (res: boolean) => {
           if (!res) { return; }

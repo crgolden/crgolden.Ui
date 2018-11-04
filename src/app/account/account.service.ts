@@ -6,12 +6,14 @@ import { BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators/index';
 import { AppService } from '../app.service';
 import { Login } from './login/login';
+import { Register } from './register/register';
+import { User } from './user';
 
 @Injectable()
 export class AccountService extends AppService {
 
   isLoggedIn: BehaviorSubject<boolean>;
-  email: string;
+  currentUser: User;
   returnUrl: string;
 
   constructor(
@@ -28,12 +30,12 @@ export class AccountService extends AppService {
     const options = { headers: this.headers };
 
     return this.http
-      .post<string>(`${this.baseUrl}/v1/Account/Login`, body, options)
+      .post<User>(`${this.baseUrl}/v1/Account/Login`, body, options)
       .pipe(map(
-        (res: string) => {
-          this.token = res;
+        (res: User) => {
+          this.token = res.token;
           this.expiration = new Date();
-          this.email = model.email;
+          this.currentUser = res;
           this.isLoggedIn.next(true);
           return true;
         }),
@@ -43,8 +45,25 @@ export class AccountService extends AppService {
   logout(): void {
     this.token = undefined;
     this.expiration = undefined;
-    this.email = undefined;
+    delete this.currentUser;
     this.isLoggedIn.next(false);
+  }
+
+  register(model: Register): Observable<boolean> {
+    const body = JSON.stringify(model);
+    const options = { headers: this.headers };
+
+    return this.http
+      .post<User>(`${this.baseUrl}/v1/Account/Register`, body, options)
+      .pipe(map(
+        (res: User) => {
+          this.token = res.token;
+          this.expiration = new Date();
+          this.currentUser = res;
+          this.isLoggedIn.next(true);
+          return true;
+        }),
+        catchError<boolean, never>(this.handleError));
   }
 
   hasToken = (): boolean => {

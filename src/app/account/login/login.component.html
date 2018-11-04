@@ -12,18 +12,22 @@
     <form #f="ngForm" ngNativeValidate (ngSubmit)="login(f)">
       <div class="form-group">
         <label for="email">Email</label>
-        <input [(ngModel)]="model.email" id="email" name="email" type="text" required class="form-control" placeholder="Email" validateEmail>
+        <input id="email" name="email" type="text" class="form-control" placeholder="Email" required email
+               [(ngModel)]="model.email">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input [(ngModel)]="model.password" id="password" name="password" type="password" required class="form-control" placeholder="Password">
+        <input id="password" name="password" type="password" class="form-control" placeholder="Password" required
+               [(ngModel)]="model.password">
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Login</button>
       </div>
     </form>
-    <div *ngIf="error" class="alert alert-danger" role="alert">
-      <strong>Oops!</strong> {{error}}
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
     </div>
   </div>
   <div class="col-sm-1 col-md-2"></div>

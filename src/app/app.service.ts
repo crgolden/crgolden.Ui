@@ -7,21 +7,23 @@ export abstract class AppService {
   protected constructor(protected readonly router: Router) {
   }
 
-  protected handleError(error: HttpErrorResponse): Observable<never> {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
+  protected handleError(response: HttpErrorResponse): Observable<never> {
+    const errors = new Array<string>();
+    if (response.status < 500 && response.error && response.error.errors) {
+      response.error.errors.forEach(error => {
+        if (error.description) {
+          errors.push(error.description);
+        }
+        switch (response.status) {
+          case 401:
+            this.router.navigate([`/Account/Login`]);
+            break;
+        }
+      });
     } else {
-      switch (error.status) {
-        case 401:
-          this.router.navigate([`/Account/Login`]);
-          break;
-        default:
-          console.error(
-            `Backend returned code ${error.status}, ` +
-            `body was: ${error.error}`);
-      }
+      errors.push('Something bad happened; please try again later.');
     }
-    return throwError('Something bad happened; please try again later.');
+    return throwError(errors);
   }
 
   protected get headers(): HttpHeaders {
@@ -32,6 +34,7 @@ export abstract class AppService {
   }
 
   protected get baseUrl(): string {
-    return 'https://clarity-api.azurewebsites.net';
+    // return 'https://clarity-api.azurewebsites.net';
+    return 'https://localhost:5001';
   }
 }

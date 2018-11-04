@@ -6,7 +6,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faHome,
   faSignIn,
-  faSignOut
+  faSignOut,
+  faUserPlus
 } from '@fortawesome/pro-light-svg-icons';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,7 +17,8 @@ import { AccountService } from './account/account.service';
 library.add(
   faHome,
   faSignIn,
-  faSignOut
+  faSignOut,
+  faUserPlus
 );
 
 @NgModule({
