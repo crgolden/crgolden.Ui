@@ -29,12 +29,16 @@
               <fa-icon [icon]="['fal', 'user-cog']"></fa-icon> Licenses
             </a>
           </li>-->
-          <li class="nav-item" [hidden]="!isLoggedIn">
+        </ul>
+        <ul class="navbar-nav" [hidden]="!isLoggedIn">
+          <li class="nav-item">
             <a class="nav-link" (click)="logout()" style="cursor: pointer">
               <fa-icon [icon]="['fal', 'sign-out']"></fa-icon> Logout
             </a>
           </li>
-          <li class="nav-item" [hidden]="isLoggedIn" [routerLinkActive]="['link-active']">
+        </ul>
+        <ul class="navbar-nav" [hidden]="isLoggedIn">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link" [routerLink]="['/Account/Login']">
               <fa-icon [icon]="['fal', 'sign-in']"></fa-icon> Login
             </a>
