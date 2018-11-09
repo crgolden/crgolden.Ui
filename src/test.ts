@@ -6,6 +6,26 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+import {
+  faHome,
+  faSignIn,
+  faSignOut,
+  faUser,
+  faUserPlus,
+  faAt,
+  faEdit
+} from '@fortawesome/pro-light-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+
+library.add(
+  faHome,
+  faSignIn,
+  faSignOut,
+  faUser,
+  faUserPlus,
+  faAt,
+  faEdit
+);
 
 declare const require: any;
 

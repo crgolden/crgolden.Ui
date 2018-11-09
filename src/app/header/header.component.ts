@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Account } from '../account/account';
 import { AccountService } from '../account/account.service';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.scss']
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
-export class NavMenuComponent implements OnInit {
+export class HeaderComponent implements OnInit {
 
-  isLoggedIn: boolean;
+  account: Account;
 
   constructor(
     private readonly router: Router,
@@ -17,7 +18,7 @@ export class NavMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.accountService.isLoggedIn.subscribe((result: boolean) => this.isLoggedIn = result);
+    this.accountService.account.subscribe((account: Account) => this.account = account);
   }
 
   logout(): void {

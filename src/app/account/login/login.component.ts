@@ -1,27 +1,32 @@
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AppComponent } from '../../app.component';
+import { Params, ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../account.service';
 import { Login } from './login';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-account-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends AppComponent {
+export class LoginComponent implements OnInit {
 
   model: Login;
+  errors: Array<string>;
+  returnUrl: string;
 
   constructor(
-    protected readonly titleService: Title,
+    private readonly titleService: Title,
     private readonly accountService: AccountService,
+    private readonly route: ActivatedRoute,
     private readonly router: Router) {
-    super(titleService);
-    this.titleService.setTitle('Clarity: Login');
     this.model = new Login();
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle('Clarity: Login');
+    this.route.queryParams.subscribe((params: Params) => this.returnUrl = params['returnUrl']);
   }
 
   login(form: NgForm): void {
@@ -30,14 +35,26 @@ export class LoginComponent extends AppComponent {
     this.accountService
       .login(this.model)
       .subscribe(
-        (res: boolean) => {
-          if (!res) { return; }
-          const returnUrl = this.accountService.returnUrl;
-          this.accountService.returnUrl = undefined;
-          if (typeof returnUrl === 'string' && returnUrl.length > 0) {
-            this.router.navigate([returnUrl]);
-          } else {
-            this.router.navigate(['/Home']);
+        (response: Login) => {
+          if (response.succeeded) {
+            if (typeof this.returnUrl === 'string' && this.returnUrl.length > 0) {
+              this.router.navigate([this.returnUrl]);
+            } else {
+              this.router.navigate(['/Home']);
+            }
+            return;
+          }
+          if (response.isNotAllowed) {
+            this.errors.push(response.message);
+            return;
+          }
+          if (response.requiresTwoFactor) {
+            this.router.navigate(['/loginWith2fa']);
+            return;
+          }
+          if (response.isLockedOut) {
+            this.router.navigate(['/lockout']);
+            return;
           }
         },
         (errors: Array<string>) => this.errors = errors);

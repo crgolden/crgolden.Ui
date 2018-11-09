@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,9 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
-  errors: Array<string>;
-
-  public constructor(protected readonly titleService: Title) {
-  }
 }

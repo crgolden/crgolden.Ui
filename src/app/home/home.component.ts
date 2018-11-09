@@ -1,16 +1,17 @@
 import { Title } from '@angular/platform-browser';
-import { Component } from '@angular/core';
-import { AppComponent } from '../app.component';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent extends AppComponent {
+export class HomeComponent implements OnInit {
 
   constructor(protected readonly titleService: Title) {
-    super(titleService);
+  }
+
+  ngOnInit(): void {
     this.titleService.setTitle('Clarity: Home');
   }
 }

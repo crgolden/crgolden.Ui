@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://clarity-api.azurewebsites.net'
+  apiUrl: 'https://clarity-api.azurewebsites.net/v1'
 };

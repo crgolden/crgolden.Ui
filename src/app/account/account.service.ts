@@ -1,121 +1,59 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/index';
 import { BehaviorSubject } from 'rxjs';
-import { map, catchError } from 'rxjs/operators/index';
-import { AppService } from '../app.service';
+import { map } from 'rxjs/operators/index';
+import { environment } from '../../environments/environment';
+import { BaseModelService } from '../base/base-model.service';
+import { ConfirmEmail } from './confirm-email/confirm-email';
 import { Login } from './login/login';
 import { Register } from './register/register';
-import { User } from './user';
+import { Account } from './account';
 
 @Injectable()
-export class AccountService extends AppService {
+export class AccountService extends BaseModelService<Account> {
 
-  isLoggedIn: BehaviorSubject<boolean>;
-  currentUser: User;
-  returnUrl: string;
+  account: BehaviorSubject<Account>;
 
-  constructor(
-    private readonly http: HttpClient,
-    private readonly route: ActivatedRoute,
-    protected readonly router: Router) {
-    super(router);
-    route.queryParams.subscribe((params: Params) => this.returnUrl = params['returnUrl'] || params['ReturnUrl']);
-    this.isLoggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  constructor(protected readonly http: HttpClient) {
+    super('Account', http);
+    this.account = new BehaviorSubject<Account>(undefined);
+    if (typeof window === 'undefined') { return; }
+    const account = window.localStorage.getItem('account');
+    if (typeof account !== 'string' || account.length <= 0) { return; }
+    this.account.next(JSON.parse(account));
   }
 
-  login(model: Login): Observable<boolean> {
-    const body = JSON.stringify(model);
-    const options = { headers: this.headers };
-
+  confirmEmail(model: ConfirmEmail): Observable<string> {
     return this.http
-      .post<User>(`${this.baseUrl}/v1/Account/Login`, body, options)
-      .pipe(map(
-        (res: User) => {
-          this.token = res.token;
-          this.expiration = new Date();
-          this.currentUser = res;
-          this.isLoggedIn.next(true);
-          return true;
-        }),
-        catchError<boolean, never>(this.handleError));
+      .post<string>(`${environment.apiUrl}/Account/ConfirmEmail`, JSON.stringify(model))
+      .pipe(map((response: string) => response));
+  }
+
+  login(model: Login): Observable<Login> {
+    return this.http
+      .post<Login>(`${environment.apiUrl}/Account/Login`, JSON.stringify(model))
+      .pipe(map((response: Login) => {
+        this.account.next(response.account);
+        if (typeof window === 'undefined') { return response; }
+        window.localStorage.setItem('account', JSON.stringify(response.account));
+        return response;
+      }));
   }
 
   logout(): void {
-    this.token = undefined;
-    this.expiration = undefined;
-    delete this.currentUser;
-    this.isLoggedIn.next(false);
+    this.http
+      .post(`${environment.apiUrl}/Account/Logout`, null)
+      .subscribe(() => {
+        this.account.next(null);
+        if (typeof window === 'undefined') { return; }
+        window.localStorage.removeItem('account');
+      });
   }
 
-  register(model: Register): Observable<boolean> {
-    const body = JSON.stringify(model);
-    const options = { headers: this.headers };
-
+  register(model: Register): Observable<string> {
     return this.http
-      .post<User>(`${this.baseUrl}/v1/Account/Register`, body, options)
-      .pipe(map(
-        (res: User) => {
-          this.token = res.token;
-          this.expiration = new Date();
-          this.currentUser = res;
-          this.isLoggedIn.next(true);
-          return true;
-        }),
-        catchError<boolean, never>(this.handleError));
-  }
-
-  hasToken = (): boolean => {
-    const token = this.token;
-    const expiration = this.expiration;
-    const tokenExists = typeof token === 'string' && token.length > 0;
-    const tokenNotExpired = expiration != null && expiration.getTime() >= Date.now();
-    return tokenExists && tokenNotExpired;
-  }
-
-  get token(): string {
-    if (typeof window === 'undefined') {
-      return undefined;
-    }
-    return localStorage.getItem('token');
-  }
-
-  set token(token: string) {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    if (typeof token !== 'undefined') {
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('token');
-    }
-  }
-
-  get expiration(): Date {
-    if (typeof window === 'undefined') {
-      return undefined;
-    }
-    const expirationString = localStorage.getItem('expiration');
-    if (typeof expirationString !== 'string' || expirationString.length <= 0) {
-      return undefined;
-    }
-    const expirationNumber = parseFloat(expirationString);
-    if (expirationNumber <= 0) {
-      return undefined;
-    }
-    return new Date(expirationNumber);
-  }
-
-  set expiration(time: Date) {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    if (typeof time !== 'undefined') {
-      const expiration = time.getTime() + 30 * 60000;
-      localStorage.setItem('expiration', JSON.stringify(expiration));
-    } else {
-      localStorage.removeItem('expiration');
-    }
+      .post<string>(`${environment.apiUrl}/Account/Register`, JSON.stringify(model))
+      .pipe(map((response: string) => response));
   }
 }
