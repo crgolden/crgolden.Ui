@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2><fa-icon [icon]="['fal', 'user']"></fa-icon> Account</h2>
+    <hr />
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/Account/Manage/Profile" routerLinkActive="active">
+          Profile
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/Account/Manage/ChangePassword" routerLinkActive="active">
+          Password
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="authenticationSchemes.length > 0">
+        <a class="nav-link" routerLink="/Account/Manage/ExternalLogins" routerLinkActive="active">
+          External Logins
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/Account/Manage/TwoFactorAuthentication" routerLinkActive="active">
+          Two-factor authentication
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/Account/Manage/PersonalData" routerLinkActive="active">
+          Personal data
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-9">
+    <router-outlet></router-outlet>
+  </div>
+</div>

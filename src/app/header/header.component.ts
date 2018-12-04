@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Account } from '../account/account';
+import { User } from 'oidc-client';
 import { AccountService } from '../account/account.service';
 
 @Component({
@@ -10,19 +9,12 @@ import { AccountService } from '../account/account.service';
 })
 export class HeaderComponent implements OnInit {
 
-  account: Account;
+  user: User;
 
-  constructor(
-    private readonly router: Router,
-    private readonly accountService: AccountService) {
+  constructor(private readonly accountService: AccountService) {
   }
 
   ngOnInit(): void {
-    this.accountService.account.subscribe((account: Account) => this.account = account);
-  }
-
-  logout(): void {
-    this.accountService.logout();
-    this.router.navigate(['/Home']);
+    this.accountService.user.subscribe((user: User) => this.user = user);
   }
 }

@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:5001/v1'
+  apiUrl: 'https://localhost:5001',
+  identityUrl: 'https://localhost:6001',
+  identityClientId: '920e1300-7266-4847-9401-6b189db9f14c'
 };
 
 /*

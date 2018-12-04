@@ -1,8 +1,7 @@
-import { OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Component } from '@angular/core';
 import { Params, ActivatedRoute, Router } from '@angular/router';
-import { ConfirmEmail } from './confirm-email';
+import { ConfirmEmail } from '../models/confirm-email';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -29,7 +28,7 @@ export class ConfirmEmailComponent implements OnInit {
         code: params['code'],
         userId: params['userId']
       };
-      if (typeof model.userId !== 'undefined' && typeof model.code !== 'undefined') {
+      if (model.userId != null && model.code != null) {
         this.accountService
           .confirmEmail(model)
           .subscribe(

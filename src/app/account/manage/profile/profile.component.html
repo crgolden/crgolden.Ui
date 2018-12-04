@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="col-12 col-md-6">
+    <form #f="ngForm"
+          ngNativeValidate
+          (ngSubmit)="profile(f)">
+      <div class="form-group row">
+        <label for="firstName" class="col-4 col-form-label">
+          First Name
+        </label>
+        <div class="col-8">
+          <input id="firstName"
+                 name="firstName"
+                 type="text"
+                 class="form-control"
+                 required
+                 #firstName="ngModel"
+                 [(ngModel)]="model.firstName" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="lastName" class="col-4 col-form-label">
+          Last Name
+        </label>
+        <div class="col-8">
+          <input id="lastName"
+                 name="lastName"
+                 type="text"
+                 class="form-control"
+                 required
+                 #lastName="ngModel"
+                 [(ngModel)]="model.lastName" />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email" class="col-4 col-form-label">
+          Email
+        </label>
+        <div class="col-8">
+          <div>
+            <div [ngClass]="{'input-group': model.emailConfirmed}">
+              <input id="email"
+                     name="email"
+                     type="email"
+                     class="form-control"
+                     required
+                     email
+                     #email="ngModel"
+                     [(ngModel)]="model.email">
+              <div class="input-group-append" *ngIf="model.emailConfirmed">
+                <span class="input-group-text text-success" aria-hidden="true">
+                  <fa-icon [icon]="['fal', 'check']"></fa-icon>
+                </span>
+              </div>
+              <div *ngIf="!model.emailConfirmed">
+                <button type="button"
+                        (click)="sendVerificationEmail()"
+                        class="btn btn-link">
+                  Send verification email
+                </button>
+                <div *ngIf="message" class="alert alert-success" role="alert">
+                  {{message}}
+                </div>
+                <div *ngFor="let error of errors">
+                  <div class="alert alert-danger" role="alert">
+                    {{error}}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="phoneNumber" class="col-4 col-form-label">
+          Phone Number
+        </label>
+        <div class="col-8">
+          <input id="phoneNumber"
+                 name="phoneNumber"
+                 type="tel"
+                 title="Format: 123-456-7890"
+                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                 #phoneNumber="ngModel"
+                 [(ngModel)]="model.phoneNumber"
+                 class="form-control"
+                 required
+                 maxlength="12"
+                 minlength="12" />
+        </div>
+      </div>
+      <button type="submit"
+              class="btn btn-default"
+              [disabled]=" f.pristine || f.invalid">
+        Save
+      </button>
+    </form>
+  </div>
+</div>

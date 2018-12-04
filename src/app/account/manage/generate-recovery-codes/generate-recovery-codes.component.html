@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">
+      <p>
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        <strong>Put these codes in a safe place.</strong>
+      </p>
+      <p>
+        If you lose your device and don't have the recovery codes you will lose access to your account.
+      </p>
+      <p>
+        Generating new recovery codes does not change the keys used in authenticator apps. If you wish to change the key
+        used in an authenticator app you should <a routerLink="/Account/Manage/ResetAuthenticator">reset your authenticator keys.</a>
+      </p>
+    </div>
+    <button class="btn btn-danger"
+            type="button"
+            (click)="generateRecoveryCodes()">
+      Generate Recovery Codes
+    </button>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="model.recoveryCodes.length > 0">
+  <div class="col-12">
+    <span *ngIf="model.message">{{model.message}}</span>
+    <span *ngFor="let recoveryCode of model.recoveryCodes">
+      <code>{{recoveryCode}}</code><br />
+    </span>
+  </div>
+</div>

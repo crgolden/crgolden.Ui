@@ -2,38 +2,44 @@ import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,
   HttpEvent,
-  HttpHeaders,
   HttpResponse,
   HttpErrorResponse,
   HttpRequest,
-  HttpHandler
+  HttpHandler,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs/index';
-import { map, catchError } from 'rxjs/operators/index';
+import { Observable, throwError } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
+import { User } from 'oidc-client';
+import { AccountService } from './account/account.service'
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
 
-  constructor(protected readonly router: Router) {
+  constructor(
+    protected readonly accountService: AccountService,
+    protected readonly router: Router) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const request = req.clone({
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      }),
-      withCredentials: true
-    });
-    return next
-      .handle(request)
-      .pipe(
-        map((event: HttpEvent<any>) => {
-          if (event instanceof HttpResponse) {
-          }
-          return event;
-        }),
-        catchError<HttpEvent<any>, never>(this.handleError));
+    return this.accountService.user.pipe(mergeMap((user: User) => {
+      req = req.clone({
+        setHeaders: {
+          'Authorization': user != null ? `${user.token_type} ${user.access_token}` : '',
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+      return next
+        .handle(req)
+        .pipe(
+          map((event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+            }
+            return event;
+          }),
+          catchError<HttpEvent<any>, never>(this.handleError));
+    }));
   }
 
   private handleError(response: HttpErrorResponse): Observable<never> {

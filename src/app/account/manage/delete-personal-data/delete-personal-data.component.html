@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">
+      <p>
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+      </p>
+    </div>
+    <div>
+      <form #f="ngForm"
+            ngNativeValidate
+            (ngSubmit)="deletePersonalData(f)">
+        <div *ngIf="requirePassword">
+          <div class="form-group row">
+            <label for="password" class="col-4 col-form-label">Password</label>
+            <div class="col-8">
+              <input id="password"
+                     name="password"
+                     type="password"
+                     class="form-control"
+                     placeholder="Password"
+                     required
+                     #password="ngModel"
+                     [(ngModel)]="model.password">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-danger"
+                type="submit"
+                [disabled]="f.invalid">
+          Delete data and close my account
+        </button>
+        <div *ngFor="let error of errors">
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

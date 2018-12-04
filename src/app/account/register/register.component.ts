@@ -1,9 +1,8 @@
-import { OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Register } from '../models/register';
 import { AccountService } from '../account.service';
-import { Register } from './register';
 
 @Component({
   selector: 'app-register',

@@ -1,32 +1,58 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DetailsComponent } from './details/details.component';
 import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
+import { LoginCallbackComponent } from './login-callback/login-callback.component';
+import { LogoutCallbackComponent } from './logout-callback/logout-callback.component';
 import { RegisterComponent } from './register/register.component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
-import { AccountLoggedIn } from './account.logged-in';
-import { AccountNotLoggedIn } from './account.not-logged-in';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AppLoggedIn } from '../app.logged-in';
+import { AppNotLoggedIn } from '../app.not-logged-in';
 
 const routes: Routes = [
   {
-    path: 'Details/:id',
-    component: DetailsComponent,
-    canActivate: [AccountLoggedIn]
-  },
-  {
     path: 'ConfirmEmail',
     component: ConfirmEmailComponent,
-    canActivate: [AccountNotLoggedIn]
+    canActivate: [AppNotLoggedIn]
+  },
+  {
+    path: 'ForgotPassword',
+    component: ForgotPasswordComponent,
+    canActivate: [AppNotLoggedIn]
   },
   {
     path: 'Login',
     component: LoginComponent,
-    canActivate: [AccountNotLoggedIn]
+    canActivate: [AppNotLoggedIn]
+  },
+  {
+    path: 'LoginCallback',
+    component: LoginCallbackComponent
+  },
+  {
+    path: 'Logout',
+    component: LogoutComponent,
+    canActivate: [AppLoggedIn]
+  },
+  {
+    path: 'LogoutCallback',
+    component: LogoutCallbackComponent
   },
   {
     path: 'Register',
     component: RegisterComponent,
-    canActivate: [AccountNotLoggedIn]
+    canActivate: [AppNotLoggedIn]
+  },
+  {
+    path: 'ResetPassword',
+    component: ResetPasswordComponent,
+    canActivate: [AppNotLoggedIn]
+  },
+  {
+    path: 'Manage',
+    loadChildren: './manage/manage.module#ManageModule'
   }
 ];
 
