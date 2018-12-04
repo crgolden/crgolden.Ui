@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12" *ngIf="!model.recoveryCodes || !model.recoveryCodes.length > 0">
+  <div class="col-12" *ngIf="!model.recoveryCodes || model.recoveryCodes.length <= 0">
     <p>To use an authenticator app go through the following steps:</p>
     <ol class="list">
       <li>
