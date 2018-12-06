@@ -18,7 +18,9 @@ export class AccountService {
     'email',
     'phone',
     'address',
-    'api1');
+    'api1',
+    'api2',
+    'identity');
   private readonly responseTypes = new Array<string>(
     'id_token',
     'token');
