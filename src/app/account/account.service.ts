@@ -19,7 +19,8 @@ export class AccountService {
     'phone',
     'address',
     'api1',
-    'api2',
+    'api2.full_access',
+    'api2.read_only',
     'identity');
   private readonly responseTypes = new Array<string>(
     'id_token',
