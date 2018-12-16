@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Profile } from './models/profile';
 import { AuthenticationScheme } from './models/authentication-scheme';
@@ -15,7 +15,21 @@ import { DeletePersonalData } from './models/delete-personal-data';
 @Injectable()
 export class ManageService {
 
+  hasPassword: BehaviorSubject<boolean>;
+  enableAuthenticator: BehaviorSubject<EnableAuthenticator>;
+  externalLogins: BehaviorSubject<ExternalLogins>;
+  twoFactorAuthentication: BehaviorSubject<TwoFactorAuthentication>;
+
   constructor(private readonly http: HttpClient) {
+    this.hasPassword = new BehaviorSubject<boolean>(undefined);
+    this.enableAuthenticator = new BehaviorSubject<EnableAuthenticator>(undefined);
+    this.externalLogins = new BehaviorSubject<ExternalLogins>(undefined);
+    this.twoFactorAuthentication = new BehaviorSubject<TwoFactorAuthentication>(undefined);
+  }
+
+  addExternalLogin(name: string): Observable<void> {
+    return this.http.get<void>(
+      `${environment.identityUrl}/Manage/LinkLogin?provider=${name}`);
   }
 
   changePassword(model: ChangePassword): Observable<string> {
@@ -42,19 +56,9 @@ export class ManageService {
         });
   }
 
-  enableAuthenticator(): Observable<EnableAuthenticator> {
-    return this.http
-      .get<EnableAuthenticator>(`${environment.identityUrl}/Manage/EnableAuthenticator`);
-  }
-
   externalAuthenticationSchemes(): Observable<Array<AuthenticationScheme>> {
     return this.http
       .get<Array<AuthenticationScheme>>(`${environment.identityUrl}/Manage/ExternalAuthenticationSchemes`);
-  }
-
-  externalLogins(): Observable<ExternalLogins> {
-    return this.http
-      .get<ExternalLogins>(`${environment.identityUrl}/Manage/ExternalLogins`);
   }
 
   forgetTwoFactorClient(): Observable<string> {
@@ -65,11 +69,6 @@ export class ManageService {
   generateRecoveryCodes(): Observable<GenerateRecoveryCodes> {
     return this.http
       .get<GenerateRecoveryCodes>(`${environment.identityUrl}/GenerateRecoveryCodes`);
-  }
-
-  hasPassword(): Observable<boolean> {
-    return this.http
-      .get<boolean>(`${environment.identityUrl}/Manage/HasPassword`);
   }
 
   isTwoFactorEnabled(): Observable<boolean> {
@@ -103,11 +102,6 @@ export class ManageService {
   setPassword(model: SetPassword): Observable<string> {
     return this.http
       .post<string>(`${environment.identityUrl}/Manage/SetPassword`, JSON.stringify(model));
-  }
-
-  twoFactorAuthentication(): Observable<TwoFactorAuthentication> {
-    return this.http
-      .get<TwoFactorAuthentication>(`${environment.identityUrl}/Manage/TwoFactorAuthentication`);
   }
 
   verifyAuthenticator(model: EnableAuthenticator): Observable<EnableAuthenticator> {

@@ -4,7 +4,7 @@
     <p>
       <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
     </p>
-    <button class="btn btn-default"
+    <button class="btn btn-primary"
             type="button"
             (click)="downloadPersonalData()">
       Download
@@ -14,8 +14,9 @@
         {{error}}
       </div>
     </div>
+    <hr />
     <p>
-      <a routerLink="/Account/Manage/DeletePersonalData" class="btn btn-default">Delete</a>
+      <a routerLink="/Account/Manage/DeletePersonalData" class="btn btn-danger">Delete</a>
     </p>
   </div>
 </div>

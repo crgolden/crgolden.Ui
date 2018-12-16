@@ -52,18 +52,24 @@ export class AppInterceptor implements HttpInterceptor {
           if (error.description) {
             errors.push(error.description);
           }
-          switch (response.status) {
-            case 401:
-              this.router.navigate(['/Account/Login'], {
-                queryParams: {
-                  returnUrl: this.router.routerState.snapshot.url
-                }
-              });
-              break;
-          }
         });
+      } else if (response.error instanceof Array) {
+        response.error.forEach(error => {
+          if (error.description) {
+            errors.push(error.description);
+          }
+        })
       } else {
         errors.push('Something bad happened; please try again later.');
+      }
+      switch (response.status) {
+        case 401:
+          this.router.navigate(['/Account/Login'], {
+            queryParams: {
+              returnUrl: this.router.routerState.snapshot.url
+            }
+          });
+          break;
       }
     }
     return throwError(errors);

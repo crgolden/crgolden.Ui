@@ -14,7 +14,6 @@ import { ResetAuthenticatorComponent } from './reset-authenticator/reset-authent
 import { PersonalDataComponent } from './personal-data/personal-data.component';
 import { DeletePersonalDataComponent } from './delete-personal-data/delete-personal-data.component';
 import { ExternalLoginsResolver } from './resolvers/external-logins.resolver';
-import { AuthenticationSchemesResolver } from './resolvers/authentication-schemes.resolver';
 import { HasPasswordResolver } from './resolvers/has-password.resolver';
 import { TwoFactorAuthenticationResolver } from './resolvers/two-factor-authentication.resolver';
 import { EnableAuthenticatorResolver } from './resolvers/enable-authenticator.resolver';
@@ -26,7 +25,8 @@ const routes: Routes = [
     component: LayoutComponent,
     canActivate: [AppLoggedIn],
     resolve: {
-      authenticationSchemes: AuthenticationSchemesResolver
+      externalLogins: ExternalLoginsResolver,
+      hasPassword: HasPasswordResolver
     },
     children: [
       {
@@ -40,9 +40,7 @@ const routes: Routes = [
       {
         path: 'DeletePersonalData',
         component: DeletePersonalDataComponent,
-        canActivate: [
-          AppLoggedIn
-        ],
+        canActivate: [AppLoggedIn],
         resolve: {
           hasPassword: HasPasswordResolver
         }
@@ -68,7 +66,8 @@ const routes: Routes = [
         component: ExternalLoginsComponent,
         canActivate: [AppLoggedIn],
         resolve: {
-          externalLogins: ExternalLoginsResolver
+          externalLogins: ExternalLoginsResolver,
+          hasPassword: HasPasswordResolver
         }
       },
       {
@@ -127,7 +126,6 @@ const routes: Routes = [
     RouterModule
   ],
   providers: [
-    AuthenticationSchemesResolver,
     ExternalLoginsResolver,
     HasPasswordResolver,
     TwoFactorAuthenticationResolver,

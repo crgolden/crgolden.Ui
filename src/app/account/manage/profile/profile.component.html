@@ -60,12 +60,6 @@
                 <div *ngIf="message" class="alert alert-success" role="alert">
                   {{message}}
                 </div>
-                <div *ngFor="let error of errors">
-                  <div class="alert alert-danger" role="alert">
-                    {{error}}
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
@@ -90,10 +84,15 @@
         </div>
       </div>
       <button type="submit"
-              class="btn btn-default"
+              class="btn btn-primary"
               [disabled]=" f.pristine || f.invalid">
         Save
       </button>
+        <div *ngFor="let error of errors">
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        </div>
     </form>
   </div>
 </div>

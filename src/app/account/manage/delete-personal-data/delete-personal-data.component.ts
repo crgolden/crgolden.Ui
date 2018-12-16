@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ManageService } from '../manage.service';
 import { DeletePersonalData } from '../models/delete-personal-data';
 
@@ -26,7 +26,9 @@ export class DeletePersonalDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Delete Personal Data');
-    this.requirePassword = this.route.snapshot.data['hasPassword'];
+    this.requirePassword = this.route.snapshot.data['hasPassword'] as boolean;
+    this.manageService.hasPassword
+      .subscribe((hasPassword: boolean) => this.requirePassword = hasPassword);
   }
 
   deletePersonalData(form: NgForm): void {

@@ -19,8 +19,9 @@
   </div>
   <div class="row" *ngIf="model.isMachineRemembered && !model.message">
     <div class="col-12">
-      <button type="button"
-              class="btn btn-default"
+        <hr />
+        <button type="button"
+              class="btn btn-primary"
               (click)="forgetTwoFactorClient()">
         Forget this browser
       </button>
@@ -33,14 +34,16 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <a routerLink="/Account/Manage/Disable2fa" class="btn btn-default">
+        <hr />
+        <a routerLink="/Account/Manage/Disable2fa" class="btn btn-danger">
         Disable 2FA
       </a>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <a routerLink="/Account/Manage/GenerateRecoveryCodes" class="btn btn-default">
+        <hr />
+        <a routerLink="/Account/Manage/GenerateRecoveryCodes" class="btn btn-primary">
         Reset recovery codes
       </a>
     </div>
@@ -48,26 +51,29 @@
 </div>
 <div class="row">
   <div class="col-12">
-    <h5>Authenticator app</h5>
+    <h4>Authenticator app</h4>
   </div>
 </div>
 <div class="row" *ngIf="!model.hasAuthenticator">
   <div class="col-12">
-    <a routerLink="/Account/Manage/EnableAuthenticator" class="btn btn-default">
+    <hr />
+    <a routerLink="/Account/Manage/EnableAuthenticator" class="btn btn-primary">
       Add authenticator app
     </a>
   </div>
 </div>
 <div class="row" *ngIf="model.hasAuthenticator">
   <div class="col-12">
-    <a routerLink="/Account/Manage/EnableAuthenticator" class="btn btn-default">
+      <hr />
+      <a routerLink="/Account/Manage/EnableAuthenticator" class="btn btn-primary">
       Setup authenticator app
     </a>
   </div>
 </div>
 <div class="row" *ngIf="model.hasAuthenticator">
   <div class="col-12">
-    <a routerLink="/Account/Manage/ResetAuthenticator" class="btn btn-default">
+      <hr />
+      <a routerLink="/Account/Manage/ResetAuthenticator" class="btn btn-danger">
       Reset authenticator app
     </a>
   </div>

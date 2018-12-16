@@ -2,50 +2,86 @@
   <div class="col-12">
     <hr />
     <h2><fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register</h2>
-    <hr />
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
-    <div *ngIf="success" class="alert alert-success" role="alert">
+  <div class="col-12 col-md-6">
+      <hr />
+      <div *ngIf="success" class="alert alert-success" role="alert">
       {{success}}
     </div>
     <div *ngIf="!success">
       <form #f="ngForm"
             ngNativeValidate
             (ngSubmit)="register(f)">
-        <div class="form-group row">
-          <label for="email" class="col-4 col-form-label">Email</label>
-          <div class="col-8">
-            <input id="email"
-                   name="email"
-                   type="email"
-                   class="form-control"
-                   placeholder="Email"
-                   required
-                   email
-                   #email="ngModel"
-                   [(ngModel)]="model.email">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label for="firstName">
+                First Name
+              </label>
+              <input id="firstName"
+                    name="firstName"
+                    type="text"
+                    class="form-control"
+                    placeholder="First Name"
+                    required
+                    #firstName="ngModel"
+                    [(ngModel)]="model.firstName">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="password" class="col-4 col-form-label">Password</label>
-          <div class="col-8">
-            <input id="password"
-                   name="password"
-                   type="password"
-                   class="form-control"
-                   placeholder="Password"
-                   required
-                   #password="ngModel"
-                   [(ngModel)]="model.password">
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label for="lastName">
+                Last Name
+              </label>
+              <input id="lastName"
+                      name="lastName"
+                      type="text"
+                      class="form-control"
+                      placeholder="Last Name"
+                      required
+                      #lastName="ngModel"
+                      [(ngModel)]="model.lastName">
+            </div>
           </div>
         </div>
         <div class="form-group">
+          <label for="email">
+            Email
+          </label>
+          <input id="email"
+                  name="email"
+                  type="email"
+                  class="form-control"
+                  aria-describedby="emailHelp"
+                  placeholder="Email"
+                  required
+                  email
+                  #email="ngModel"
+                  [(ngModel)]="model.email">
+          <small id="emailHelp" class="form-text text-muted">
+            We'll never share your email with anyone else.
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="password">
+            Password
+          </label>
+          <input id="password"
+                  name="password"
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  required
+                  #password="ngModel"
+                  [(ngModel)]="model.password">
+        </div>
+        <div class="form-group">
           <button type="submit"
-                  class="btn btn-default"
+                  class="btn btn-primary"
                   [disabled]="f.invalid">
-            Register
+            Submit
           </button>
         </div>
         <div *ngFor="let error of errors">

@@ -17,7 +17,7 @@
           </td>
           <td>
             <button type="button"
-                    class="btn btn-default"
+                    class="btn btn-danger"
                     *ngIf="model.showRemoveButton"
                     (click)="removeLogin(currentLogin.loginProvider, currentLogin.providerKey)"
                     title="Remove this {{currentLogin.loginProvider}} login from your account">
@@ -31,26 +31,6 @@
       <div class="alert alert-danger" role="alert">
         {{error}}
       </div>
-    </div>
-  </div>
-</div>
-<div class="row" *ngIf="model.otherLogins.length > 0">
-  <div class="col-12">
-    <h4>Add another service to log in.</h4>
-    <hr />
-    <div *ngFor="let otherLogin of model.otherLogins">
-      <p [ngSwitch]="otherLogin.name">
-        <button type="submit"
-                style="background-color: #4267b2; border: #29487d solid 1px"
-                class="btn btn-primary"
-                name="provider"
-                value="{{otherLogin.name}}"
-                title="Log in using your {{otherLogin.displayName}} account"
-                (click)="linkLogin(otherLogin.name)"
-                *ngSwitchCase="'Facebook'">
-          <fa-icon [icon]="['fab', 'facebook']"></fa-icon> {{otherLogin.displayName}}
-        </button>
-      </p>
     </div>
   </div>
 </div>
