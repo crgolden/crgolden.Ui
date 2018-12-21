@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <h2><fa-icon [icon]="['fal', 'box']"></fa-icon> Product Details</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <dl>
+      <dt>
+        Name
+      </dt>
+      <dd>
+        {{product.name}}
+      </dd>
+      <dt>
+        Price
+      </dt>
+      <dd>
+        {{product.price | currency}}
+      </dd>
+      <dt>
+        Description
+      </dt>
+      <dd>
+        {{product.description}}
+      </dd>
+    </dl>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <h4>
+      <a *ngIf="!inCart" (click)="addToCart()">
+        <fa-icon [icon]="['fal', 'plus']"></fa-icon> Add to Cart
+      </a>
+      <a *ngIf="inCart" (click)="removeFromCart()">
+        <fa-icon [icon]="['fal', 'trash']"></fa-icon> Remove from Cart
+      </a>
+    </h4>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <h4>
+      <a routerLink="/Products">
+        <fa-icon [icon]="['fal', 'list']"></fa-icon> List
+      </a>
+      <span *ngIf="showEdit"> |
+        <a routerLink="/Products/Edit/{{product.id}}">
+          <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
+        </a>
+      </span>
+      <span *ngIf="showDelete"> |
+        <a routerLink="/Products/Delete/{{product.id}}">
+          <fa-icon [icon]="['fal', 'trash']"></fa-icon> Delete
+        </a>
+      </span>
+    </h4>
+      <div *ngFor="let error of errors">
+        <div class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+      </div>
+  </div>
+</div>

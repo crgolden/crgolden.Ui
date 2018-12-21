@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, from } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserManagerSettings, UserManager, User } from 'oidc-client';
 import { environment } from '../../environments/environment';
@@ -21,7 +21,8 @@ export class AccountService {
     'api1',
     'api2.full_access',
     'api2.read_only',
-    'identity');
+    'identity',
+    'roles');
   private readonly responseTypes = new Array<string>(
     'id_token',
     'token');
@@ -68,19 +69,29 @@ export class AccountService {
       .pipe(map((response: string) => response));
   }
 
-  signinRedirect(args?: any): Observable<any> {
-    return from(this.userManager.signinRedirect(args));
+  signinRedirect(args?: any): Promise<any> {
+    return this.userManager.signinRedirect(args);
   }
 
-  signinRedirectCallback(url?: string): Observable<void> {
-    return from(this.userManager.signinRedirectCallback(url).then((user: User) => this.user.next(user)));
+  signinRedirectCallback(url?: string): Promise<User> {
+    return this.userManager.signinRedirectCallback(url);
   }
 
-  signoutRedirect(args?: any): Observable<any> {
-    return from(this.userManager.signoutRedirect(args));
+  signoutRedirect(args?: any): Promise<any> {
+    return this.userManager.signoutRedirect(args);
   }
 
-  signoutRedirectCallback(url?: string): Observable<any> {
-    return from(this.userManager.signoutRedirectCallback(url));
+  signoutRedirectCallback(url?: string): Promise<any> {
+    return this.userManager.signoutRedirectCallback(url);
+  }
+
+  userHasRole(role: string): Observable<boolean> {
+    const roleType = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+    return this.user.pipe(map((user: User) => {
+      if (user != null && user.profile[roleType] instanceof Array) {
+        return user.profile[roleType].includes(role);
+      }
+      return false;
+    }));
   }
 }

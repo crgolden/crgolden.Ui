@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <h2><fa-icon [icon]="['fal', 'boxes']"></fa-icon> Products</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <kendo-grid [data]="products"
+                [pageSize]="state.take"
+                [skip]="state.skip"
+                [sort]="state.sort"
+                [sortable]="sortable"
+                [pageable]="pageable"
+                [scrollable]="'none'"
+                [groupable]="false"
+                [group]="state.group"
+                [filterable]="true"
+                [filter]="state.filter"
+                (dataStateChange)="dataStateChange($event)">
+      <kendo-grid-column field="name">
+        <ng-template kendoGridHeaderTemplate>
+          <fa-icon [icon]="['fal', 'box']"></fa-icon> Product
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-product>
+          <a routerLink="/Products/Details/{{product.id}}">
+            {{product.name}}
+          </a>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <h4>
+      <span *ngIf="showAdd">
+        <a routerLink="/Products/Create">
+          <fa-icon [icon]="['fal', 'plus']"></fa-icon> Add
+        </a>
+      </span>
+    </h4>
+  </div>
+</div>

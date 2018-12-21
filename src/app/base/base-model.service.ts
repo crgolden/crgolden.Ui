@@ -7,6 +7,7 @@ import {
   DataSourceRequestState
 } from '@progress/kendo-data-query';
 import { GridDataResult } from '@progress/kendo-angular-grid';
+import { environment } from '../../environments/environment';
 import { BaseModel } from './base-model';
 
 export abstract class BaseModelService<T extends BaseModel> {
@@ -24,7 +25,7 @@ export abstract class BaseModelService<T extends BaseModel> {
     const queryStr = `${toDataSourceRequestString(state)}`;
 
     return this.http
-      .get<GridDataResult>(`/api/v1/${this.controllerName}/Index?${queryStr}`)
+      .get<GridDataResult>(`${environment.apiUrl}/${this.controllerName}/Index?${queryStr}`)
       .pipe(
         map((res: GridDataResult) => ({
           data: hasGroups ? translateDataSourceResultGroups(res.data) : res.data,
@@ -34,21 +35,21 @@ export abstract class BaseModelService<T extends BaseModel> {
 
   details(id: string): Observable<T> {
     return this.http
-      .get<T>(`/api/v1/${this.controllerName}/Details/${id}`);
+      .get<T>(`${environment.apiUrl}/${this.controllerName}/Details/${id}`);
   }
 
   create(model: T): Observable<T> {
     return this.http
-      .post<T>(`/api/v1/${this.controllerName}/Create`, JSON.stringify(model));
+      .post<T>(`${environment.apiUrl}/${this.controllerName}/Create`, JSON.stringify(model));
   }
 
   edit(model: T): Observable<Object> {
     return this.http
-      .put(`/api/v1/${this.controllerName}/Edit/${model.id}`, JSON.stringify(model));
+      .put(`${environment.apiUrl}/${this.controllerName}/Edit/${model.id}`, JSON.stringify(model));
   }
 
   delete(id: string): Observable<Object> {
     return this.http
-      .delete(`/api/v1/${this.controllerName}/Delete/${id}`);
+      .delete(`${environment.apiUrl}/${this.controllerName}/Delete/${id}`);
   }
 }

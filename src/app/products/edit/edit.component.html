@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <h2><fa-icon [icon]="['fal', 'box']"></fa-icon> Edit Product</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-md-6">
+    <hr />
+    <form #f="ngForm" ngNativeValidate (ngSubmit)="edit(f)">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required class="form-control" placeholder="Name"
+               #name="ngModel"
+               [(ngModel)]="product.name">
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Name is required
+        </div>
+      </div>
+      <div class="form-group">
+        <hr />
+        <h4>
+          <span *ngIf="showSave">
+            <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
+              Save
+            </button> |
+          </span>
+          <a routerLink="/Products/Details/{{product.id}}">
+            <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
+          </a> |
+          <a routerLink="/Products">
+            <fa-icon [icon]="['fal', 'list']"></fa-icon> List
+          </a>
+        </h4>
+        <div *ngFor="let error of errors">
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -11,6 +11,20 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/Products" routerLinkActive="active">
+          <fa-icon [icon]="['fal', 'boxes']"></fa-icon> Products
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/Cart" routerLinkActive="active">
+          <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart <span *ngIf="cart">
+            ({{cart.cartProducts.length}})
+          </span><span *ngIf="!cart">
+            (0)
+          </span>
+        </a>
+      </li>
       <li *ngIf="user" class="nav-item">
         <a class="nav-link" routerLink="/Account/Manage" routerLinkActive="active">
           <fa-icon [icon]="['fal', 'user']"></fa-icon> Account

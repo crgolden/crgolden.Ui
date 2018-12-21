@@ -13,17 +13,30 @@ import {
   faEdit,
   faKey,
   faLock,
-  faCheck
+  faCheck,
+  faBox,
+  faBoxes,
+  faList,
+  faInfoSquare,
+  faTrash,
+  faPlus,
+  faBan,
+  faShoppingCart
 } from '@fortawesome/pro-light-svg-icons';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { CookieService } from 'ngx-cookie-service';
 import { AppInterceptor } from './app.interceptor';
 import { AppLoggedIn } from './app.logged-in';
 import { AppNotLoggedIn } from './app.not-logged-in';
+import { AppIsAdmin } from './app.is-admin';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccountService } from './account/account.service';
+import { CartService } from './cart/cart.service';
+import { CartProductsService } from './cart-products/cart-products.service';
 import { HomeComponent } from './home/home.component';
+import { AccessDeniedComponent } from './access-denied/access-denied.component'
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -39,13 +52,22 @@ library.add(
   faKey,
   faFacebook,
   faLock,
-  faCheck
+  faCheck,
+  faBox,
+  faBoxes,
+  faList,
+  faInfoSquare,
+  faTrash,
+  faPlus,
+  faBan,
+  faShoppingCart
 );
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    AccessDeniedComponent,
     HeaderComponent,
     FooterComponent
   ],
@@ -61,9 +83,13 @@ library.add(
       useClass: AppInterceptor,
       multi: true
     },
+    CookieService,
     AppLoggedIn,
     AppNotLoggedIn,
-    AccountService
+    AppIsAdmin,
+    AccountService,
+    CartService,
+    CartProductsService
   ],
   bootstrap: [
     AppComponent

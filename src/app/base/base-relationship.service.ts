@@ -7,6 +7,7 @@ import {
   DataSourceRequestState
 } from '@progress/kendo-data-query';
 import { GridDataResult } from '@progress/kendo-angular-grid';
+import { environment } from '../../environments/environment';
 import { BaseRelationship } from './base-relationship';
 
 export abstract class BaseRelationshipService<T extends BaseRelationship> {
@@ -24,7 +25,7 @@ export abstract class BaseRelationshipService<T extends BaseRelationship> {
     const queryStr = `${toDataSourceRequestString(state)}`;
 
     return this.http
-      .get<GridDataResult>(`/api/v1/${this.controllerName}/Index?${queryStr}`)
+      .get<GridDataResult>(`${environment.apiUrl}/${this.controllerName}/Index?${queryStr}`)
       .pipe(
         map((res: GridDataResult) => ({
           data: hasGroups ? translateDataSourceResultGroups(res.data) : res.data,
@@ -34,21 +35,21 @@ export abstract class BaseRelationshipService<T extends BaseRelationship> {
 
   details(id1: string, id2: string): Observable<T> {
     return this.http
-      .get<T>(`/api/v1/${this.controllerName}/Details/${id1}/${id2}`);
+      .get<T>(`${environment.apiUrl}/${this.controllerName}/Details/${id1}/${id2}`);
   }
 
   create(relationship: T): Observable<T> {
     return this.http
-      .post<T>(`/api/v1/${this.controllerName}/Create`, JSON.stringify(relationship));
+      .post<T>(`${environment.apiUrl}/${this.controllerName}/Create`, JSON.stringify(relationship));
   }
 
   edit(relationship: T): Observable<Object> {
     return this.http
-      .put(`/api/v1/${this.controllerName}/Edit/${relationship.model1Id}/${relationship.model2Id}`, JSON.stringify(relationship));
+      .put(`${environment.apiUrl}/${this.controllerName}/Edit/${relationship.model1Id}/${relationship.model2Id}`, JSON.stringify(relationship));
   }
 
   delete(id1: string, id2: string): Observable<Object> {
     return this.http
-      .delete(`/api/v1/${this.controllerName}/Delete/${id1}/${id2}`);
+      .delete(`${environment.apiUrl}/${this.controllerName}/Delete/${id1}/${id2}`);
   }
 }

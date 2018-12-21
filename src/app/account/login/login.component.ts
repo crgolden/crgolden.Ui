@@ -19,9 +19,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Login');
     this.route.queryParams.subscribe((params: Params) => {
-       if (params['returnUrl'] != null) {
-         window.sessionStorage.setItem('returnUrl', params['returnUrl']);
-       }
+      if (params['returnUrl'] != null) {
+        window.sessionStorage.setItem('returnUrl', params['returnUrl']);
+      }
       this.accountService.signinRedirect();
     });
   }

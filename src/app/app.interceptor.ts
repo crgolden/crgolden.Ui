@@ -9,7 +9,7 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { User } from 'oidc-client';
 import { AccountService } from './account/account.service'
 
@@ -22,7 +22,7 @@ export class AppInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.accountService.user.pipe(mergeMap((user: User) => {
+    return this.accountService.user.pipe(switchMap((user: User) => {
       req = req.clone({
         setHeaders: {
           'Authorization': user != null ? `${user.token_type} ${user.access_token}` : '',
@@ -42,35 +42,44 @@ export class AppInterceptor implements HttpInterceptor {
     }));
   }
 
-  private handleError(response: HttpErrorResponse): Observable<never> {
+  private handleError = (response: HttpErrorResponse): Observable<never> => {
     const errors = new Array<string>();
-    if (response.status < 500 && response.error) {
-      if (typeof response.error === 'string') {
-        errors.push(response.error);
-      } else if (response.error.errors) {
-        response.error.errors.forEach(error => {
-          if (error.description) {
-            errors.push(error.description);
-          }
-        });
-      } else if (response.error instanceof Array) {
-        response.error.forEach(error => {
-          if (error.description) {
-            errors.push(error.description);
-          }
-        })
-      } else {
-        errors.push('Something bad happened; please try again later.');
-      }
+    if (response.status < 500) {
       switch (response.status) {
         case 401:
-          this.router.navigate(['/Account/Login'], {
-            queryParams: {
-              returnUrl: this.router.routerState.snapshot.url
+          {
+            this.router.navigate(['/Account/Login'], {
+              queryParams: {
+                returnUrl: this.router.routerState.snapshot.url
+              }
+            });
+            break;
+          }
+        case 403:
+          {
+            this.router.navigate(['/AccessDenied']);
+            break;
+          }
+      }
+      if (response.error) {
+        if (typeof response.error === 'string') {
+          errors.push(response.error);
+        } else if (response.error['errors'] instanceof Array) {
+          response.error['errors'].forEach((error: any) => {
+            if (typeof error.description === 'string') {
+              errors.push(error.description);
             }
           });
-          break;
+        } else if (response.error instanceof Array) {
+          response.error.forEach((error: any) => {
+            if (typeof error.description === 'string') {
+              errors.push(error.description);
+            }
+          });
+        }
       }
+    } else {
+      errors.push('Something bad happened; please try again later.');
     }
     return throwError(errors);
   }
