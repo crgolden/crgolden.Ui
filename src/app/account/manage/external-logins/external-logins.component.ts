@@ -14,7 +14,7 @@ export class ExternalLoginsComponent implements OnInit {
   model: ExternalLogins;
   errors: Array<string>;
   message: string;
-  
+
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
@@ -31,22 +31,20 @@ export class ExternalLoginsComponent implements OnInit {
     } else {
       this.model.showRemoveButton = (hasPassword) || this.model.currentLogins.length > 1;
       this.manageService.hasPassword.subscribe(
-        (hasPassword: boolean) => this.model.showRemoveButton = hasPassword || this.model.currentLogins.length > 1);
-      }
+        (value: boolean) => this.model.showRemoveButton = value || this.model.currentLogins.length > 1);
+    }
   }
 
   removeLogin(loginProvider: string, providerKey: string): void {
     this.errors = new Array<string>();
-    this.manageService
-      .removeLogin(loginProvider, providerKey)
-      .subscribe(
-        (externalLogins: ExternalLogins) => {
-          this.model = externalLogins;
-          this.manageService.externalLogins.next(externalLogins);
-          if (this.model.currentLogins.length === 0) {
-            this.router.navigate(['/Account/Manage']);
-          }
-        },
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.removeLogin$(loginProvider, providerKey).subscribe(
+      (externalLogins: ExternalLogins) => {
+        this.model = externalLogins;
+        this.manageService.externalLogins.next(externalLogins);
+        if (this.model.currentLogins.length === 0) {
+          this.router.navigate(['/Account/Manage']);
+        }
+      },
+      (errors: Array<string>) => this.errors = errors);
   }
 }

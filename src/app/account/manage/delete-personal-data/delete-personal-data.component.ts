@@ -27,17 +27,15 @@ export class DeletePersonalDataComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Delete Personal Data');
     this.requirePassword = this.route.snapshot.data['hasPassword'] as boolean;
-    this.manageService.hasPassword
-      .subscribe((hasPassword: boolean) => this.requirePassword = hasPassword);
+    this.manageService.hasPassword.subscribe(
+      (hasPassword: boolean) => this.requirePassword = hasPassword);
   }
 
   deletePersonalData(form: NgForm): void {
     if (!form.valid) { return; }
     this.errors = new Array<string>();
-    this.manageService
-      .deletePersonalData(this.model)
-      .subscribe(
-        () => this.router.navigate(['/Home']),
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.deletePersonalData$(this.model).subscribe(
+      () => this.router.navigate(['/Home']),
+      (errors: Array<string>) => this.errors = errors);
   }
 }

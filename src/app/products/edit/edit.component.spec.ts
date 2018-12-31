@@ -13,14 +13,17 @@ import { EditPage } from '../../test/page-models/products/edit-page';
 import { EditComponent } from './edit.component';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../relationships/order-product';
+import { OrderProduct } from '../../order-products/order-product';
 import { ProductsService } from '../../products/products.service';
 
 const product: Product = {
   id: '1',
   name: 'Product 1',
+  active: true,
   description: 'Description 1',
   price: 1.00,
+  isDownload: false,
+  created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>()
 };
@@ -55,7 +58,7 @@ describe('EditComponent', () => {
     const form = { valid: true } as NgForm;
 
     component.edit(form);
-    expect(productsService.edit).toHaveBeenCalled();
+    expect(productsService.edit$).toHaveBeenCalled();
     // expect(router.navigate).toHaveBeenCalled();
   });
 

@@ -28,10 +28,8 @@ export class GenerateRecoveryCodesComponent implements OnInit {
 
   generateRecoveryCodes(): void {
     this.errors = new Array<string>();
-    this.manageService
-      .generateRecoveryCodes()
-      .subscribe(
-        (response: GenerateRecoveryCodes) => this.model = response,
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.generateRecoveryCodes$().subscribe(
+      (response: GenerateRecoveryCodes) => this.model = response,
+      (errors: Array<string>) => this.errors = errors);
   }
 }

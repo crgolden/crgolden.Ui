@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       if (params['returnUrl'] != null) {
         window.sessionStorage.setItem('returnUrl', params['returnUrl']);
       }
-      this.accountService.signinRedirect();
+      this.accountService.signinRedirect$();
     });
   }
 }

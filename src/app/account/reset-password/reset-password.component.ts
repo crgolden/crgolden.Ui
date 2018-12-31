@@ -25,16 +25,15 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Reset Password');
-    this.route.queryParams.subscribe((params: Params) => this.model.code = params['code']);
+    this.route.queryParams.subscribe(
+      (params: Params) => this.model.code = params['code']);
   }
 
   resetPassword(form: NgForm) {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.accountService
-      .resetPassword(this.model)
-      .subscribe(
-        (response: string) => this.success = response,
-        (errors: Array<string>) => this.errors = errors);
+    this.accountService.resetPassword$(this.model).subscribe(
+      (response: string) => this.success = response,
+      (errors: Array<string>) => this.errors = errors);
   }
 }

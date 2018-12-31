@@ -23,14 +23,14 @@ export class EnableAuthenticatorResolver implements Resolve<EnableAuthenticator>
     return this.manageService.enableAuthenticator.pipe(
       take(1),
       concatMap((enableAuthenticator: EnableAuthenticator) => {
-        if (typeof enableAuthenticator === 'undefined'){
+        if (typeof enableAuthenticator === 'undefined') {
           return this.http
             .get<EnableAuthenticator>(`${environment.identityUrl}/Manage/EnableAuthenticator`)
             .pipe(
               take(1),
-              map((enableAuthenticator: EnableAuthenticator) => {
-                this.manageService.enableAuthenticator.next(enableAuthenticator);
-                return enableAuthenticator;
+              map((value: EnableAuthenticator) => {
+                this.manageService.enableAuthenticator.next(value);
+                return value;
               }));
         } else {
           return of(enableAuthenticator);

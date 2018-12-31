@@ -5,34 +5,53 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { concatMap, take } from 'rxjs/operators';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import {
   AggregateDescriptor,
+  CompositeFilterDescriptor,
   DataSourceRequestState,
+  FilterDescriptor,
   SortDescriptor
 } from '@progress/kendo-data-query';
+import { AccountService } from '../account/account.service';
 import { ProductsService } from './products.service';
 
 @Injectable()
 export class ProductsResolver implements Resolve<GridDataResult> {
 
-  constructor(private readonly productsService: ProductsService) {
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly productsService: ProductsService) {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<GridDataResult> {
-    const sortDescriptor: SortDescriptor = {
-      field: 'name',
-      dir: 'asc'
-    };
-    const requestState: DataSourceRequestState = {
-      skip: 0,
-      take: 5,
-      sort: new Array<SortDescriptor>(sortDescriptor),
-      aggregates: new Array<AggregateDescriptor>()
-    };
-    return this.productsService.index(requestState).pipe(
-      take(1),
-      map((products: GridDataResult) => products));
+    return this.accountService.userHasRole$('Admin').pipe(
+      concatMap(
+        (response: boolean) => {
+          const requestState: DataSourceRequestState = {
+            skip: 0,
+            take: 5,
+            sort: new Array<SortDescriptor>({
+              field: 'name',
+              dir: 'asc'
+            } as SortDescriptor),
+            filter: {
+              logic: 'and',
+              filters: new Array<FilterDescriptor>()
+            } as CompositeFilterDescriptor,
+            aggregates: new Array<AggregateDescriptor>()
+          };
+          if (!response) {
+            requestState.filter.filters.push({
+              field: 'active',
+              operator: 'eq',
+              value: true
+            } as FilterDescriptor);
+          }
+          return this.productsService.index$(requestState);
+        },
+        (_: boolean, products: GridDataResult) => products),
+      take(1));
   }
 }

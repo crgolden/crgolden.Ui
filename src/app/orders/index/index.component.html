@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2>
+      <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Orders
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <kendo-grid [data]="orders"
+                [pageSize]="state.take"
+                [skip]="state.skip"
+                [sort]="state.sort"
+                [sortable]="sortable"
+                [pageable]="pageable"
+                [scrollable]="'none'"
+                [groupable]="false"
+                [group]="state.group"
+                [filterable]="true"
+                [filter]="state.filter"
+                (dataStateChange)="dataStateChange($event)">
+      <kendo-grid-column field="name" title="Name">
+        <ng-template kendoGridCellTemplate let-order>
+          <a routerLink="/Orders/Details/{{order.id}}"
+             title="Order Details">
+            {{order.name}}
+          </a>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="total"
+                         title="Total"
+                         filter="numeric"
+                         [filterable]="true"
+                         [format]="{ style: 'currency', currency: 'USD' }">
+      </kendo-grid-column>
+      <kendo-grid-column field="created"
+                         title="Date"
+                         filter="date"
+                         [filterable]="true"
+                         [format]="{ date: 'short' }">
+        <ng-template kendoGridCellTemplate let-order>
+          {{order.created | date}}
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>

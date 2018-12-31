@@ -15,13 +15,14 @@ export class AppNotLoggedIn implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.accountService.user.pipe(map((user: User) => {
-      if (user == null || user.expired) {
-        return true;
-      } else {
-        this.router.navigate(['/Home']);
-        return false;
-      }
-    }));
+    return this.accountService.user$
+      .pipe(map((user: User) => {
+        if (user == null || user.expired) {
+          return true;
+        } else {
+          this.router.navigate(['/Home']);
+          return false;
+        }
+      }));
   }
 }

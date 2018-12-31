@@ -1,31 +1,99 @@
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'box']"></fa-icon> Create Product</h2>
+    <h2>
+      <fa-icon [icon]="['fal', 'box']"></fa-icon> Create Product
+    </h2>
   </div>
 </div>
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
-    <form #f="ngForm" ngNativeValidate (ngSubmit)="create(f)">
+    <form #f="ngForm"
+          ngNativeValidate
+          (ngSubmit)="create(f)">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name"
+                   name="name"
+                   type="text"
+                   required
+                   class="form-control"
+                   placeholder="Name"
+                   #name="ngModel"
+                   [(ngModel)]="product.name">
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check">
+            <input id="active"
+                   name="active"
+                   class="form-check-input"
+                   type="checkbox"
+                   #active="ngModel"
+                   [(ngModel)]="product.active">
+            <label class="form-check-label" for="active">
+              Active
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="form-group">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" required class="form-control" placeholder="Name"
-                #name="ngModel"
-                [(ngModel)]="product.name">
-        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-          Name is required
+        <label for="description">Description</label>
+        <textarea kendoTextArea
+                  id="description"
+                  class="form-control"
+                  name="description"
+                  placeholder="Description"
+                  #description="ngModel"
+                  [(ngModel)]="product.description"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="price">Price</label>
+            <kendo-numerictextbox id="price"
+                                  class="form-control"
+                                  name="price"
+                                  required
+                                  placeholder="price"
+                                  [value]="product.price"
+                                  [title]="Price"
+                                  [min]="0"
+                                  [decimals]="2"
+                                  [format]="'c2'"
+                                  [autoCorrect]="true"
+                                  #price="ngModel"
+                                  [(ngModel)]="product.price">
+            </kendo-numerictextbox>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check">
+            <input id="isDownload"
+                   name="isDownload"
+                   class="form-check-input"
+                   type="checkbox"
+                   #isDownload="ngModel"
+                   [(ngModel)]="product.isDownload">
+            <label class="form-check-label" for="isDownload">
+              Download
+            </label>
+          </div>
         </div>
       </div>
       <div class="form-group">
         <hr />
         <h4>
-          <span *ngIf="showCreate">
+          <span *ngIf="showCreate$() | async">
             <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
               Create
             </button> |
           </span>
-          <a routerLink="/Products">
+          <a routerLink="/Products"
+             title="Products">
             <fa-icon [icon]="['fal', 'list']"></fa-icon> List
           </a>
         </h4>
@@ -36,5 +104,6 @@
         </div>
       </div>
     </form>
+    <hr />
   </div>
 </div>

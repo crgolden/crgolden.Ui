@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Register } from '../models/register';
+import { Address } from '../../address/address';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -18,7 +19,13 @@ export class RegisterComponent implements OnInit {
   constructor(
     private readonly titleService: Title,
     private readonly accountService: AccountService) {
-    this.model = new Register();
+    this.model = {
+      email: undefined,
+      firstName: undefined,
+      lastName: undefined,
+      password: undefined,
+      address: new Address(),
+    } as Register;
   }
 
   ngOnInit(): void {
@@ -28,10 +35,8 @@ export class RegisterComponent implements OnInit {
   register(form: NgForm) {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.accountService
-      .register(this.model)
-      .subscribe(
-        (response: string) => this.success = response,
-        (errors: Array<string>) => this.errors = errors);
+    this.accountService.register$(this.model).subscribe(
+      (response: string) => this.success = response,
+      (errors: Array<string>) => this.errors = errors);
   }
 }

@@ -43,7 +43,7 @@ describe('BaseRelationshipService', () => {
     httpBaseRelationshipSpy.get.and.returnValue(defer(() => Promise.resolve(relationshipsGridDataResult)));
 
     relationshipService
-      .index({})
+      .index$({})
       .subscribe((result: GridDataResult) => expect(result).toEqual(relationshipsGridDataResult, 'expected relationships'));
 
     expect(httpBaseRelationshipSpy.get.calls.count()).toBe(1, 'one call');
@@ -53,7 +53,7 @@ describe('BaseRelationshipService', () => {
     httpBaseRelationshipSpy.get.and.returnValue(defer(() => Promise.resolve(relationship1)));
 
     relationshipService
-      .details(relationship1.model1Id, relationship1.model2Id)
+      .details$(relationship1.model1Id, relationship1.model2Id)
       .subscribe((result: BaseRelationship) => expect(result).toEqual(relationship1, 'expected relationship1'));
 
     expect(httpBaseRelationshipSpy.get.calls.count()).toBe(1, 'one call');
@@ -63,7 +63,7 @@ describe('BaseRelationshipService', () => {
     httpBaseRelationshipSpy.post.and.returnValue(defer(() => Promise.resolve(relationship1)));
 
     relationshipService
-      .create(relationship1)
+      .create$(relationship1)
       .subscribe((result: BaseRelationship) => expect(result).toEqual(relationship1, 'expected relationship1'));
 
     expect(httpBaseRelationshipSpy.post.calls.count()).toBe(1, 'one call');
@@ -73,7 +73,7 @@ describe('BaseRelationshipService', () => {
     httpBaseRelationshipSpy.put.and.returnValue(defer(() => Promise.resolve()));
 
     relationshipService
-      .edit(relationship1)
+      .edit$(relationship1)
       .subscribe((result: Object) => expect(result).toBeUndefined('expected undefined'));
 
     expect(httpBaseRelationshipSpy.put.calls.count()).toBe(1, 'one call');
@@ -83,7 +83,7 @@ describe('BaseRelationshipService', () => {
     httpBaseRelationshipSpy.delete.and.returnValue(defer(() => Promise.resolve()));
 
     relationshipService
-      .delete(relationship1.model1Id, relationship1.model2Id)
+      .delete$(relationship1.model1Id, relationship1.model2Id)
       .subscribe((result: Object) => expect(result).toBeUndefined('expected undefined'));
 
     expect(httpBaseRelationshipSpy.delete.calls.count()).toBe(1, 'one call');

@@ -25,7 +25,13 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/web.config"
+              "src/web.config",
+              "src/silent-callback.html",
+              {
+                "glob": "**/oidc-client.min.js",
+                "input": "./node_modules/oidc-client/dist",
+                "output": "/"
+              }
             ],
             "styles": [
               "src/styles.scss"

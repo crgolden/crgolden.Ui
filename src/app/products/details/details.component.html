@@ -1,18 +1,59 @@
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'box']"></fa-icon> Product Details</h2>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <h2>
+          <fa-icon [icon]="['fal', 'box']"></fa-icon> Product Details
+        </h2>
+      </div>
+      <div class="col-12 col-md-6">
+        <ng-container *ngIf="inCart$() | async; then inCart; else notInCart"></ng-container>
+        <ng-template #inCart>
+          <h2>
+            <span class="float-md-right">
+              <a title="Remove from Cart"
+                 (click)="removeFromCart()">
+                <fa-icon [icon]="['fal', 'trash']"></fa-icon> Remove from Cart
+              </a>
+            </span>
+          </h2>
+        </ng-template>
+        <ng-template #notInCart>
+          <h2>
+            <span class="float-md-right">
+              <a title="Add to Cart"
+                 (click)="addToCart()">
+                <fa-icon [icon]="['fal', 'cart-plus']"></fa-icon> Add to Cart
+              </a>
+            </span>
+          </h2>
+        </ng-template>
+      </div>
+    </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
     <dl>
+      <dt *ngIf="showActive$() | async">
+        Active
+      </dt>
+      <dd *ngIf="showActive$() | async">
+        <input type="checkbox" [checked]="product.active" disabled />
+      </dd>
       <dt>
         Name
       </dt>
       <dd>
         {{product.name}}
+      </dd>
+      <dt>
+        Description
+      </dt>
+      <dd>
+        {{product.description}}
       </dd>
       <dt>
         Price
@@ -21,49 +62,34 @@
         {{product.price | currency}}
       </dd>
       <dt>
-        Description
+        Download
       </dt>
       <dd>
-        {{product.description}}
+        <input type="checkbox" [checked]="product.isDownload" disabled />
       </dd>
     </dl>
   </div>
 </div>
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
     <h4>
-      <a *ngIf="!inCart" (click)="addToCart()">
-        <fa-icon [icon]="['fal', 'plus']"></fa-icon> Add to Cart
-      </a>
-      <a *ngIf="inCart" (click)="removeFromCart()">
-        <fa-icon [icon]="['fal', 'trash']"></fa-icon> Remove from Cart
-      </a>
-    </h4>
-  </div>
-</div>
-<div class="row">
-  <div class="col-12 col-md-6">
-    <hr />
-    <h4>
-      <a routerLink="/Products">
+      <a routerLink="/Products"
+         title="Products">
         <fa-icon [icon]="['fal', 'list']"></fa-icon> List
       </a>
-      <span *ngIf="showEdit"> |
-        <a routerLink="/Products/Edit/{{product.id}}">
+      <span *ngIf="showEdit$() | async">
+        | <a routerLink="/Products/Edit/{{product.id}}"
+           title="Edit Product">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>
       </span>
-      <span *ngIf="showDelete"> |
-        <a routerLink="/Products/Delete/{{product.id}}">
-          <fa-icon [icon]="['fal', 'trash']"></fa-icon> Delete
-        </a>
-      </span>
     </h4>
-      <div *ngFor="let error of errors">
-        <div class="alert alert-danger" role="alert">
-          {{error}}
-        </div>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
       </div>
+    </div>
+    <hr />
   </div>
 </div>

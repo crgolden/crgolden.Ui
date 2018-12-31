@@ -5,11 +5,11 @@ import { AccountService } from '../account.service';
 import { CartService } from '../../cart/cart.service';
 
 @Component({
-  selector: 'app-account-logout-callback',
-  templateUrl: './logout-callback.component.html',
-  styleUrls: ['./logout-callback.component.scss']
+  selector: 'app-account-logout-success',
+  templateUrl: './logout-success.component.html',
+  styleUrls: ['./logout-success.component.scss']
 })
-export class LogoutCallbackComponent implements OnInit {
+export class LogoutSuccessComponent implements OnInit {
 
   constructor(
     private readonly titleService: Title,
@@ -20,11 +20,9 @@ export class LogoutCallbackComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Logout');
-    this.accountService
-      .signoutRedirectCallback()
-      .then(() => {
-        this.cookieService.delete('CartId');
-        this.cartService.cart.next(undefined);
-      });
+    this.accountService.signoutRedirectCallback$().subscribe(() => {
+      this.cookieService.delete('CartId');
+      this.cartService.cart$.next(undefined);
+    });
   }
 }

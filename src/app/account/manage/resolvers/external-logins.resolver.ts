@@ -23,14 +23,14 @@ export class ExternalLoginsResolver implements Resolve<ExternalLogins> {
     return this.manageService.externalLogins.pipe(
       take(1),
       concatMap((externalLogins: ExternalLogins) => {
-        if (typeof externalLogins == 'undefined') {
+        if (typeof externalLogins === 'undefined') {
           return this.http
             .get<ExternalLogins>(`${environment.identityUrl}/Manage/ExternalLogins`)
             .pipe(
               take(1),
-              map((externalLogins: ExternalLogins) => {
-                this.manageService.externalLogins.next(externalLogins);
-                return externalLogins;
+              map((value: ExternalLogins) => {
+                this.manageService.externalLogins.next(value);
+                return value;
               }));
         } else {
           return of(externalLogins);

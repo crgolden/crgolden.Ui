@@ -9,9 +9,9 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { User } from 'oidc-client';
-import { AccountService } from './account/account.service'
+import { AccountService } from './account/account.service';
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
@@ -22,24 +22,21 @@ export class AppInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.accountService.user.pipe(switchMap((user: User) => {
-      req = req.clone({
-        setHeaders: {
-          'Authorization': user != null ? `${user.token_type} ${user.access_token}` : '',
-          'Content-Type': 'application/json'
-        },
-        withCredentials: true
-      });
-      return next
-        .handle(req)
-        .pipe(
-          map((event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-            }
-            return event;
-          }),
-          catchError<HttpEvent<any>, never>(this.handleError));
-    }));
+    return this.accountService.user$.pipe(
+      switchMap(
+        (user: User) => next.handle(req.clone({
+          setHeaders: {
+            'Authorization': user != null ? `${user.token_type} ${user.access_token}` : '',
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        })),
+        (_, event) => {
+          if (event instanceof HttpResponse) {
+          }
+          return event;
+        }),
+      catchError<HttpEvent<any>, never>(this.handleError));
   }
 
   private handleError = (response: HttpErrorResponse): Observable<never> => {
@@ -47,19 +44,15 @@ export class AppInterceptor implements HttpInterceptor {
     if (response.status < 500) {
       switch (response.status) {
         case 401:
-          {
-            this.router.navigate(['/Account/Login'], {
-              queryParams: {
-                returnUrl: this.router.routerState.snapshot.url
-              }
-            });
-            break;
-          }
+          this.router.navigate(['/Account/Login'], {
+            queryParams: {
+              returnUrl: this.router.routerState.snapshot.url
+            }
+          });
+          break;
         case 403:
-          {
-            this.router.navigate(['/AccessDenied']);
-            break;
-          }
+          this.router.navigate(['/AccessDenied']);
+          break;
       }
       if (response.error) {
         if (typeof response.error === 'string') {

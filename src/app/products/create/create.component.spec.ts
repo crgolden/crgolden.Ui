@@ -14,25 +14,31 @@ import { CreateComponent } from './create.component';
 import { ProductsService } from '../../products/products.service';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../relationships/order-product';
+import { OrderProduct } from '../../order-products/order-product';
 
 const product1: Product = {
   id: '1',
   name: 'Product 1',
+  active: true,
   description: 'Description 1',
   price: 1.00,
+  isDownload: true,
+  created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>()
 };
-const feature2: Product = {
+const product2: Product = {
   id: '2',
   name: 'Product 2',
+  active: true,
   description: 'Description 2',
   price: 2.00,
+  isDownload: false,
+  created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>()
 };
-const products = [product1, feature2];
+const products = [product1, product2];
 const productsGridDataResult: GridDataResult = {
   data: products,
   total: products.length
@@ -68,7 +74,7 @@ describe('CreateComponent', () => {
     const form = { valid: true } as NgForm;
 
     component.create(form);
-    expect(productsService.create).toHaveBeenCalled();
+    expect(productsService.create$).toHaveBeenCalled();
     // expect(router.navigateByUrl).toHaveBeenCalled();
   });
 

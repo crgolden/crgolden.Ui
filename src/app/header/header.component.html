@@ -1,5 +1,7 @@
 <nav class="navbar container fixed-top navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" routerLink="/Home">Clarity</a>
+  <a class="navbar-brand"
+     routerLink="/Home"
+     title="Home">Clarity</a>
   <button type="button"
           class="navbar-toggler"
           data-toggle="collapse"
@@ -9,42 +11,73 @@
           aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div id="navbarSupportedContent"
+       class="collapse navbar-collapse">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/Products" routerLinkActive="active">
-          <fa-icon [icon]="['fal', 'boxes']"></fa-icon> Products
+        <a class="nav-link"
+           routerLink="/Products"
+           routerLinkActive="active"
+           title="Products">
+          <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
+        </a>
+      </li>
+      <li *ngIf="user$() | async" class="nav-item">
+        <a class="nav-link"
+           routerLink="/Orders"
+           routerLinkActive="active"
+           title="Orders">
+          <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Orders
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/Cart" routerLinkActive="active">
-          <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart <span *ngIf="cart">
-            ({{cart.cartProducts.length}})
-          </span><span *ngIf="!cart">
-            (0)
-          </span>
+        <a class="nav-link"
+           routerLink="/Cart"
+           routerLinkActive="active"
+           title="Cart">
+          <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart
+          (<ng-container *ngIf="cart$() | async as cart; then isCart; else isNotCart"></ng-container>)
         </a>
       </li>
-      <li *ngIf="user" class="nav-item">
-        <a class="nav-link" routerLink="/Account/Manage" routerLinkActive="active">
+      <ng-container *ngIf="user$() | async; then loggedIn; else loggedOut"></ng-container>
+    </ul>
+    <ng-template #loggedIn>
+      <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/Account/Manage"
+           routerLinkActive="active"
+           title="Account">
           <fa-icon [icon]="['fal', 'user']"></fa-icon> Account
         </a>
       </li>
-      <li *ngIf="user" class="nav-item">
-        <a class="nav-link" routerLink="/Account/Logout" routerLinkActive="active">
+      <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/Account/Logout"
+           routerLinkActive="active"
+           title="Logout">
           <fa-icon [icon]="['fal', 'sign-out']"></fa-icon> Logout
         </a>
       </li>
-      <li *ngIf="!user" class="nav-item">
-        <a class="nav-link" routerLink="/Account/Register" routerLinkActive="active">
+    </ng-template>
+    <ng-template #loggedOut>
+      <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/Account/Register"
+           routerLinkActive="active"
+           title="Register">
           <fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register
         </a>
       </li>
-      <li *ngIf="!user" class="nav-item">
-        <a class="nav-link" routerLink="/Account/Login" routerLinkActive="active">
+      <li class="nav-item">
+        <a class="nav-link"
+           [routerLink]="['/Account/Login']"
+           [queryParams]="{ returnUrl: returnUrl }"
+           title="Login">
           <fa-icon [icon]="['fal', 'sign-in']"></fa-icon> Login
         </a>
       </li>
-    </ul>
+    </ng-template>
+    <ng-template #isCart let-cart>{{cart.cartProducts.length}}</ng-template>
+    <ng-template #isNotCart>0</ng-template>
   </div>
 </nav>

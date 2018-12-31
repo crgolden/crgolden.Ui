@@ -28,13 +28,11 @@ export class TwoFactorAuthenticationComponent implements OnInit {
 
   forgetBrowser(): void {
     this.errors = new Array<string>();
-    this.manageService
-      .forgetTwoFactorClient()
-      .subscribe(
-        (response: string) => {
-          this.message = response;
-          this.model.isMachineRemembered = false;
-        },
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.forgetTwoFactorClient$().subscribe(
+      (response: string) => {
+        this.message = response;
+        this.model.isMachineRemembered = false;
+      },
+      (errors: Array<string>) => this.errors = errors);
   }
 }

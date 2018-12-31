@@ -6,8 +6,7 @@ import { IndexComponent } from './index/index.component';
 import { CreateComponent } from './create/create.component';
 import { DetailsComponent } from './details/details.component';
 import { EditComponent } from './edit/edit.component';
-import { DeleteComponent } from './delete/delete.component';
-import { AppIsAdmin } from '../app.is-admin'
+import { AppIsAdmin } from '../app.is-admin';
 
 const routes: Routes = [
   {
@@ -36,15 +35,7 @@ const routes: Routes = [
     resolve: {
       product: ProductResolver,
     }
-  },
-  {
-    path: 'Delete/:id',
-    component: DeleteComponent,
-    canActivate: [AppIsAdmin],
-    resolve: {
-      product: ProductResolver,
-    }
-  },
+  }
 ];
 
 @NgModule({

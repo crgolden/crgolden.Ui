@@ -21,17 +21,15 @@ export class ForgotPasswordComponent implements OnInit {
     this.model = new ForgotPassword();
   }
 
+  ngOnInit(): void {
+    this.titleService.setTitle('Clarity: Forgot Password');
+  }
+
   forgotPassword(form: NgForm): void {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.accountService
-      .forgotPassword(this.model)
-      .subscribe(
+    this.accountService.forgotPassword$(this.model).subscribe(
         (response: string) => this.success = response,
         (errors: Array<string>) => this.errors = errors);
-  }
-
-  ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Forgot Password');
   }
 }

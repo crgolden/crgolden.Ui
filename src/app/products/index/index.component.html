@@ -1,11 +1,25 @@
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'boxes']"></fa-icon> Products</h2>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <h2><fa-icon [icon]="['fal', 'box']"></fa-icon> Products</h2>
+      </div>
+      <div class="col-12 col-md-6">
+        <h2 *ngIf="showAdd$() | async">
+          <span class="float-md-right">
+            <a routerLink="/Products/Create"
+               title="Create Product">
+              <fa-icon [icon]="['fal', 'plus']"></fa-icon> Create Product
+            </a>
+          </span>
+        </h2>
+      </div>
+    </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
     <kendo-grid [data]="products"
                 [pageSize]="state.take"
@@ -19,14 +33,45 @@
                 [filterable]="true"
                 [filter]="state.filter"
                 (dataStateChange)="dataStateChange($event)">
-      <kendo-grid-column field="name">
-        <ng-template kendoGridHeaderTemplate>
-          <fa-icon [icon]="['fal', 'box']"></fa-icon> Product
-        </ng-template>
+      <kendo-grid-column field="name" title="Name">
         <ng-template kendoGridCellTemplate let-product>
-          <a routerLink="/Products/Details/{{product.id}}">
+          <a routerLink="/Products/Details/{{product.id}}"
+             title="Product Details">
             {{product.name}}
           </a>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="price"
+                         title="Price"
+                         filter="numeric"
+                         [format]="{ style: 'currency', currency: 'USD' }">
+      </kendo-grid-column>
+      <kendo-grid-column field="isDownload" title="Download" filter="boolean">
+        <ng-template kendoGridCellTemplate let-product>
+          <input type="checkbox" [checked]="product.isDownload" disabled />
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="active" title="Active" filter="boolean" *ngIf="showActive$() | async">
+        <ng-template kendoGridCellTemplate let-product>
+          <input type="checkbox" [checked]="product.active" disabled />
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column>
+        <ng-template kendoGridCellTemplate let-product>
+          <ng-container *ngIf="inCart$(product.id) | async; then inCart; else notInCart"></ng-container>
+          <ng-template #inCart>
+            <a class="text-danger"
+               title="Remove from Cart"
+               (click)="removeFromCart(product.id)">
+              <fa-icon [icon]="['fal', 'trash']"></fa-icon>
+            </a>
+          </ng-template>
+          <ng-template #notInCart>
+            <a (click)="addToCart(product)"
+               title="Add to Cart">
+              <fa-icon [icon]="['fal', 'cart-plus']"></fa-icon>
+            </a>
+          </ng-template>
         </ng-template>
       </kendo-grid-column>
     </kendo-grid>
@@ -35,17 +80,6 @@
         {{error}}
       </div>
     </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-12 col-md-6">
     <hr />
-    <h4>
-      <span *ngIf="showAdd">
-        <a routerLink="/Products/Create">
-          <fa-icon [icon]="['fal', 'plus']"></fa-icon> Add
-        </a>
-      </span>
-    </h4>
   </div>
 </div>

@@ -4,16 +4,16 @@
     <h2><fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register</h2>
   </div>
 </div>
-<div class="row">
-  <div class="col-12 col-md-6">
-      <hr />
-      <div *ngIf="success" class="alert alert-success" role="alert">
-      {{success}}
-    </div>
-    <div *ngIf="!success">
-      <form #f="ngForm"
-            ngNativeValidate
-            (ngSubmit)="register(f)">
+<hr />
+<div *ngIf="success" class="alert alert-success" role="alert">
+  {{success}}
+</div>
+<div *ngIf="!success">
+  <form #f="ngForm"
+        ngNativeValidate
+        (ngSubmit)="register(f)">
+    <div class="row">
+      <div class="col-12 col-md-6">
         <div class="row">
           <div class="col-12 col-md-6">
             <div class="form-group">
@@ -21,13 +21,13 @@
                 First Name
               </label>
               <input id="firstName"
-                    name="firstName"
-                    type="text"
-                    class="form-control"
-                    placeholder="First Name"
-                    required
-                    #firstName="ngModel"
-                    [(ngModel)]="model.firstName">
+                     name="firstName"
+                     type="text"
+                     class="form-control"
+                     placeholder="First Name"
+                     required
+                     #firstName="ngModel"
+                     [(ngModel)]="model.firstName">
             </div>
           </div>
           <div class="col-12 col-md-6">
@@ -36,13 +36,13 @@
                 Last Name
               </label>
               <input id="lastName"
-                      name="lastName"
-                      type="text"
-                      class="form-control"
-                      placeholder="Last Name"
-                      required
-                      #lastName="ngModel"
-                      [(ngModel)]="model.lastName">
+                     name="lastName"
+                     type="text"
+                     class="form-control"
+                     placeholder="Last Name"
+                     required
+                     #lastName="ngModel"
+                     [(ngModel)]="model.lastName">
             </div>
           </div>
         </div>
@@ -51,15 +51,15 @@
             Email
           </label>
           <input id="email"
-                  name="email"
-                  type="email"
-                  class="form-control"
-                  aria-describedby="emailHelp"
-                  placeholder="Email"
-                  required
-                  email
-                  #email="ngModel"
-                  [(ngModel)]="model.email">
+                 name="email"
+                 type="email"
+                 class="form-control"
+                 aria-describedby="emailHelp"
+                 placeholder="Email"
+                 required
+                 email
+                 #email="ngModel"
+                 [(ngModel)]="model.email">
           <small id="emailHelp" class="form-text text-muted">
             We'll never share your email with anyone else.
           </small>
@@ -69,27 +69,100 @@
             Password
           </label>
           <input id="password"
-                  name="password"
-                  type="password"
-                  class="form-control"
-                  placeholder="Password"
-                  required
-                  #password="ngModel"
-                  [(ngModel)]="model.password">
+                 name="password"
+                 type="password"
+                 class="form-control"
+                 placeholder="Password"
+                 required
+                 #password="ngModel"
+                 [(ngModel)]="model.password">
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="streetAddress">
+            Street Address
+          </label>
+          <input id="streetAddress"
+                 name="streetAddress"
+                 type="text"
+                 placeholder="Street Address"
+                 title="Street Address"
+                 #streetAddress="ngModel"
+                 [(ngModel)]="model.address.street_address"
+                 class="form-control" />
         </div>
         <div class="form-group">
-          <button type="submit"
-                  class="btn btn-primary"
-                  [disabled]="f.invalid">
-            Submit
-          </button>
+          <label for="locality">
+            City
+          </label>
+          <input id="locality"
+                 name="locality"
+                 type="text"
+                 placeholder="City"
+                 title="City"
+                 #locality="ngModel"
+                 [(ngModel)]="model.address.locality"
+                 class="form-control" />
         </div>
-        <div *ngFor="let error of errors">
-          <div class="alert alert-danger" role="alert">
-            {{error}}
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label for="region">
+                State
+              </label>
+              <input id="region"
+                     name="region"
+                     type="text"
+                     placeholder="State"
+                     title="State"
+                     #region="ngModel"
+                     [(ngModel)]="model.address.region"
+                     class="form-control" />
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-group">
+              <label for="postalCode">
+                ZIP Code
+              </label>
+              <input id="postalCode"
+                     name="postalCode"
+                     type="text"
+                     placeholder="ZIP Code"
+                     title="ZIP Code"
+                     #postalCode="ngModel"
+                     [(ngModel)]="model.address.postal_code"
+                     class="form-control" />
+            </div>
           </div>
         </div>
-      </form>
+        <div class="form-group">
+          <label for="country">
+            Country
+          </label>
+          <input id="country"
+                 name="country"
+                 type="text"
+                 placeholder="Country"
+                 title="Country"
+                 #postalCode="ngModel"
+                 [(ngModel)]="model.address.country"
+                 class="form-control" />
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="submit"
+                class="btn btn-primary"
+                [disabled]="f.invalid">
+          Submit
+        </button>
+      </div>
+      <div *ngFor="let error of errors">
+        <div class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+      </div>
     </div>
-  </div>
+  </form>
 </div>

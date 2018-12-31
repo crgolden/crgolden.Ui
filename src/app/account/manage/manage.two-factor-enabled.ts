@@ -13,7 +13,7 @@ export class ManageTwoFactorEnabled implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.manageService.isTwoFactorEnabled().pipe(map((isTwoFactorEnabled: boolean) => {
+    return this.manageService.isTwoFactorEnabled$().pipe(map((isTwoFactorEnabled: boolean) => {
       if (isTwoFactorEnabled) {
         return true;
       } else {

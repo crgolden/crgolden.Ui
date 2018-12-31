@@ -3,4 +3,6 @@ export abstract class BaseRelationship {
   model1Name: string;
   model2Id: string;
   model2Name: string;
+  created: Date;
+  updated?: Date;
 }

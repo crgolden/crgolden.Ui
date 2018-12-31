@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faHome,
@@ -15,15 +17,27 @@ import {
   faLock,
   faCheck,
   faBox,
-  faBoxes,
   faList,
   faInfoSquare,
   faTrash,
   faPlus,
   faBan,
-  faShoppingCart
+  faShoppingCart,
+  faCartPlus,
+  faCashRegister,
+  faShoppingBag,
+  faDollarSign
 } from '@fortawesome/pro-light-svg-icons';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import {
+  faFacebook,
+  faCcVisa,
+  faCcAmex,
+  faCcMastercard,
+  faCcDiscover,
+  faCcJcb,
+  faCcDinersClub,
+  faCcStripe
+} from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { CookieService } from 'ngx-cookie-service';
 import { AppInterceptor } from './app.interceptor';
@@ -33,10 +47,12 @@ import { AppIsAdmin } from './app.is-admin';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccountService } from './account/account.service';
+import { AddressService } from './address/address.service';
 import { CartService } from './cart/cart.service';
 import { CartProductsService } from './cart-products/cart-products.service';
+import { OrdersService } from './orders/orders.service';
 import { HomeComponent } from './home/home.component';
-import { AccessDeniedComponent } from './access-denied/access-denied.component'
+import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -54,13 +70,23 @@ library.add(
   faLock,
   faCheck,
   faBox,
-  faBoxes,
   faList,
   faInfoSquare,
   faTrash,
   faPlus,
   faBan,
-  faShoppingCart
+  faShoppingCart,
+  faCartPlus,
+  faCashRegister,
+  faCcVisa,
+  faCcAmex,
+  faCcMastercard,
+  faCcDiscover,
+  faCcJcb,
+  faCcDinersClub,
+  faCcStripe,
+  faShoppingBag,
+  faDollarSign
 );
 
 @NgModule({
@@ -73,6 +99,7 @@ library.add(
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FontAwesomeModule,
     AppRoutingModule
@@ -83,13 +110,16 @@ library.add(
       useClass: AppInterceptor,
       multi: true
     },
+    NgbActiveModal,
     CookieService,
     AppLoggedIn,
     AppNotLoggedIn,
     AppIsAdmin,
     AccountService,
+    AddressService,
     CartService,
-    CartProductsService
+    CartProductsService,
+    OrdersService
   ],
   bootstrap: [
     AppComponent

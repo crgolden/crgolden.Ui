@@ -24,10 +24,8 @@ export class PersonalDataComponent implements OnInit {
 
   downloadPersonalData(): void {
     this.errors = new Array<string>();
-    this.manageService
-      .downloadPersonalData()
-      .subscribe(
-        (response: HttpResponse<Blob>) => saveAs(response.body, 'PersonalData.json'),
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.downloadPersonalData$().subscribe(
+      (response: HttpResponse<Blob>) => saveAs(response.body, 'PersonalData.json'),
+      (errors: Array<string>) => this.errors = errors);
   }
 }

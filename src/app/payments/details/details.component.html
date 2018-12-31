@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2>
+      <fa-icon [icon]="['fal', 'dollar-sign']"></fa-icon> Payment Details
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <dl>
+      <dt>
+        Name
+      </dt>
+      <dd>
+        {{payment.name}}
+      </dd>
+      <dt>
+        Amount
+      </dt>
+      <dd>
+        {{payment.amount | currency}}
+      </dd>
+      <dt>
+        Description
+      </dt>
+      <dd>
+        {{payment.description}}
+      </dd>
+    </dl>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h4>
+      <a routerLink="/Orders/Details/{{payment.orderId}}"
+         title="Order Details">
+        <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order
+      </a>
+      <span *ngIf="showEdit$() | async">
+        | <a routerLink="/Payments/Edit/{{payment.id}}">
+          <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
+        </a>
+      </span>
+    </h4>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+    </div>
+  </div>
+</div>

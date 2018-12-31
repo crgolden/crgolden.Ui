@@ -1,12 +1,12 @@
 import { ComponentFixture } from '@angular/core/testing';
-import { DeleteComponent } from '../../../products/delete/delete.component';
+import { DetailsComponent } from '../../../orders/details/details.component';
 import { QueryHelpers } from '../../helpers/query-helpers';
 
-export class DeletePage {
+export class DetailsPage {
 
-  fixture: ComponentFixture<DeleteComponent>;
+  fixture: ComponentFixture<DetailsComponent>;
 
-  constructor(fixture: ComponentFixture<DeleteComponent>) {
+  constructor(fixture: ComponentFixture<DetailsComponent>) {
     this.fixture = fixture;
   }
 

@@ -10,13 +10,15 @@ import { DetailsPage } from '../../test/page-models/products/details-page';
 import { DetailsComponent } from './details.component';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../relationships/order-product';
+import { OrderProduct } from '../../order-products/order-product';
 
 const product: Product = {
   id: '1',
   name: 'Product 1',
   description: 'Description 1',
   price: 1.00,
+  isDownload: false,
+  created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>()
 };

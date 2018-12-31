@@ -27,9 +27,9 @@ export class HasPasswordResolver implements Resolve<boolean> {
             .get<boolean>(`${environment.identityUrl}/Manage/HasPassword`)
             .pipe(
               take(1),
-              map((hasPassword: boolean) => {
-                this.manageService.hasPassword.next(hasPassword);
-                return hasPassword;
+              map((value: boolean) => {
+                this.manageService.hasPassword.next(value);
+                return value;
               }));
         } else {
           return of(hasPassword);

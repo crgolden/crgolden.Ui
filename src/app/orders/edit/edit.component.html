@@ -1,0 +1,189 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2>
+      <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Edit Order
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <form #f="ngForm"
+          ngNativeValidate
+          (ngSubmit)="edit(f)">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name"
+                   name="name"
+                   type="text"
+                   required
+                   class="form-control"
+                   placeholder="Name"
+                   #name="ngModel"
+                   [(ngModel)]="order.name">
+          </div>
+          <dl>
+            <dt>
+              Total
+            </dt>
+            <dd>
+              {{order.total | currency}}
+            </dd>
+            <dt>
+              Date
+            </dt>
+            <dd>
+              {{order.created | date}}
+            </dd>
+          </dl>
+        </div>
+        <div class="col-12 col-md-6" *ngIf="shippingAddress">
+          <div class="form-group">
+            <label for="streetAddress">
+              Street Address
+            </label>
+            <input id="streetAddress"
+                   name="streetAddress"
+                   type="text"
+                   class="form-control"
+                   placeholder="Street Address"
+                   required
+                   #street="ngModel"
+                   [(ngModel)]="shippingAddress.street_address">
+          </div>
+          <div class="form-group">
+            <label for="city">City</label>
+            <input id="city"
+                   name="city"
+                   type="text"
+                   class="form-control"
+                   placeholder="City"
+                   required
+                   #street="ngModel"
+                   [(ngModel)]="shippingAddress.locality">
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label for="region">State</label>
+                <input id="region"
+                       name="region"
+                       type="text"
+                       class="form-control"
+                       placeholder="State"
+                       required
+                       #street="ngModel"
+                       [(ngModel)]="shippingAddress.region">
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label for="postalCode">ZIP Code</label>
+                <input id="postalCode"
+                       name="postalCode"
+                       type="text"
+                       class="form-control"
+                       placeholder="ZIP Code"
+                       required
+                       #street="ngModel"
+                       [(ngModel)]="shippingAddress.postal_code">
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input id="country"
+                   name="country"
+                   type="text"
+                   class="form-control"
+                   placeholder="Country"
+                   required
+                   #street="ngModel"
+                   [(ngModel)]="shippingAddress.country">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <hr />
+          <kendo-grid id="orderProductsGrid"
+                      [data]="orderProducts"
+                      [pageSize]="orderProductsState.take"
+                      [skip]="orderProductsState.skip"
+                      [sort]="orderProductsState.sort"
+                      [sortable]="sortable"
+                      [pageable]="pageable"
+                      [scrollable]="'none'"
+                      [groupable]="false"
+                      [group]="orderProductsState.group"
+                      [filterable]="false"
+                      [filter]="orderProductsState.filter"
+                      (dataStateChange)="orderProductsStateChange($event)"
+                      (cellClick)="orderProductsClick($event)">
+            <ng-template kendoGridToolbarTemplate>
+              <h4>
+                Products<span *ngIf="formGroup">
+                  | <a id="cancel"
+                       title="Cancel"
+                       (click)="cancelHandler()">
+                    Cancel
+                  </a>
+                </span>
+              </h4>
+            </ng-template>
+            <kendo-grid-column field="model1Id" [hidden]="true"></kendo-grid-column>
+            <kendo-grid-column field="model1Name" [hidden]="true"></kendo-grid-column>
+            <kendo-grid-column field="model2Id" [hidden]="true"></kendo-grid-column>
+            <kendo-grid-column field="model2Name" title="Name" [editable]="false">
+              <ng-template kendoGridCellTemplate let-orderProduct>
+                <a routerLink="/Products/Details/{{orderProduct.model2Id}}"
+                   title="Product Details">
+                  {{orderProduct.model2Name}}
+                </a>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="price"
+                               title="Price"
+                               editor="numeric"
+                               [format]="{ style: 'currency', currency: 'USD' }">
+            </kendo-grid-column>
+            <kendo-grid-column field="quantity"
+                               title="Quantity"
+                               editor="numeric">
+            </kendo-grid-column>
+            <kendo-grid-column field="isDownload" [hidden]="true"></kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+      <div class="form-group">
+        <hr />
+        <h4>
+          <span *ngIf="showSave$() | async">
+            <button type="submit"
+                    class="btn btn-primary"
+                    [disabled]="f.pristine || f.invalid">
+              Save
+            </button> |
+          </span>
+          <a routerLink="/Orders/Details/{{order.id}}"
+             title="Orders">
+            <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
+          </a> |
+          <a routerLink="/Orders"
+             title="Orders">
+            <fa-icon [icon]="['fal', 'list']"></fa-icon> List
+          </a>
+        </h4>
+      </div>
+      <div *ngFor="let error of errors">
+        <div class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+      </div>
+    </form>
+    <hr />
+  </div>
+</div>

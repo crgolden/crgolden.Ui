@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiUrl: 'https://localhost:5001/v1',
   identityUrl: 'https://localhost:6001',
-  identityClientId: '6294e6f0-826e-40f3-9937-8907fa7ed376'
+  identityClientId: '6294e6f0-826e-40f3-9937-8907fa7ed376',
+  stripePublishableKey: 'pk_test_sZ7XHwwRP724lAqMVd00SccX'
 };
 
 /*

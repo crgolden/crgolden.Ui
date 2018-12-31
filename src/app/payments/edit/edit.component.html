@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2>
+      <fa-icon [icon]="['fal', 'dollar-sign']"></fa-icon> Edit Payment
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <form #f="ngForm"
+          ngNativeValidate
+          (ngSubmit)="edit(f)">
+        <dl>
+          <dt>
+            Name
+          </dt>
+          <dd>
+            {{payment.name}}
+          </dd>
+          <dt>
+            Amount
+          </dt>
+          <dd>
+            {{payment.amount | currency}}
+          </dd>
+        </dl>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea kendoTextArea
+                  id="description"
+                  class="form-control"
+                  name="description"
+                  placeholder="Description"
+                  #description="ngModel"
+                  [(ngModel)]="payment.description"></textarea>
+      </div>
+      <div class="form-group">
+        <hr />
+        <h4>
+          <span *ngIf="showSave$() | async">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="f.pristine || f.invalid">
+              Save
+            </button> |
+          </span>
+          <a routerLink="/Payments/Details/{{payment.id}}"
+             title="Payment Details">
+            <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
+          </a> |
+          <a routerLink="/Orders/Details/{{payment.orderId}}"
+             title="Order Details">
+            <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order
+          </a>
+        </h4>
+      </div>
+      <div *ngFor="let error of errors">
+        <div class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

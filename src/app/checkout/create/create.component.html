@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2>
+      <fa-icon [icon]="['fal', 'cash-register']"></fa-icon> Checkout
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div *ngIf="needsShippingAddress">
+          <div *ngIf="validShippingAddress">
+            <h4>
+              Shipping Address:
+            </h4>
+            <p [innerHTML]="formattedShippingAddress"></p>
+            <button class="btn btn-primary"
+                    (click)="openShippingAddressModal()">
+              Change Shipping Address
+            </button>
+          </div>
+          <div *ngIf="!validShippingAddress">
+            <button class="btn btn-outline-primary"
+                    (click)="openShippingAddressModal()">
+              Enter Shipping Address
+            </button>
+          </div>
+          <hr />
+        </div>
+        <div *ngIf="!needsShippingAddress || validShippingAddress">
+          <div *ngIf="needsPayment">
+            <div *ngIf="validPayment">
+              <h4>
+                Payment Information:
+              </h4>
+              <p *ngIf="token && token.type === 'card'" [ngSwitch]="token.card.brand">
+                <span *ngSwitchCase="'Visa'">
+                  <fa-icon [icon]="['fab', 'cc-visa']"></fa-icon>
+                </span>
+                <span *ngSwitchCase="'American Express'">
+                  <fa-icon [icon]="['fab', 'cc-amex']"></fa-icon>
+                </span>
+                <span *ngSwitchCase="'MasterCard'">
+                  <fa-icon [icon]="['fab', 'cc-mastercard']"></fa-icon>
+                </span>
+                <span *ngSwitchCase="'Discover'">
+                  <fa-icon [icon]="['fab', 'cc-discover']"></fa-icon>
+                </span>
+                <span *ngSwitchCase="'JCB'">
+                  <fa-icon [icon]="['fab', 'cc-jcb']"></fa-icon>
+                </span>
+                <span *ngSwitchCase="'Diners Club'">
+                  <fa-icon [icon]="['fab', 'cc-diners-club']"></fa-icon>
+                </span>
+                <span *ngSwitchCase="'Unknown'">
+                  <fa-icon [icon]="['fab', 'cc-stripe']"></fa-icon>
+                </span>
+                <span> **** **** **** {{token.card.last4}}</span>
+              </p>
+              <button class="btn btn-primary"
+                      (click)="openPaymentInformationModal()">
+                Change Payment Information
+              </button>
+            </div>
+            <div *ngIf="!validPayment">
+              <button class="btn btn-outline-primary"
+                      (click)="openPaymentInformationModal()">
+                Enter Payment Information
+              </button>
+            </div>
+            <hr />
+          </div>
+          <button class="btn btn-primary"
+                  type="button"
+                  (click)="create()"
+                  [disabled]="invalidShipping || invalidPayment">
+            Submit Checkout
+          </button>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <h4>
+          Total: {{order.total | currency}}
+        </h4>
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>

@@ -16,6 +16,6 @@ export class LogoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Logout');
-    this.accountService.signoutRedirect();
+    this.accountService.signoutRedirect$();
   }
 }

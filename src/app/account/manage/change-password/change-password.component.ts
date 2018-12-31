@@ -35,10 +35,8 @@ export class ChangePasswordComponent implements OnInit {
   changePassword(form: NgForm): void {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.manageService
-      .changePassword(this.model)
-      .subscribe(
-        (response: string) => this.message = response,
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.changePassword$(this.model).subscribe(
+      (response: string) => this.message = response,
+      (errors: Array<string>) => this.errors = errors);
   }
 }

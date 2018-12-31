@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Params, ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
 import { ConfirmEmail } from '../models/confirm-email';
 import { AccountService } from '../account.service';
 
@@ -23,20 +25,23 @@ export class ConfirmEmailComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Confirm Email');
-    this.route.queryParams.subscribe((params: Params) => {
-      const model: ConfirmEmail = {
-        code: params['code'],
-        userId: params['userId']
-      };
-      if (model.userId != null && model.code != null) {
-        this.accountService
-          .confirmEmail(model)
-          .subscribe(
-            (response: string) => this.success = response,
-            (errors: Array<string>) => this.errors = errors);
-      } else {
-        this.router.navigate(['/Home']);
-      }
-    });
+    this.route.queryParams.pipe(concatMap(
+      (params: Params) => {
+        const model: ConfirmEmail = {
+          code: params['code'],
+          userId: params['userId']
+        };
+        if (model.userId != null && model.code != null) {
+          return this.accountService.confirmEmail$(model);
+        } else {
+          this.router.navigate(['/Home']);
+          return of('');
+        }
+      },
+      (_: Params, response: string) => response)).subscribe(
+        (res: string) => this.success = res.length > 0
+          ? res
+          : undefined,
+        (errors: Array<string>) => this.errors = errors);
   }
 }

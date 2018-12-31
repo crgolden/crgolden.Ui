@@ -18,6 +18,7 @@ import { CartService } from '../cart.service';
 const cart: Cart = {
   id: '1',
   name: 'Cart 1',
+  created: new Date(),
   cartProducts: new Array<CartProduct>()
 };
 let component: EditComponent;

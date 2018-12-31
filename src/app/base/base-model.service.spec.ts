@@ -39,7 +39,7 @@ describe('BaseModelService', () => {
     httpBaseModelSpy.get.and.returnValue(defer(() => Promise.resolve(modelsGridDataResult)));
 
     modelService
-      .index({})
+      .index$({})
       .subscribe((result: GridDataResult) => expect(result).toEqual(modelsGridDataResult, 'expected models'));
 
     expect(httpBaseModelSpy.get.calls.count()).toBe(1, 'one call');
@@ -49,7 +49,7 @@ describe('BaseModelService', () => {
     httpBaseModelSpy.get.and.returnValue(defer(() => Promise.resolve(model1)));
 
     modelService
-      .details(model1.id)
+      .details$(model1.id)
       .subscribe((result: BaseModel) => expect(result).toEqual(model1, 'expected model1'));
 
     expect(httpBaseModelSpy.get.calls.count()).toBe(1, 'one call');
@@ -59,7 +59,7 @@ describe('BaseModelService', () => {
     httpBaseModelSpy.post.and.returnValue(defer(() => Promise.resolve(model1)));
 
     modelService
-      .create(model1)
+      .create$(model1)
       .subscribe((result: BaseModel) => expect(result).toEqual(model1, 'expected model1'));
 
     expect(httpBaseModelSpy.post.calls.count()).toBe(1, 'one call');
@@ -69,7 +69,7 @@ describe('BaseModelService', () => {
     httpBaseModelSpy.put.and.returnValue(defer(() => Promise.resolve()));
 
     modelService
-      .edit(model1)
+      .edit$(model1)
       .subscribe((result: Object) => expect(result).toBeUndefined('expected undefined'));
 
     expect(httpBaseModelSpy.put.calls.count()).toBe(1, 'one call');
@@ -79,7 +79,7 @@ describe('BaseModelService', () => {
     httpBaseModelSpy.delete.and.returnValue(defer(() => Promise.resolve()));
 
     modelService
-      .delete(model1.id)
+      .delete$(model1.id)
       .subscribe((result: Object) => expect(result).toBeUndefined('expected undefined'));
 
     expect(httpBaseModelSpy.delete.calls.count()).toBe(1, 'one call');

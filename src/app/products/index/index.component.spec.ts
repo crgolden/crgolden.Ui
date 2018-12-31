@@ -12,7 +12,7 @@ import { IndexPage } from '../../test/page-models/products/index-page';
 import { IndexComponent } from './index.component';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../relationships/order-product';
+import { OrderProduct } from '../../order-products/order-product';
 import { ProductsService } from '../../products/products.service';
 
 const product1: Product = {
@@ -20,6 +20,8 @@ const product1: Product = {
   name: 'Product 1',
   description: 'Description 1',
   price: 1.00,
+  isDownload: false,
+  created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>()
 };
@@ -28,6 +30,8 @@ const product2: Product = {
   name: 'Product 2',
   description: 'Description 2',
   price: 2.00,
+  isDownload: true,
+  created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>()
 };
@@ -128,7 +132,7 @@ function setup() {
       },
       {
         provide: ProductsService,
-        useValue: jasmine.createSpyObj('productsService', { index: of() })
+        useValue: jasmine.createSpyObj('ProductsService', { index: of() })
       }
     ],
     imports: [

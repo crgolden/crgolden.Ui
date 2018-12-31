@@ -18,7 +18,7 @@ export class AppIsAdmin implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.accountService.userHasRole('Admin').pipe(map((response: boolean) => {
+    return this.accountService.userHasRole$('Admin').pipe(map((response: boolean) => {
       if (response) {
         return true;
       }

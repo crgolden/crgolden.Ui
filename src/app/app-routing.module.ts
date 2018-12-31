@@ -17,12 +17,24 @@ const routes: Routes = [
     loadChildren: './account/account.module#AccountModule'
   },
   {
+    path: 'Payments',
+    loadChildren: './payments/payments.module#PaymentsModule'
+  },
+  {
     path: 'Products',
     loadChildren: './products/products.module#ProductsModule'
   },
   {
+    path: 'Orders',
+    loadChildren: './orders/orders.module#OrdersModule'
+  },
+  {
     path: 'Cart',
     loadChildren: './cart/cart.module#CartModule'
+  },
+  {
+    path: 'Checkout',
+    loadChildren: './checkout/checkout.module#CheckoutModule'
   },
   {
     path: '',

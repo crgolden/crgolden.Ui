@@ -1,43 +1,117 @@
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'box']"></fa-icon> Edit Product</h2>
+    <h2>
+      <fa-icon [icon]="['fal', 'box']"></fa-icon> Edit Product
+    </h2>
   </div>
 </div>
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <hr />
-    <form #f="ngForm" ngNativeValidate (ngSubmit)="edit(f)">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" required class="form-control" placeholder="Name"
-               #name="ngModel"
-               [(ngModel)]="product.name">
-        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-          Name is required
+    <form #f="ngForm"
+          ngNativeValidate
+          (ngSubmit)="edit(f)">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name"
+                   name="name"
+                   type="text"
+                   required
+                   class="form-control"
+                   placeholder="Name"
+                   #name="ngModel"
+                   [(ngModel)]="product.name">
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <hr />
-        <h4>
-          <span *ngIf="showSave">
-            <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
-              Save
-            </button> |
-          </span>
-          <a routerLink="/Products/Details/{{product.id}}">
-            <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
-          </a> |
-          <a routerLink="/Products">
-            <fa-icon [icon]="['fal', 'list']"></fa-icon> List
-          </a>
-        </h4>
-        <div *ngFor="let error of errors">
-          <div class="alert alert-danger" role="alert">
-            {{error}}
+        <div class="col-12 col-md-6">
+          <div class="form-check">
+            <input id="active"
+                   name="active"
+                   class="form-check-input"
+                   type="checkbox"
+                   [checked]="product.active"
+                   #active="ngModel"
+                   [(ngModel)]="product.active">
+            <label class="form-check-label" for="active">
+              Active
+            </label>
           </div>
         </div>
       </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea kendoTextArea
+                  id="description"
+                  class="form-control"
+                  name="description"
+                  placeholder="Description"
+                  #description="ngModel"
+                  [(ngModel)]="product.description"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label for="price">Price</label>
+            <kendo-numerictextbox id="price"
+                                  class="form-control"
+                                  name="price"
+                                  required
+                                  placeholder="Price"
+                                  [value]="product.price"
+                                  [title]="Price"
+                                  [min]="0"
+                                  [decimals]="2"
+                                  [format]="'c2'"
+                                  [autoCorrect]="true"
+                                  #price="ngModel"
+                                  [(ngModel)]="product.price">
+            </kendo-numerictextbox>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="form-check">
+            <input id="isDownload"
+                   name="isDownload"
+                   class="form-check-input"
+                   type="checkbox"
+                   [checked]="product.isDownload"
+                   #isDownload="ngModel"
+                   [(ngModel)]="product.isDownload">
+            <label class="form-check-label" for="isDownload">
+              Download
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <hr/>
+        <h4>
+          <span *ngIf="showSave$() | async">
+            <button type="submit"
+                    class="btn btn-primary"
+                    [disabled]="f.pristine || f.invalid">
+              Save
+            </button> |
+          </span>
+          <a routerLink="/Products/Details/{{product.id}}"
+             title="Product Details">
+            <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
+          </a> |
+          <a routerLink="/Products"
+             title="Products">
+            <fa-icon [icon]="['fal', 'list']"></fa-icon> List
+          </a>
+        </h4>
+      </div>
+      <div *ngFor="let error of errors">
+        <div class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+      </div>
     </form>
+    <hr />
   </div>
 </div>

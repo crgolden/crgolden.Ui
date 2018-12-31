@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
-import { LoginCallbackComponent } from './login-callback/login-callback.component';
-import { LogoutCallbackComponent } from './logout-callback/logout-callback.component';
+import { LoginSuccessComponent } from './login-success/login-success.component';
+import { LogoutSuccessComponent } from './logout-success/logout-success.component';
 import { RegisterComponent } from './register/register.component';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
@@ -28,8 +28,8 @@ const routes: Routes = [
     canActivate: [AppNotLoggedIn]
   },
   {
-    path: 'LoginCallback',
-    component: LoginCallbackComponent
+    path: 'LoginSuccess',
+    component: LoginSuccessComponent
   },
   {
     path: 'Logout',
@@ -37,8 +37,8 @@ const routes: Routes = [
     canActivate: [AppLoggedIn]
   },
   {
-    path: 'LogoutCallback',
-    component: LogoutCallbackComponent
+    path: 'LogoutSuccess',
+    component: LogoutSuccessComponent
   },
   {
     path: 'Register',

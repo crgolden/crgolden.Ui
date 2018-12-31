@@ -35,14 +35,12 @@ export class SetPasswordComponent implements OnInit {
   setPassword(form: NgForm): void {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.manageService
-      .setPassword(this.model)
-      .subscribe(
-        (response: string) => {
-          this.message = response;
-          this.manageService.hasPassword.next(true);
-          this.router.navigate(['/Account/Manage/ChangePassword']);
-        },
-        (errors: Array<string>) => this.errors = errors);
+    this.manageService.setPassword$(this.model).subscribe(
+      (response: string) => {
+        this.message = response;
+        this.manageService.hasPassword.next(true);
+        this.router.navigate(['/Account/Manage/ChangePassword']);
+      },
+      (errors: Array<string>) => this.errors = errors);
   }
 }

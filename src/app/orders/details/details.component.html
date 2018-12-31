@@ -1,0 +1,157 @@
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h2>
+      <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order Details
+    </h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <dl>
+          <dt>
+            Name
+          </dt>
+          <dd>
+            {{order.name}}
+          </dd>
+          <dt>
+            Total
+          </dt>
+          <dd>
+            {{order.total | currency}}
+          </dd>
+          <dt>
+            Date
+          </dt>
+          <dd>
+            {{order.created | date}}
+          </dd>
+        </dl>
+      </div>
+      <div class="col-12 col-md-6">
+        <dl>
+          <dt *ngIf="shippingAddress">
+            Shipping Address
+          </dt>
+          <dd *ngIf="shippingAddress" [innerHTML]="formattedShippingAddress">
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <kendo-grid [data]="orderProducts"
+                [pageSize]="orderProductsState.take"
+                [skip]="orderProductsState.skip"
+                [sort]="orderProductsState.sort"
+                [sortable]="sortable"
+                [pageable]="pageable"
+                [scrollable]="'none'"
+                [groupable]="false"
+                [group]="orderProductsState.group"
+                [filterable]="false"
+                [filter]="orderProductsState.filter"
+                (dataStateChange)="orderProductsStateChange($event)">
+      <ng-template kendoGridToolbarTemplate>
+        <h4>
+          Products
+        </h4>
+      </ng-template>
+      <kendo-grid-column field="model2Name"
+                         title="Name">
+        <ng-template kendoGridCellTemplate let-orderProduct>
+          <a routerLink="/Products/Details/{{orderProduct.model2Id}}"
+             title="Product Details">
+            {{orderProduct.model2Name}}
+          </a>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="extendedPrice"
+                         title="Price">
+        <ng-template kendoGridCellTemplate let-orderProduct>
+          {{orderProduct.extendedPrice | currency}}
+          <span *ngIf="orderProduct.quantity > 1">
+            ({{orderProduct.quantity}} @ {{orderProduct.price | currency}})
+          </span>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <kendo-grid [data]="payments"
+                [pageSize]="paymentsState.take"
+                [skip]="paymentsState.skip"
+                [sort]="paymentsState.sort"
+                [sortable]="sortable"
+                [pageable]="pageable"
+                [scrollable]="'none'"
+                [groupable]="false"
+                [group]="paymentsState.group"
+                [filterable]="false"
+                [filter]="paymentsState.filter"
+                (dataStateChange)="paymentsStateChange($event)">
+      <ng-template kendoGridToolbarTemplate>
+        <h4>
+          Payments
+        </h4>
+      </ng-template>
+      <kendo-grid-column field="name"
+                         title="Name"
+                         [filterable]="false">
+        <ng-template kendoGridCellTemplate let-payment>
+          <a routerLink="/Payments/Details/{{payment.id}}">
+            {{payment.name}}
+          </a>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="amount"
+                         title="Amount"
+                         filter="numeric"
+                         [filterable]="false"
+                         [format]="{ style: 'currency', currency: 'USD' }">
+      </kendo-grid-column>
+      <kendo-grid-column field="created"
+                         title="Date"
+                         filter="date"
+                         [filterable]="false"
+                         [format]="{ date: 'short' }">
+        <ng-template kendoGridCellTemplate let-payment>
+          {{payment.created | date}}
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <hr />
+    <h4>
+      <a routerLink="/Orders"
+         title="Orders">
+        <fa-icon [icon]="['fal', 'list']"></fa-icon> List
+      </a>
+      <span *ngIf="showEdit$() | async">
+        | <a routerLink="/Orders/Edit/{{order.id}}"
+             title="Edit Order">
+          <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
+        </a>
+      </span>
+    </h4>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>
