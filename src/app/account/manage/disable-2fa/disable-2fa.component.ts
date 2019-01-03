@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { ManageService } from '../manage.service';
 })
 export class Disable2faComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   message: string;
   errors: Array<string>;
 
@@ -25,8 +27,13 @@ export class Disable2faComponent implements OnInit {
 
   disable2fa(): void {
     this.errors = new Array<string>();
+    this.blockUI.start();
     this.manageService.disable2fa$().subscribe(
-      (response: string) => this.router.navigate(['/Manage/TwoFactorAuthentication']),
-      (errors: Array<string>) => this.errors = errors);
+      (response: string) => {
+        this.message = response;
+        this.router.navigate(['/Manage/TwoFactorAuthentication']);
+      },
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

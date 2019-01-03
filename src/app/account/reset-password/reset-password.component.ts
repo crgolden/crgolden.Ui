@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Params, ActivatedRoute } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ResetPassword } from '../models/reset-password';
 import { AccountService } from '../account.service';
 
@@ -12,6 +13,7 @@ import { AccountService } from '../account.service';
 })
 export class ResetPasswordComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
   success: string;
   model: ResetPassword;
@@ -32,8 +34,10 @@ export class ResetPasswordComponent implements OnInit {
   resetPassword(form: NgForm) {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.accountService.resetPassword$(this.model).subscribe(
       (response: string) => this.success = response,
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

@@ -11,22 +11,20 @@
         <ng-container *ngIf="inCart$() | async; then inCart; else notInCart"></ng-container>
         <ng-template #inCart>
           <h2>
-            <span class="float-md-right">
-              <a title="Remove from Cart"
-                 (click)="removeFromCart()">
-                <fa-icon [icon]="['fal', 'trash']"></fa-icon> Remove from Cart
-              </a>
-            </span>
+            <a class="float-md-right text-danger"
+               title="Remove from Cart"
+               (click)="removeFromCart()">
+              <fa-icon [icon]="['fal', 'trash']"></fa-icon>
+            </a>
           </h2>
         </ng-template>
         <ng-template #notInCart>
           <h2>
-            <span class="float-md-right">
-              <a title="Add to Cart"
-                 (click)="addToCart()">
-                <fa-icon [icon]="['fal', 'cart-plus']"></fa-icon> Add to Cart
-              </a>
-            </span>
+            <a class="float-md-right"
+               title="Add to Cart"
+               (click)="addToCart()">
+              <fa-icon [icon]="['fal', 'cart-plus']"></fa-icon>
+            </a>
           </h2>
         </ng-template>
       </div>
@@ -36,38 +34,50 @@
 <div class="row">
   <div class="col-12">
     <hr />
-    <dl>
-      <dt *ngIf="showActive$() | async">
-        Active
-      </dt>
-      <dd *ngIf="showActive$() | async">
-        <input type="checkbox" [checked]="product.active" disabled />
-      </dd>
-      <dt>
-        Name
-      </dt>
-      <dd>
-        {{product.name}}
-      </dd>
-      <dt>
-        Description
-      </dt>
-      <dd>
-        {{product.description}}
-      </dd>
-      <dt>
-        Price
-      </dt>
-      <dd>
-        {{product.price | currency}}
-      </dd>
-      <dt>
-        Download
-      </dt>
-      <dd>
-        <input type="checkbox" [checked]="product.isDownload" disabled />
-      </dd>
-    </dl>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <dl>
+          <dt *ngIf="showActive$() | async">
+            Active
+          </dt>
+          <dd *ngIf="showActive$() | async">
+            <input type="checkbox" [checked]="product.active" disabled />
+          </dd>
+          <dt>
+            Name
+          </dt>
+          <dd>
+            {{product.name}}
+          </dd>
+          <dt>
+            Description
+          </dt>
+          <dd>
+            {{product.description}}
+          </dd>
+          <dt>
+            Price
+          </dt>
+          <dd>
+            {{product.price | currency}}
+          </dd>
+          <dt>
+            Download
+          </dt>
+          <dd>
+            <input type="checkbox" [checked]="product.isDownload" disabled />
+          </dd>
+        </dl>
+      </div>
+      <div class="col-12 col-md-6">
+        <ng-container *ngIf="primaryImageUri">
+          <img src="{{primaryImageUri}}"
+               alt="Product Image"
+               title="Product Image"
+               width="500" />
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>
 <div class="row">
@@ -80,7 +90,7 @@
       </a>
       <span *ngIf="showEdit$() | async">
         | <a routerLink="/Products/Edit/{{product.id}}"
-           title="Edit Product">
+             title="Edit Product">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>
       </span>

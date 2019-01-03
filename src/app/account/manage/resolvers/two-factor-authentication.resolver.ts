@@ -21,20 +21,14 @@ export class TwoFactorAuthenticationResolver implements Resolve<TwoFactorAuthent
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TwoFactorAuthentication> {
     return this.manageService.twoFactorAuthentication.pipe(
-      take(1),
-      concatMap((twoFactorAuthentication: TwoFactorAuthentication) => {
-        if (typeof twoFactorAuthentication === 'undefined') {
-          return this.http
-            .get<TwoFactorAuthentication>(`${environment.identityUrl}/Manage/TwoFactorAuthentication`)
-            .pipe(
-              take(1),
-              map((value: TwoFactorAuthentication) => {
-                this.manageService.twoFactorAuthentication.next(value);
-                return value;
-              }));
-        } else {
-          return of(twoFactorAuthentication);
-        }
-      }));
+      concatMap(
+        (twoFactorAuthentication: TwoFactorAuthentication) => twoFactorAuthentication == null
+          ? this.http.get<TwoFactorAuthentication>(`${environment.identityUrl}/Manage/TwoFactorAuthentication`).pipe(map(
+            (response: TwoFactorAuthentication) => {
+              this.manageService.twoFactorAuthentication.next(response);
+              return response;
+            }))
+          : of(twoFactorAuthentication)),
+      take(1));
   }
 }

@@ -4,8 +4,8 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { concatMap, take } from 'rxjs/operators';
 import { User } from 'oidc-client';
 import { AccountService } from '../account/account.service';
 import { AddressService } from './address.service';
@@ -23,29 +23,24 @@ export class AddressResolver implements Resolve<boolean> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.cartService.cart$.
-      pipe(
-        take(1),
-        mergeMap((cart: Cart) => {
-          if (cart == null) {
-            return of(false);
-          }
-          if (!cart.cartProducts.some(x => !x.isDownload)) {
-            return of(true);
-          }
-          return this.accountService.user$
-            .pipe(
-              take(1),
-              switchMap((user: User) => {
-                if (user == null || typeof user.profile['address'] !== 'string') {
-                  return of(false);
-                }
-                const address = JSON.parse(user.profile['address']) as Address;
-                return this.addressService.validate(address)
-                  .pipe(
-                    take(1),
-                    map((isValid: boolean) => isValid));
-              }));
-        }));
+    return combineLatest(
+      this.cartService.cart$,
+      this.accountService.user$).pipe(
+        concatMap(
+          (latest: [Cart, User]) => {
+            const [cart, user] = latest;
+            if (cart == null) {
+              return of(false);
+            }
+            if (!cart.cartProducts.some(x => !x.isDownload)) {
+              return of(true);
+            }
+            if (user == null || typeof user.profile['address'] !== 'string') {
+              return of(false);
+            }
+            const address = JSON.parse(user.profile['address']) as Address;
+            return this.addressService.validate(address);
+          }),
+        take(1));
   }
 }

@@ -15,6 +15,7 @@ import { ProductsService } from '../../products/products.service';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
+import { ProductFile } from '../../product-files/product-file';
 
 const product1: Product = {
   id: '1',
@@ -25,7 +26,8 @@ const product1: Product = {
   isDownload: true,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  productFiles: new Array<ProductFile>()
 };
 const product2: Product = {
   id: '2',
@@ -36,7 +38,8 @@ const product2: Product = {
   isDownload: false,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  productFiles: new Array<ProductFile>()
 };
 const products = [product1, product2];
 const productsGridDataResult: GridDataResult = {

@@ -15,6 +15,7 @@ import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
 import { ProductsService } from '../../products/products.service';
+import { ProductFile } from '../../product-files/product-file';
 
 const product: Product = {
   id: '1',
@@ -25,7 +26,8 @@ const product: Product = {
   isDownload: false,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  productFiles: new Array<ProductFile>()
 };
 let component: EditComponent;
 let fixture: ComponentFixture<EditComponent>;

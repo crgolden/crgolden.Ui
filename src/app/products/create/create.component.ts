@@ -3,11 +3,13 @@ import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AccountService } from '../../account/account.service';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
+import { ProductFile } from '../../product-files/product-file';
 
 @Component({
   selector: 'app-products-create',
@@ -16,6 +18,7 @@ import { OrderProduct } from '../../order-products/order-product';
 })
 export class CreateComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
   product: Product;
 
@@ -36,7 +39,8 @@ export class CreateComponent implements OnInit {
       pictureFileName: undefined,
       pictureUri: undefined,
       cartProducts: new Array<CartProduct>(),
-      orderProducts: new Array<OrderProduct>()
+      orderProducts: new Array<OrderProduct>(),
+      productFiles: new Array<ProductFile>()
     } as Product;
   }
 
@@ -45,10 +49,13 @@ export class CreateComponent implements OnInit {
   }
 
   create(form: NgForm): void {
+    this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.productsService.create$(this.product).subscribe(
       (product: Product) => this.router.navigate([`/Products/Details/${product.id}`]),
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 
   showCreate$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

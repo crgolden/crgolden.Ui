@@ -30,4 +30,4 @@ export class SafePipe implements PipeTransform {
         throw new Error(`Invalid safe type specified: ${type}`);
     }
   }
-} 
+}

@@ -78,15 +78,16 @@
              [(ngModel)]="shippingAddress.country">
     </div>
   </div>
-  <div *ngIf="!unableToValidateShippingAddress">
+  <ng-container *ngIf="unableToValidateShippingAddress; then invalid; else valid"></ng-container>
+  <ng-template #valid>
     <div class="modal-footer">
       <button type="submit"
               class="btn btn-primary">
         Save
       </button>
     </div>
-  </div>
-  <div *ngIf="unableToValidateShippingAddress">
+  </ng-template>
+  <ng-template #invalid>
     <div class="modal-footer">
       <p class="text-warning">
         Unable to validate shipping address. Use it anyway?
@@ -103,5 +104,10 @@
         No
       </button>
     </div>
-  </div>
+    <div *ngFor="let error of errors">
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+    </div>
+  </ng-template>
 </form>

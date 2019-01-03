@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Params, ActivatedRoute } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -9,6 +10,8 @@ import { AccountService } from '../account.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(
     private readonly titleService: Title,
@@ -22,7 +25,8 @@ export class LoginComponent implements OnInit {
       if (params['returnUrl'] != null) {
         window.sessionStorage.setItem('returnUrl', params['returnUrl']);
       }
-      this.accountService.signinRedirect$();
+      this.blockUI.start();
+      this.accountService.signinRedirect().finally(() => this.blockUI.stop());
     });
   }
 }

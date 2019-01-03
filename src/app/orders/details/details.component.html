@@ -61,7 +61,7 @@
                 (dataStateChange)="orderProductsStateChange($event)">
       <ng-template kendoGridToolbarTemplate>
         <h4>
-          Products
+          <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
         </h4>
       </ng-template>
       <kendo-grid-column field="model2Name"
@@ -102,7 +102,7 @@
                 (dataStateChange)="paymentsStateChange($event)">
       <ng-template kendoGridToolbarTemplate>
         <h4>
-          Payments
+          <fa-icon [icon]="['fal', 'dollar-sign']"></fa-icon> Payments
         </h4>
       </ng-template>
       <kendo-grid-column field="name"

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -10,6 +11,7 @@ import { environment } from '../../../environments/environment';
 })
 export class PaymentStripeComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   private readonly stripe: stripe.Stripe;
   private card: stripe.elements.Element;
   error: stripe.Error;
@@ -24,7 +26,10 @@ export class PaymentStripeComponent implements OnInit {
 
   async validatePaymentInformation(form: NgForm): Promise<void> {
     if (!form.valid || this.error != null) { return; }
-    const { token, error } = await this.stripe.createToken(this.card, this.tokenOptions());
+    this.blockUI.start();
+    const { token, error } = await this.stripe
+      .createToken(this.card, this.tokenOptions())
+      .finally(() => this.blockUI.stop());
     if (error) {
       this.error = error;
     } else {
@@ -52,7 +57,6 @@ export class PaymentStripeComponent implements OnInit {
       style: {
         base: {
           color: '#32325d',
-          lineHeight: '18px',
           fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
           fontSmoothing: 'antialiased',
           fontSize: '16px',
@@ -71,7 +75,7 @@ export class PaymentStripeComponent implements OnInit {
 
   private elementsOptions(): stripe.elements.ElementsCreateOptions {
     const options: stripe.elements.ElementsCreateOptions = {
-    }
+    };
     return options;
   }
 

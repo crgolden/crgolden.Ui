@@ -59,9 +59,13 @@ describe('CreateComponent', () => {
 
   beforeEach(() => setup());
 
-  it('should have a new order', () => {
-    expect(component.order.id).toBeUndefined();
-    expect(component.order.name).toBeUndefined();
+  it('should have a new shippingAddress', () => {
+    expect(component.shippingAddress).toBeDefined();
+  });
+
+  it('should have a new payment', () => {
+    expect(component.payment.id).toBeUndefined();
+    expect(component.payment.name).toBeUndefined();
   });
 
   it('should display blank inputs', () => {

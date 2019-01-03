@@ -21,20 +21,14 @@ export class EnableAuthenticatorResolver implements Resolve<EnableAuthenticator>
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<EnableAuthenticator> {
     return this.manageService.enableAuthenticator.pipe(
-      take(1),
-      concatMap((enableAuthenticator: EnableAuthenticator) => {
-        if (typeof enableAuthenticator === 'undefined') {
-          return this.http
-            .get<EnableAuthenticator>(`${environment.identityUrl}/Manage/EnableAuthenticator`)
-            .pipe(
-              take(1),
-              map((value: EnableAuthenticator) => {
-                this.manageService.enableAuthenticator.next(value);
-                return value;
-              }));
-        } else {
-          return of(enableAuthenticator);
-        }
-      }));
+      concatMap(
+        (enableAuthenticator: EnableAuthenticator) => enableAuthenticator == null
+          ? this.http.get<EnableAuthenticator>(`${environment.identityUrl}/Manage/EnableAuthenticator`).pipe(map(
+            (response: EnableAuthenticator) => {
+              this.manageService.enableAuthenticator.next(response);
+              return response;
+            }))
+          : of(enableAuthenticator)),
+      take(1));
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { DeletePersonalData } from '../models/delete-personal-data';
 
@@ -12,6 +13,7 @@ import { DeletePersonalData } from '../models/delete-personal-data';
 })
 export class DeletePersonalDataComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: DeletePersonalData;
   errors: Array<string>;
   requirePassword: boolean;
@@ -32,10 +34,12 @@ export class DeletePersonalDataComponent implements OnInit {
   }
 
   deletePersonalData(form: NgForm): void {
-    if (!form.valid) { return; }
     this.errors = new Array<string>();
+    if (!form.valid) { return; }
+    this.blockUI.start();
     this.manageService.deletePersonalData$(this.model).subscribe(
       () => this.router.navigate(['/Home']),
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

@@ -21,20 +21,14 @@ export class ExternalLoginsResolver implements Resolve<ExternalLogins> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ExternalLogins> {
     return this.manageService.externalLogins.pipe(
-      take(1),
-      concatMap((externalLogins: ExternalLogins) => {
-        if (typeof externalLogins === 'undefined') {
-          return this.http
-            .get<ExternalLogins>(`${environment.identityUrl}/Manage/ExternalLogins`)
-            .pipe(
-              take(1),
-              map((value: ExternalLogins) => {
-                this.manageService.externalLogins.next(value);
-                return value;
-              }));
-        } else {
-          return of(externalLogins);
-        }
-      }));
+      concatMap(
+        (externalLogins: ExternalLogins) => externalLogins == null
+          ? this.http.get<ExternalLogins>(`${environment.identityUrl}/Manage/ExternalLogins`).pipe(map(
+            (response: ExternalLogins) => {
+              this.manageService.externalLogins.next(response);
+              return response;
+          }))
+          : of(externalLogins)),
+      take(1));
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { User } from 'oidc-client';
 import { AccountService } from '../../account.service';
 import { ManageService } from '../manage.service';
@@ -14,9 +15,10 @@ import { Address } from '../../../address/address';
 })
 export class ProfileComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: Profile;
-  message: string;
   errors: Array<string>;
+  message: string;
 
   constructor(
     private readonly titleService: Title,
@@ -33,19 +35,23 @@ export class ProfileComponent implements OnInit {
   profile(form: NgForm): void {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.manageService.profile$(this.model).subscribe(
       (profile: Profile) => {
         this.model = profile;
-        this.accountService.signinSilent$();
+        this.accountService.signinSilent();
       },
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 
   sendVerificationEmail(): void {
     this.errors = new Array<string>();
+    this.blockUI.start();
     this.manageService.sendVerificationEmail$().subscribe(
       (response: string) => this.message = response,
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 
   private setProfile(user: User): void {

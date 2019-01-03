@@ -1,16 +1,10 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  OnDestroy,
-  Renderer2,
-  ViewChild
-} from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   CellClickEvent,
   DataStateChangeEvent,
@@ -47,15 +41,15 @@ const createFormGroup = (orderProduct: OrderProduct): FormGroup => new FormGroup
   ])),
   'isDownload': new FormControl(orderProduct.isDownload)
 });
-const matches = (el, selector: string) => (el.matches || el.msMatchesSelector).call(el, selector);
 
 @Component({
   selector: 'app-orders-edit',
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent implements OnInit, OnDestroy {
+export class EditComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   formGroup: FormGroup;
   errors: Array<string>;
   order: Order;
@@ -68,11 +62,9 @@ export class EditComponent implements OnInit, OnDestroy {
   @ViewChild(GridComponent)
   private grid: GridComponent;
   private editedRowIndex: number;
-  private docClickSubscription: any;
 
   constructor(
     private readonly titleService: Title,
-    private readonly renderer: Renderer2,
     private readonly accountService: AccountService,
     private readonly ordersService: OrdersService,
     private readonly orderProductsService: OrderProductsService,
@@ -101,7 +93,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Edit Order');
-    this.docClickSubscription = this.renderer.listen('document', 'click', this.onDocumentClick.bind(this));
     this.order = this.route.snapshot.data['order'] as Order;
     this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
     const address = JSON.parse(this.order.shippingAddress) as Address;
@@ -110,22 +101,21 @@ export class EditComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.docClickSubscription();
-  }
-
   cancelHandler(): void {
     this.closeEditor();
   }
 
   edit(form: NgForm): void {
+    this.errors = new Array<string>();
     if (!form.valid) { return; }
     if (this.shippingAddress != null) {
       this.order.shippingAddress = JSON.stringify(this.shippingAddress);
     }
+    this.blockUI.start();
     this.ordersService.edit$(this.order).subscribe(
       () => this.router.navigate([`/Orders/Details/${this.order.id}`]),
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {
@@ -151,23 +141,31 @@ export class EditComponent implements OnInit, OnDestroy {
     this.formGroup = undefined;
   }
 
-  private onDocumentClick(e: any): void {
-    if (this.formGroup && this.formGroup.valid &&
-      !matches(e.target, '#orderProductsGrid tbody *, #cancel')) {
-      this.saveCurrent();
+  @HostListener('document:keypress', ['$event', '$event.target'])
+  handleKeyboardEvent(event: KeyboardEvent, targetElement: HTMLElement): void {
+    if (event.key !== 'Enter' ||
+      !this.formGroup ||
+      !this.formGroup.valid ||
+      !targetElement ||
+      !targetElement.matches('.k-input')) {
+      return;
     }
+    this.saveCurrent();
   }
 
-  @HostListener('document:keypress', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent): void {
-    const code = (event.keyCode ? event.keyCode : event.which);
-    if (code === 13 && this.formGroup && this.formGroup.valid &&
-      matches(event.target, '.k-input')) {
-      this.saveCurrent();
+  @HostListener('document:click', ['$event.target'])
+  handleClickEvent(targetElement: HTMLElement): void {
+    if (!this.formGroup ||
+      !this.formGroup.valid ||
+      !targetElement ||
+      targetElement.matches('#orderProductsGrid tbody *, #cancel')) {
+      return;
     }
+    this.saveCurrent();
   }
 
   private saveCurrent(): void {
+    this.errors = new Array<string>();
     if (!this.formGroup) {
       return;
     }
@@ -175,16 +173,17 @@ export class EditComponent implements OnInit, OnDestroy {
       this.closeEditor();
       return;
     }
+    this.blockUI.start();
     this.orderProductsService.edit$(this.formGroup.value)
       .pipe(concatMap(
-        () => this.ordersService.details$(this.order.id),
-        (_: Object, order: Order) => order))
+        () => this.ordersService.details$(this.order.id)))
       .subscribe(
         (order: Order) => {
           this.order = order;
           this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
         },
-        (errors: Array<string>) => this.errors = errors);
+        (errors: Array<string>) => this.errors = errors,
+        () => this.blockUI.stop());
     this.closeEditor();
   }
 }

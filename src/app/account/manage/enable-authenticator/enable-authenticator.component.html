@@ -39,7 +39,7 @@
           </div>
           <button type="submit"
                   class="btn btn-primary"
-                  [disabled]="f.invalid">
+                  [disabled]="f.pristine || f.invalid">
             Verify
           </button>
           <div *ngFor="let error of errors">

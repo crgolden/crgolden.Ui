@@ -20,20 +20,14 @@ export class HasPasswordResolver implements Resolve<boolean> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.manageService.hasPassword.pipe(
-      take(1),
-      concatMap((hasPassword: boolean) => {
-        if (typeof hasPassword === 'undefined') {
-          return this.http
-            .get<boolean>(`${environment.identityUrl}/Manage/HasPassword`)
-            .pipe(
-              take(1),
-              map((value: boolean) => {
-                this.manageService.hasPassword.next(value);
-                return value;
-              }));
-        } else {
-          return of(hasPassword);
-        }
-      }));
+      concatMap(
+        (hasPassword: boolean) => hasPassword == null
+          ? this.http.get<boolean>(`${environment.identityUrl}/Manage/HasPassword`).pipe(map(
+            (response: boolean) => {
+              this.manageService.hasPassword.next(response);
+              return response;
+            }))
+          : of(hasPassword)),
+      take(1));
   }
 }

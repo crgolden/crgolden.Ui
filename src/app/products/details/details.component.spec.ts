@@ -11,16 +11,19 @@ import { DetailsComponent } from './details.component';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
+import { ProductFile } from '../../product-files/product-file';
 
 const product: Product = {
   id: '1',
   name: 'Product 1',
+  active: true,
   description: 'Description 1',
   price: 1.00,
   isDownload: false,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  productFiles: new Array<ProductFile>()
 };
 let component: DetailsComponent;
 let fixture: ComponentFixture<DetailsComponent>;

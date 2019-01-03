@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, from, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserManagerSettings, UserManager, User } from 'oidc-client';
 import { environment } from '../../environments/environment';
 import { ConfirmEmail } from './models/confirm-email';
@@ -54,36 +54,36 @@ export class AccountService {
       .post<string>(`${environment.identityUrl}/Account/ResetPassword`, JSON.stringify(model));
   }
 
-  signinSilent$(): Observable<User> {
-    return from(this.userManager.signinSilent());
+  signinSilent(): Promise<User> {
+    return this.userManager.signinSilent();
   }
 
-  signinRedirect$(args?: any): Observable<any> {
-    return from(this.userManager.signinRedirect(args));
+  signinRedirect(args?: any): Promise<any> {
+    return this.userManager.signinRedirect(args);
   }
 
-  signinRedirectCallback$(url?: string): Observable<User> {
-    return from(this.userManager.signinRedirectCallback(url));
+  signinRedirectCallback$(url?: string): Promise<User> {
+    return this.userManager.signinRedirectCallback(url);
   }
 
-  signoutRedirect$(args?: any): Observable<any> {
-    return from(this.userManager.signoutRedirect(args));
+  signoutRedirect(args?: any): Promise<any> {
+    return this.userManager.signoutRedirect(args);
   }
 
-  signoutRedirectCallback$(url?: string): Observable<any> {
-    return from(this.userManager.signoutRedirectCallback(url));
+  signoutRedirectCallback$(url?: string): Promise<any> {
+    return this.userManager.signoutRedirectCallback(url);
   }
 
   userHasRole$(role: string): Observable<boolean> {
     const roleType = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-    return this.user$
-      .pipe(
-        filter((user: User) => user != null),
-        map((user: User) => user.profile[roleType] instanceof Array
+    return this.user$.pipe(
+      map((user: User) => user != null
+        ? user.profile[roleType] instanceof Array
           ? user.profile[roleType].includes(role)
           : typeof user.profile[roleType] === 'string'
             ? user.profile[roleType] === role
-            : false));
+            : false
+        : false));
   }
 
   private get userManagerSettings(): UserManagerSettings {

@@ -12,24 +12,16 @@ import { Payment } from '../payment';
 import { Order } from '../../orders/order';
 import { OrderProduct } from '../../order-products/order-product';
 
-const order: Order = {
-  id: '1',
-  name: 'Order 1',
-  userId: '1',
-  created: new Date(),
-  orderProducts: new Array<OrderProduct>(),
-  payments: new Array<Payment>()
-};
 const payment: Payment = {
   id: '1',
   name: 'Payment 1',
-  userId: order.userId,
+  userId: '1',
   description: 'Description 1',
   currency: 'usd',
   tokenId: 'tokenId 1',
   amount: 1.00,
   created: new Date(),
-  orderId: order.id
+  orderId: '1'
 };
 let component: DetailsComponent;
 let fixture: ComponentFixture<DetailsComponent>;

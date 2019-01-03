@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { GenerateRecoveryCodes } from '../models/generate-recovery-codes';
 
@@ -10,6 +11,7 @@ import { GenerateRecoveryCodes } from '../models/generate-recovery-codes';
 })
 export class GenerateRecoveryCodesComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: GenerateRecoveryCodes;
   message: string;
   errors: Array<string>;
@@ -28,8 +30,10 @@ export class GenerateRecoveryCodesComponent implements OnInit {
 
   generateRecoveryCodes(): void {
     this.errors = new Array<string>();
+    this.blockUI.start();
     this.manageService.generateRecoveryCodes$().subscribe(
       (response: GenerateRecoveryCodes) => this.model = response,
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { concatMap, exhaustMap, filter, map, mergeMap } from 'rxjs/operators';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgbModal, NgbModalRef, NgbModalOptions, } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'oidc-client';
-import { CookieService } from 'ngx-cookie-service';
 import { PaymentStripeComponent } from '../payment-stripe/payment-stripe.component';
 import { ShippingAddressComponent } from '../shipping-address/shipping-address.component';
 import { AccountService } from '../../account/account.service';
@@ -25,58 +25,35 @@ import { Address } from '../../address/address';
 })
 export class CreateComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
   private modalRef: NgbModalRef;
-  order: Order;
   payment: Payment;
   shippingAddress: Address;
   token: stripe.Token;
   formattedShippingAddress: string;
-  needsShippingAddress: boolean;
   validShippingAddress: boolean;
-  invalidShipping = this.needsShippingAddress && !this.validShippingAddress;
-  needsPayment: boolean;
   validPayment: boolean;
-  invalidPayment = this.needsPayment && !this.validPayment;
 
   constructor(
     private readonly titleService: Title,
     private readonly modalService: NgbModal,
-    private readonly cookieService: CookieService,
     private readonly accountService: AccountService,
     private readonly cartService: CartService,
     private readonly ordersService: OrdersService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
-    this.order = {
-      id: undefined,
-      name: 'Order',
-      userId: undefined,
-      created: undefined,
-      total: 0,
-      orderProducts: new Array<OrderProduct>(),
-      payments: new Array<Payment>()
-    } as Order;
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Checkout');
-    this.accountService.user$
-      .subscribe((user: User) => {
+    this.accountService.user$.subscribe(
+      (user: User) => {
         if (user != null && typeof user.profile['address'] === 'string') {
-          const address = JSON.parse(user.profile['address']) as Address;
-          this.shippingAddress = address;
-          this.setFormattedShippingAddress(address);
+          this.shippingAddress = JSON.parse(user.profile['address']) as Address;
+          this.setFormattedShippingAddress();
         } else {
           this.shippingAddress = new Address();
-        }
-      });
-    this.cartService.cart$
-      .subscribe((cart: Cart) => {
-        if (cart != null) {
-          this.setOrder(cart);
-          this.needsShippingAddress = cart.cartProducts.some(x => !x.isDownload);
-          this.needsPayment = cart.cartProducts.some(x => x.price > 0);
         }
       });
     this.validShippingAddress = this.route.snapshot.data['validAddress'];
@@ -92,7 +69,7 @@ export class CreateComponent implements OnInit {
       (value: Address) => {
         this.validShippingAddress = true;
         this.shippingAddress = value;
-        this.setFormattedShippingAddress(value);
+        this.setFormattedShippingAddress();
       },
       (reason: any) => {
       });
@@ -113,51 +90,91 @@ export class CreateComponent implements OnInit {
   }
 
   create(): void {
-    if (this.invalidShipping || this.invalidPayment) { return; }
-    if (this.shippingAddress != null) {
-      this.order.shippingAddress = JSON.stringify(this.shippingAddress);
-    }
-    if (this.payment != null) {
-      this.order.payments.push(this.payment);
-    }
-    combineLatest(
-      this.ordersService.create$(this.order),
-      this.cartService.cart$.pipe(concatMap(
-        (cart) => {
-          cart.cartProducts = new Array<CartProduct>();
-          return this.cartService.edit$(cart);
-        },
-        (cart) => {
-          this.cookieService.delete('CartId');
-          this.cartService.cart$.next(cart);
-        })))
-      .pipe(map(
-        (response: [Order, void]) => response[0]))
+    this.cartService.cart$
+      .pipe(
+        filter((cart: Cart) => cart.cartProducts.length > 0 &&
+          (cart.total === 0 || this.validPayment) &&
+          (!cart.cartProducts.some(x => !x.isDownload) || this.validShippingAddress)),
+        exhaustMap(
+          (cart: Cart) => {
+            const order: Order = {
+              id: undefined,
+              name: 'Order',
+              created: undefined,
+              userId: cart.userId,
+              total: cart.total,
+              orderProducts: cart.cartProducts.map(x => {
+                return {
+                  model1Id: undefined,
+                  model1Name: 'Order',
+                  model2Id: x.model2Id,
+                  model2Name: x.model2Name,
+                  price: x.price,
+                  quantity: x.quantity,
+                  created: undefined,
+                  isDownload: x.isDownload,
+                } as OrderProduct;
+              }),
+              payments: new Array<Payment>()
+            };
+            cart.cartProducts = new Array<CartProduct>();
+            if (this.shippingAddress != null) {
+              order.shippingAddress = JSON.stringify(this.shippingAddress);
+            }
+            if (this.payment != null) {
+              this.payment.userId = order.userId;
+              this.payment.amount = order.total;
+              order.payments.push(this.payment);
+            }
+            this.errors = new Array<string>();
+            this.blockUI.start();
+            return this.ordersService.create$(order).pipe(mergeMap(
+              (newOrder: Order) => this.cartService.edit$(cart).pipe(concatMap(
+                () => this.cartService.details$(cart.id).pipe(map(
+                  (updatedCart: Cart) => {
+                    this.cartService.cart$.next(updatedCart);
+                    return newOrder;
+                  }))))));
+          }))
       .subscribe(
         (order: Order) => this.router.navigate([`/Orders/Details/${order.id}`]),
-        (errors: Array<string>) => this.errors = errors);
+        (errors: Array<string>) => this.errors = errors,
+        () => this.blockUI.stop());
   }
 
-  private setFormattedShippingAddress(address: Address): void {
-    this.formattedShippingAddress = address.formatted.replace(/\r\n/g, '<br />');
+  needsPayment$(): Observable<boolean> {
+    return this.cartService.cart$.pipe(map(
+      (cart: Cart) => cart != null && cart.total > 0));
   }
 
-  private setOrder(cart: Cart): void {
-    this.order.userId = cart.userId;
-    this.order.total = cart.total;
-    cart.cartProducts.forEach(x => {
-      this.order.orderProducts.push({
-        model1Id: undefined,
-        model1Name: this.order.name,
-        model2Id: x.model2Id,
-        model2Name: x.model2Name,
-        created: undefined,
-        quantity: x.quantity,
-        isDownload: x.isDownload,
-        price: x.price,
-        extendedPrice: x.extendedPrice
-      } as OrderProduct);
-    });
+  needsShippingAddress$(): Observable<boolean> {
+    return this.cartService.cart$.pipe(map(
+      (cart: Cart) => cart != null &&
+        cart.cartProducts != null &&
+        cart.cartProducts.some(x => !x.isDownload)));
+  }
+
+  invalidPayment$(): Observable<boolean> {
+    return this.needsPayment$().pipe(map(
+      (response: boolean) => response && !this.validPayment));
+  }
+
+  invalidShippingAddress$(): Observable<boolean> {
+    return this.needsShippingAddress$().pipe(map(
+      (response: boolean) => response && !this.validShippingAddress));
+  }
+
+  total$(): Observable<number> {
+    return this.cartService.cart$.pipe(
+      filter((cart: Cart) => cart != null),
+      map((cart: Cart) => cart.total));
+  }
+
+  private setFormattedShippingAddress(): void {
+    if (this.shippingAddress.formatted == null) {
+      return;
+    }
+    this.formattedShippingAddress = this.shippingAddress.formatted.replace(/\r\n/g, '<br />');
   }
 
   private setPayment(tokenId: string): void {
@@ -165,8 +182,8 @@ export class CreateComponent implements OnInit {
       this.payment = {
         id: undefined,
         name: 'Payment',
-        userId: this.order.userId,
-        amount: this.order.total,
+        userId: undefined,
+        amount: undefined,
         currency: 'USD',
         description: 'Example Description',
         tokenId: tokenId,

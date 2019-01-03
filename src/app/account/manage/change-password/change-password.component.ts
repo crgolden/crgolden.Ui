@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { ChangePassword } from '../models/change-password';
 
@@ -12,6 +13,7 @@ import { ChangePassword } from '../models/change-password';
 })
 export class ChangePasswordComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: ChangePassword;
   message: string;
   errors: Array<string>;
@@ -35,8 +37,10 @@ export class ChangePasswordComponent implements OnInit {
   changePassword(form: NgForm): void {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.manageService.changePassword$(this.model).subscribe(
       (response: string) => this.message = response,
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

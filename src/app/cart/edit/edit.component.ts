@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   PagerSettings,
   SortSettings
@@ -22,11 +23,13 @@ import { CartProduct } from '../../cart-products/cart-product';
 })
 export class EditComponent implements OnInit {
 
-  errors: Array<string>;
-  cart$ = (): Observable<Cart> => this.cartService.cart$;
   state: DataSourceRequestState;
   pageable: PagerSettings;
   sortable: SortSettings;
+
+  @BlockUI() blockUI: NgBlockUI;
+  errors: Array<string>;
+  cart$ = (): Observable<Cart> => this.cartService.cart$;
 
   constructor(
     private readonly titleService: Title,
@@ -58,25 +61,31 @@ export class EditComponent implements OnInit {
 
   updateQuantity(quantity: number, cartProduct: CartProduct): void {
     cartProduct.quantity = quantity;
+    this.errors = new Array<string>();
+    this.blockUI.start();
     this.cartProductsService.edit$(cartProduct)
-      .pipe(concatMap(
-        () => this.cartService.details$(cartProduct.model1Id),
-        (response: Object, cart: Cart) => cart))
+      .pipe(exhaustMap(
+        () => this.cartService.details$(cartProduct.model1Id)))
       .subscribe(
         (cart: Cart) => this.cartService.cart$.next(cart),
-        (errors: Array<string>) => this.errors = errors);
+        (errors: Array<string>) => this.errors = errors,
+        () => this.blockUI.stop());
   }
 
   removeCartProduct(cartProduct: CartProduct): void {
+    this.errors = new Array<string>();
+    this.blockUI.start();
     this.cartProductsService.delete$(cartProduct.model1Id, cartProduct.model2Id)
-      .pipe(concatMap(
-        () => this.cartService.details$(cartProduct.model1Id),
-        (response: Object, cart: Cart) => cart))
+      .pipe(exhaustMap(
+        () => this.cartService.details$(cartProduct.model1Id)))
       .subscribe(
         (cart: Cart) => this.cartService.cart$.next(cart),
-        (errors: Array<string>) => this.errors = errors);
+        (errors: Array<string>) => this.errors = errors,
+        () => this.blockUI.stop());
   }
 
-  showProceedToCheckout$ = (): Observable<boolean> => this.cart$()
-    .pipe(map((cart: Cart) => cart != null && cart.cartProducts.length > 0));
+  showProceedToCheckout$(): Observable<boolean> {
+    return this.cart$().pipe(map(
+      (cart: Cart) => cart != null && cart.cartProducts.length > 0));
+  }
 }

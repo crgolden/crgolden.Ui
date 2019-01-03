@@ -15,12 +15,6 @@ import { Cart } from '../cart';
 import { CartProduct } from '../../cart-products/cart-product';
 import { CartService } from '../cart.service';
 
-const cart: Cart = {
-  id: '1',
-  name: 'Cart 1',
-  created: new Date(),
-  cartProducts: new Array<CartProduct>()
-};
 let component: EditComponent;
 let fixture: ComponentFixture<EditComponent>;
 let page: EditPage;
@@ -37,47 +31,6 @@ describe('EditComponent', () => {
 
   beforeEach(() => setup());
 
-  it('should have the cart', () => {
-    expect(component.cart.id).toBe(cart.id);
-    expect(component.cart.name).toBe(cart.name);
-  });
-
-  it('should display cart details', () => {
-    return fixture.whenStable().then(() => {
-      expect(page.name.value).toBe(component.cart.name);
-    });
-  });
-
-  it('can get RouterLinks from template', () => {
-    expect(routerLinks.length).toBe(2, 'should have 2 routerLinks');
-    expect(routerLinks[0].linkParams).toBe(`/Carts/Details/${cart.id}`);
-    expect(routerLinks[1].linkParams).toBe('/Carts');
-  });
-
-  it('can click Carts/Details/:product.Id link in template', () => {
-    const cartLinkDebugElement = routerLinkDebugElements[0];
-    const cartLink = routerLinks[0];
-
-    expect(cartLink.navigatedTo).toBeNull('should not have navigated yet');
-
-    cartLinkDebugElement.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    expect(cartLink.navigatedTo).toBe(`/Carts/Details/${cart.id}`);
-  });
-
-  it('can click Carts link in template', () => {
-    const cartLinkDebugElement = routerLinkDebugElements[1];
-    const cartLink = routerLinks[1];
-
-    expect(cartLink.navigatedTo).toBeNull('should not have navigated yet');
-
-    cartLinkDebugElement.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    expect(cartLink.navigatedTo).toBe('/Carts');
-  });
-
 });
 
 function setup() {
@@ -93,20 +46,6 @@ function setup() {
       RouterOutletStubComponent
     ],
     providers: [
-      {
-        provide: ActivatedRoute,
-        useValue: {
-          snapshot: {
-            data: {
-              'cart': cart
-            }
-          }
-        }
-      },
-      {
-        provide: Router,
-        useValue: jasmine.createSpyObj('Router', { navigate: of([`/Carts/Details/${cart.id}`]) })
-      },
       {
         provide: CartService,
         useValue: jasmine.createSpyObj('CartService', { edit: of() })

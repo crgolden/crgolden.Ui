@@ -35,7 +35,9 @@
   <div class="row">
     <div class="col-12">
         <hr />
-        <a routerLink="/Account/Manage/Disable2fa" class="btn btn-danger">
+        <a routerLink="/Account/Manage/Disable2fa"
+           class="btn btn-danger"
+           title="Disable 2FA">
         Disable 2FA
       </a>
     </div>
@@ -43,7 +45,9 @@
   <div class="row">
     <div class="col-12">
         <hr />
-        <a routerLink="/Account/Manage/GenerateRecoveryCodes" class="btn btn-primary">
+        <a routerLink="/Account/Manage/GenerateRecoveryCodes"
+           class="btn btn-primary"
+           title="Generate Recovery Codes">
         Reset recovery codes
       </a>
     </div>
@@ -57,7 +61,9 @@
 <div class="row" *ngIf="!model.hasAuthenticator">
   <div class="col-12">
     <hr />
-    <a routerLink="/Account/Manage/EnableAuthenticator" class="btn btn-primary">
+    <a routerLink="/Account/Manage/EnableAuthenticator"
+       class="btn btn-primary"
+       title="Add Authenticator App">
       Add authenticator app
     </a>
   </div>
@@ -65,7 +71,9 @@
 <div class="row" *ngIf="model.hasAuthenticator">
   <div class="col-12">
       <hr />
-      <a routerLink="/Account/Manage/EnableAuthenticator" class="btn btn-primary">
+      <a routerLink="/Account/Manage/EnableAuthenticator"
+         class="btn btn-primary"
+         title="Setup Authenticator App">
       Setup authenticator app
     </a>
   </div>
@@ -73,7 +81,9 @@
 <div class="row" *ngIf="model.hasAuthenticator">
   <div class="col-12">
       <hr />
-      <a routerLink="/Account/Manage/ResetAuthenticator" class="btn btn-danger">
+      <a routerLink="/Account/Manage/ResetAuthenticator"
+         class="btn btn-danger"
+         title="Reset Authenticator App">
       Reset authenticator app
     </a>
   </div>

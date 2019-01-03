@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { saveAs } from 'file-saver';
 import { Title } from '@angular/platform-browser';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { saveAs } from 'file-saver';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { ManageService } from '../manage.service';
 })
 export class PersonalDataComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
 
   constructor(
@@ -24,8 +26,10 @@ export class PersonalDataComponent implements OnInit {
 
   downloadPersonalData(): void {
     this.errors = new Array<string>();
+    this.blockUI.start();
     this.manageService.downloadPersonalData$().subscribe(
       (response: HttpResponse<Blob>) => saveAs(response.body, 'PersonalData.json'),
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

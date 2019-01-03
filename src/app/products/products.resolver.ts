@@ -28,7 +28,7 @@ export class ProductsResolver implements Resolve<GridDataResult> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<GridDataResult> {
     return this.accountService.userHasRole$('Admin').pipe(
       concatMap(
-        (response: boolean) => {
+        (isAdmin: boolean) => {
           const requestState: DataSourceRequestState = {
             skip: 0,
             take: 5,
@@ -42,7 +42,7 @@ export class ProductsResolver implements Resolve<GridDataResult> {
             } as CompositeFilterDescriptor,
             aggregates: new Array<AggregateDescriptor>()
           };
-          if (!response) {
+          if (!isAdmin) {
             requestState.filter.filters.push({
               field: 'active',
               operator: 'eq',
@@ -50,8 +50,7 @@ export class ProductsResolver implements Resolve<GridDataResult> {
             } as FilterDescriptor);
           }
           return this.productsService.index$(requestState);
-        },
-        (_: boolean, products: GridDataResult) => products),
+        }),
       take(1));
   }
 }

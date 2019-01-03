@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { EnableAuthenticator } from '../models/enable-authenticator';
 
@@ -12,6 +13,7 @@ import { EnableAuthenticator } from '../models/enable-authenticator';
 })
 export class EnableAuthenticatorComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: EnableAuthenticator;
   message: string;
   errors: Array<string>;
@@ -29,8 +31,9 @@ export class EnableAuthenticatorComponent implements OnInit {
   }
 
   verifyAuthenticator(form: NgForm): void {
-    if (!form.valid) { return; }
     this.errors = new Array<string>();
+    if (!form.valid) { return; }
+    this.blockUI.start();
     this.manageService.verifyAuthenticator$(this.model).subscribe(
       (response: EnableAuthenticator) => {
         if (response.recoveryCodes && response.recoveryCodes.length > 0) {
@@ -39,6 +42,7 @@ export class EnableAuthenticatorComponent implements OnInit {
           this.router.navigate(['/Manage/TwoFactorAuthentication']);
         }
       },
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

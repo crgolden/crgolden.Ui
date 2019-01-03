@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConfirmEmail } from '../models/confirm-email';
 import { AccountService } from '../account.service';
 
@@ -13,6 +14,7 @@ import { AccountService } from '../account.service';
 })
 export class ConfirmEmailComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
   success: string;
 
@@ -21,10 +23,12 @@ export class ConfirmEmailComponent implements OnInit {
     private readonly accountService: AccountService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
+    this.errors = new Array<string>();
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Confirm Email');
+    this.blockUI.start();
     this.route.queryParams.pipe(concatMap(
       (params: Params) => {
         const model: ConfirmEmail = {
@@ -37,11 +41,11 @@ export class ConfirmEmailComponent implements OnInit {
           this.router.navigate(['/Home']);
           return of('');
         }
-      },
-      (_: Params, response: string) => response)).subscribe(
-        (res: string) => this.success = res.length > 0
-          ? res
+      })).subscribe(
+        (message: string) => this.success = message.length > 0
+          ? message
           : undefined,
-        (errors: Array<string>) => this.errors = errors);
+        (errors: Array<string>) => this.errors = errors,
+        () => this.blockUI.stop());
   }
 }

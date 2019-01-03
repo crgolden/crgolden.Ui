@@ -31,28 +31,24 @@
                 [group]="state.group"
                 [filterable]="false"
                 [filter]="state.filter">
-      <kendo-grid-column field="model2Name">
-        <ng-template kendoGridHeaderTemplate>
-          Product
-        </ng-template>
+      <ng-template kendoGridToolbarTemplate>
+        <h4>
+          <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
+        </h4>
+      </ng-template>
+      <kendo-grid-column field="model2Name" title="Name">
         <ng-template kendoGridCellTemplate let-cartProduct>
           <a routerLink="/Products/Details/{{cartProduct.model2Id}}">
             {{cartProduct.model2Name}}
           </a>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="price">
-        <ng-template kendoGridHeaderTemplate>
-          Price
-        </ng-template>
+      <kendo-grid-column field="price" title="Price">
         <ng-template kendoGridCellTemplate let-cartProduct>
           {{cartProduct.price | currency}}
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="quantity">
-        <ng-template kendoGridHeaderTemplate>
-          Quantity
-        </ng-template>
+      <kendo-grid-column field="quantity" title="Quantity">
         <ng-template kendoGridCellTemplate let-cartProduct>
           <kendo-numerictextbox [value]="cartProduct.quantity"
                                 [min]="1"

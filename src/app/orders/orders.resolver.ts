@@ -27,33 +27,31 @@ export class OrdersResolver implements Resolve<GridDataResult> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<GridDataResult> {
+    const requestState: DataSourceRequestState = {
+      skip: 0,
+      take: 5,
+      sort: new Array<SortDescriptor>({
+        field: 'created',
+        dir: 'desc'
+      } as SortDescriptor),
+      filter: {
+        logic: 'and',
+        filters: new Array<FilterDescriptor>()
+      } as CompositeFilterDescriptor,
+      aggregates: new Array<AggregateDescriptor>()
+    };
     return this.accountService.userHasRole$('Admin').pipe(
       mergeMap(
-        () => this.accountService.user$,
-        (response: boolean, user: User) => {
-          const requestState: DataSourceRequestState = {
-            skip: 0,
-            take: 5,
-            sort: new Array<SortDescriptor>({
-              field: 'created',
-              dir: 'desc'
-            } as SortDescriptor),
-            filter: {
-              logic: 'and',
-              filters: new Array<FilterDescriptor>()
-            } as CompositeFilterDescriptor,
-            aggregates: new Array<AggregateDescriptor>()
-          };
-          if (!response) {
+        (isAdmin: boolean) => isAdmin
+          ? this.ordersService.index$(requestState)
+          : this.accountService.user$.pipe(concatMap((user: User) => {
             requestState.filter.filters.push({
               field: 'userId',
               operator: 'eq',
               value: user.profile['sub']
             } as FilterDescriptor);
-          }
-          return requestState;
-        }),
-      concatMap((requestState: DataSourceRequestState) => this.ordersService.index$(requestState)),
+            return this.ordersService.index$(requestState);
+          }))),
       take(1));
   }
 }

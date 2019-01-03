@@ -31,22 +31,22 @@
           Two-factor authentication
         </a>
       </li>
-      <li class="nav-item" *ngIf="showResetAuthenticator">
+      <li class="nav-item" *ngIf="showResetAuthenticator$() | async">
         <a class="nav-link" routerLink="/Account/Manage/ResetAuthenticator" routerLinkActive="active">
           Reset Authenticator
         </a>
       </li>
-      <li class="nav-item" *ngIf="showEnableAuthenticator">
+      <li class="nav-item" *ngIf="showEnableAuthenticator$() | async">
         <a class="nav-link" routerLink="/Account/Manage/EnableAuthenticator" routerLinkActive="active">
           Enable Authenticator
         </a>
       </li>
-      <li class="nav-item" *ngIf="showGenerateRecoveryCodes">
+      <li class="nav-item" *ngIf="showGenerateRecoveryCodes$() | async">
         <a class="nav-link" routerLink="/Account/Manage/GenerateRecoveryCodes" routerLinkActive="active">
           Generate Recovery Codes
         </a>
       </li>
-      <li class="nav-item" *ngIf="showDisable2fa">
+      <li class="nav-item" *ngIf="showDisable2fa$() | async">
         <a class="nav-link" routerLink="/Account/Manage/Disable2fa" routerLinkActive="active">
           Disable 2FA
         </a>
@@ -56,7 +56,7 @@
           Personal data
         </a>
       </li>
-      <li class="nav-item" *ngIf="showDeletePersonalData">
+      <li class="nav-item" *ngIf="showDeletePersonalData$() | async">
         <a class="nav-link" routerLink="/Account/Manage/DeletePersonalData" routerLinkActive="active">
           Delete Personal data
         </a>

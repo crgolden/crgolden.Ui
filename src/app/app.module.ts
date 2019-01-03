@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BlockUIModule } from 'ng-block-ui';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faHome,
@@ -26,7 +27,8 @@ import {
   faCartPlus,
   faCashRegister,
   faShoppingBag,
-  faDollarSign
+  faDollarSign,
+  faExclamation
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faFacebook,
@@ -51,6 +53,7 @@ import { AddressService } from './address/address.service';
 import { CartService } from './cart/cart.service';
 import { CartProductsService } from './cart-products/cart-products.service';
 import { OrdersService } from './orders/orders.service';
+import { FilesService } from './files/files.service';
 import { HomeComponent } from './home/home.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
 import { HeaderComponent } from './header/header.component';
@@ -86,7 +89,8 @@ library.add(
   faCcDinersClub,
   faCcStripe,
   faShoppingBag,
-  faDollarSign
+  faDollarSign,
+  faExclamation
 );
 
 @NgModule({
@@ -101,6 +105,7 @@ library.add(
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    BlockUIModule.forRoot(),
     FontAwesomeModule,
     AppRoutingModule
   ],
@@ -119,7 +124,8 @@ library.add(
     AddressService,
     CartService,
     CartProductsService,
-    OrdersService
+    OrdersService,
+    FilesService
   ],
   bootstrap: [
     AppComponent

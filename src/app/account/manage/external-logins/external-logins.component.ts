@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ExternalLogins } from '../models/external-logins';
 import { ManageService } from '../manage.service';
 
@@ -11,6 +12,7 @@ import { ManageService } from '../manage.service';
 })
 export class ExternalLoginsComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: ExternalLogins;
   errors: Array<string>;
   message: string;
@@ -37,6 +39,7 @@ export class ExternalLoginsComponent implements OnInit {
 
   removeLogin(loginProvider: string, providerKey: string): void {
     this.errors = new Array<string>();
+    this.blockUI.start();
     this.manageService.removeLogin$(loginProvider, providerKey).subscribe(
       (externalLogins: ExternalLogins) => {
         this.model = externalLogins;
@@ -45,6 +48,7 @@ export class ExternalLoginsComponent implements OnInit {
           this.router.navigate(['/Account/Manage']);
         }
       },
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

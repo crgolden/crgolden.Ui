@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-12">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register</h2>
+    <h2>
+      <fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register
+    </h2>
   </div>
 </div>
 <hr />
@@ -151,16 +153,18 @@
                  class="form-control" />
         </div>
       </div>
-      <div class="form-group">
-        <button type="submit"
-                class="btn btn-primary"
-                [disabled]="f.invalid">
-          Submit
-        </button>
-      </div>
-      <div *ngFor="let error of errors">
-        <div class="alert alert-danger" role="alert">
-          {{error}}
+      <div class="col-12">
+        <div class="form-group">
+          <button type="submit"
+                  class="btn btn-primary"
+                  [disabled]="f.pristine || f.invalid">
+            Submit
+          </button>
+        </div>
+        <div *ngFor="let error of errors">
+          <div class="alert alert-danger" role="alert">
+            {{error}}
+          </div>
         </div>
       </div>
     </div>

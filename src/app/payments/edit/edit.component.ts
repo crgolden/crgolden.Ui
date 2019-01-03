@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AccountService } from '../../account/account.service';
 import { PaymentsService } from '../payments.service';
 import { Payment } from '../payment';
@@ -14,6 +15,7 @@ import { Payment } from '../payment';
 })
 export class EditComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
   payment: Payment;
 
@@ -31,12 +33,13 @@ export class EditComponent implements OnInit {
   }
 
   edit(form: NgForm): void {
+    this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.paymentsService
-      .edit$(this.payment)
-      .subscribe(
-        () => this.router.navigate([`/Payments/Details/${this.payment.id}`]),
-        (errors: Array<string>) => this.errors = errors);
+    this.blockUI.start();
+    this.paymentsService.edit$(this.payment).subscribe(
+      () => this.router.navigate([`/Payments/Details/${this.payment.id}`]),
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 
   showSave$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

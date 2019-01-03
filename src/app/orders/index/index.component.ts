@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   GridDataResult,
   PagerSettings,
@@ -25,6 +26,7 @@ import { OrdersService } from '../orders.service';
 })
 export class IndexComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   errors: Array<string>;
   orders: GridDataResult;
   state: DataSourceRequestState;
@@ -64,10 +66,12 @@ export class IndexComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Orders');
     this.orders = this.route.snapshot.data['orders'] as GridDataResult;
-    this.accountService.userHasRole$('Admin').pipe(
-      filter((response: boolean) => !response),
-      switchMap(() => this.accountService.user$),
-      filter((user: User) => user != null)).subscribe(
+    this.accountService.userHasRole$('Admin')
+      .pipe(
+        filter((response: boolean) => !response),
+        switchMap(() => this.accountService.user$),
+        filter((user: User) => user != null))
+      .subscribe(
         (user: User) => this.state.filter.filters.push({
           field: 'userId',
           operator: 'eq',
@@ -76,11 +80,14 @@ export class IndexComponent implements OnInit {
   }
 
   dataStateChange(state: DataSourceRequestState): void {
+    this.errors = new Array<string>();
     this.state = state;
+    this.blockUI.start();
     this.ordersService
       .index$(state)
       .subscribe(
         (result: GridDataResult) => this.orders = result,
-        (errors: Array<string>) => this.errors = errors);
+        (errors: Array<string>) => this.errors = errors,
+        () => this.blockUI.stop());
   }
 }

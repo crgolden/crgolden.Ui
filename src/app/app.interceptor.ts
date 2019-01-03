@@ -9,7 +9,7 @@ import {
 } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { User } from 'oidc-client';
 import { AccountService } from './account/account.service';
 
@@ -23,20 +23,21 @@ export class AppInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.accountService.user$.pipe(
+      take(1),
       switchMap(
         (user: User) => next.handle(req.clone({
           setHeaders: {
-            'Authorization': user != null ? `${user.token_type} ${user.access_token}` : '',
-            'Content-Type': 'application/json'
+            'Authorization': user != null ? `${user.token_type} ${user.access_token}` : ''
           },
           withCredentials: true
-        })),
-        (_, event) => {
-          if (event instanceof HttpResponse) {
-          }
-          return event;
-        }),
-      catchError<HttpEvent<any>, never>(this.handleError));
+        })).pipe(map(
+          (event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse) {
+              // placeholder for response handling
+            }
+            return event;
+          }))),
+      catchError(this.handleError));
   }
 
   private handleError = (response: HttpErrorResponse): Observable<never> => {
@@ -59,14 +60,14 @@ export class AppInterceptor implements HttpInterceptor {
           errors.push(response.error);
         } else if (response.error['errors'] instanceof Array) {
           response.error['errors'].forEach((error: any) => {
-            if (typeof error.description === 'string') {
-              errors.push(error.description);
+            if (typeof error['description'] === 'string') {
+              errors.push(error['description']);
             }
           });
         } else if (response.error instanceof Array) {
           response.error.forEach((error: any) => {
-            if (typeof error.description === 'string') {
-              errors.push(error.description);
+            if (typeof error['description'] === 'string') {
+              errors.push(error['description']);
             }
           });
         }

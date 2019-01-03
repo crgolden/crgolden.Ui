@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { SetPassword } from '../models/set-password';
 
@@ -12,6 +13,7 @@ import { SetPassword } from '../models/set-password';
 })
 export class SetPasswordComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: SetPassword;
   message: string;
   errors: Array<string>;
@@ -35,12 +37,14 @@ export class SetPasswordComponent implements OnInit {
   setPassword(form: NgForm): void {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.manageService.setPassword$(this.model).subscribe(
       (response: string) => {
         this.message = response;
         this.manageService.hasPassword.next(true);
         this.router.navigate(['/Account/Manage/ChangePassword']);
       },
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

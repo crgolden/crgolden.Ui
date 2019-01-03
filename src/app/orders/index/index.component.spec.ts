@@ -13,20 +13,25 @@ import { IndexComponent } from './index.component';
 import { Order } from '../order';
 import { OrderProduct } from '../../order-products/order-product';
 import { OrdersService } from '../../orders/orders.service';
+import { Payment } from '../../payments/payment';
 
 const order1: Order = {
   id: '1',
   userId: '1',
   name: 'Order 1',
+  total: 1,
   created: new Date(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  payments: new Array<Payment>()
 };
 const order2: Order = {
   id: '2',
   userId: '1',
   name: 'Order 2',
+  total: 1,
   created: new Date(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  payments: new Array<Payment>()
 };
 const orders = [order1, order2];
 const ordersGridDataResult = {

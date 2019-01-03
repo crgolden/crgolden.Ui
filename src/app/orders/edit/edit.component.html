@@ -125,7 +125,7 @@
                       (cellClick)="orderProductsClick($event)">
             <ng-template kendoGridToolbarTemplate>
               <h4>
-                Products<span *ngIf="formGroup">
+                <fa-icon [icon]="['fal', 'box']"></fa-icon> Products<span *ngIf="formGroup">
                   | <a id="cancel"
                        title="Cancel"
                        (click)="cancelHandler()">

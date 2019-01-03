@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { Register } from '../models/register';
 import { Address } from '../../address/address';
 import { AccountService } from '../account.service';
@@ -12,6 +13,7 @@ import { AccountService } from '../account.service';
 })
 export class RegisterComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
   model: Register;
   errors: Array<string>;
   success: string;
@@ -35,8 +37,10 @@ export class RegisterComponent implements OnInit {
   register(form: NgForm) {
     this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.accountService.register$(this.model).subscribe(
       (response: string) => this.success = response,
-      (errors: Array<string>) => this.errors = errors);
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 }

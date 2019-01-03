@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AddressService } from '../../address/address.service';
 import { Address } from '../../address/address';
 
@@ -11,6 +12,8 @@ import { Address } from '../../address/address';
 })
 export class ShippingAddressComponent {
 
+  @BlockUI() blockUI: NgBlockUI;
+  errors: Array<string>;
   shippingAddress: Address;
   unableToValidateShippingAddress: boolean;
 
@@ -29,7 +32,9 @@ export class ShippingAddressComponent {
   }
 
   validateShippingAddress(form: NgForm): void {
+    this.errors = new Array<string>();
     if (!form.valid) { return; }
+    this.blockUI.start();
     this.addressService.validate(this.shippingAddress).subscribe(
       (isValid: boolean) => {
         if (isValid) {
@@ -38,7 +43,9 @@ export class ShippingAddressComponent {
         } else {
           this.unableToValidateShippingAddress = true;
         }
-      });
+      },
+      (errors: Array<string>) => this.errors = errors,
+      () => this.blockUI.stop());
   }
 
   private setFormatted(): void {

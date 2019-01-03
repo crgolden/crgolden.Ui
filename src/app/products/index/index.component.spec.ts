@@ -13,27 +13,32 @@ import { IndexComponent } from './index.component';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
+import { ProductFile } from '../../product-files/product-file';
 import { ProductsService } from '../../products/products.service';
 
 const product1: Product = {
   id: '1',
   name: 'Product 1',
+  active: true,
   description: 'Description 1',
   price: 1.00,
   isDownload: false,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  productFiles: new Array<ProductFile>()
 };
 const product2: Product = {
   id: '2',
   name: 'Product 2',
+  active: true,
   description: 'Description 2',
   price: 2.00,
   isDownload: true,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
-  orderProducts: new Array<OrderProduct>()
+  orderProducts: new Array<OrderProduct>(),
+  productFiles: new Array<ProductFile>()
 };
 const products = [product1, product2];
 const productsGridDataResult = {

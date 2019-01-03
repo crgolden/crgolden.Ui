@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/index';
 import { map } from 'rxjs/operators/index';
 import {
@@ -20,17 +20,22 @@ export abstract class BaseModelService<T extends BaseModel> {
     this.controllerName = controllerName;
   }
 
+  protected get headers(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+  }
+
   index$(state: DataSourceRequestState): Observable<GridDataResult> {
     const hasGroups = state.group && state.group.length > 0;
     const queryStr = toDataSourceRequestString(state);
 
     return this.http
       .get<GridDataResult>(`${environment.apiUrl}/${this.controllerName}/Index?${queryStr}`)
-      .pipe(
-        map((res: GridDataResult) => ({
-          data: hasGroups ? translateDataSourceResultGroups(res.data) : res.data,
-          total: res.total
-        })));
+      .pipe(map((res: GridDataResult) => ({
+        data: hasGroups ? translateDataSourceResultGroups(res.data) : res.data,
+        total: res.total
+      })));
   }
 
   details$(id: string): Observable<T> {
@@ -40,12 +45,30 @@ export abstract class BaseModelService<T extends BaseModel> {
 
   create$(model: T): Observable<T> {
     return this.http
-      .post<T>(`${environment.apiUrl}/${this.controllerName}/Create`, JSON.stringify(model));
+      .post<T>(`${environment.apiUrl}/${this.controllerName}/Create`, JSON.stringify(model), {
+        headers: this.headers
+      });
+  }
+
+  createRange$(models: Array<T>): Observable<Array<T>> {
+    return this.http
+      .post<Array<T>>(`${environment.apiUrl}/${this.controllerName}/CreateRange`, JSON.stringify(models), {
+        headers: this.headers
+      });
   }
 
   edit$(model: T): Observable<Object> {
     return this.http
-      .put(`${environment.apiUrl}/${this.controllerName}/Edit/${model.id}`, JSON.stringify(model));
+      .put(`${environment.apiUrl}/${this.controllerName}/Edit/${model.id}`, JSON.stringify(model), {
+        headers: this.headers
+      });
+  }
+
+  editRange$(models: Array<T>): Observable<Object> {
+    return this.http
+      .put(`${environment.apiUrl}/${this.controllerName}/EditRange`, JSON.stringify(models), {
+        headers: this.headers
+      });
   }
 
   delete$(id: string): Observable<Object> {

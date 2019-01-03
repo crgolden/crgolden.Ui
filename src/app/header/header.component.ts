@@ -14,9 +14,10 @@ import { Cart } from '../cart/cart';
 })
 export class HeaderComponent implements OnInit {
 
+  returnUrl: string;
+
   user$ = (): Observable<User> => this.accountService.user$;
   cart$ = (): Observable<Cart> => this.cartService.cart$;
-  returnUrl: string;
 
   constructor(
     private readonly router: Router,

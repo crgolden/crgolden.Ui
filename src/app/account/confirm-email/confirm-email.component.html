@@ -1,16 +1,19 @@
 <div class="row">
   <div class="col-12">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'at']"></fa-icon> Confirm Email</h2>
+    <h2>
+      <fa-icon [icon]="['fal', 'at']"></fa-icon> Confirm Email
+    </h2>
     <hr />
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col-12 col-md-6">
     <div *ngIf="success" class="alert alert-success" role="alert">
       {{success}}
       <br />
-      <a routerLink="/Account/Login">
+      <a routerLink="/Account/Login"
+         title="Login">
         <fa-icon [icon]="['fal', 'sign-in']"></fa-icon> Login
       </a>
     </div>
