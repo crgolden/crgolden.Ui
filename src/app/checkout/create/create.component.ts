@@ -137,7 +137,8 @@ export class CreateComponent implements OnInit {
                   }))))));
           }))
       .subscribe(
-        (order: Order) => this.router.navigate([`/Orders/Details/${order.id}`]),
+        (order: Order) => this.router.navigate([`/Orders/Details/${order.id}`]).finally(
+          () => this.blockUI.stop()),
         (errors: Array<string>) => this.errors = errors,
         () => this.blockUI.stop());
   }

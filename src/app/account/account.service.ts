@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserManagerSettings, UserManager, User } from 'oidc-client';
@@ -34,24 +34,38 @@ export class AccountService {
     this.userManager.getUser().then((user: User) => this.user$.next(user));
   }
 
+  protected get headers(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+  }
+
   confirmEmail$(model: ConfirmEmail): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/ConfirmEmail`, JSON.stringify(model));
+      .post<string>(`${environment.identityUrl}/Account/ConfirmEmail`, JSON.stringify(model), {
+        headers: this.headers
+      });
   }
 
   forgotPassword$(model: ForgotPassword): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/ForgotPassword`, JSON.stringify(model));
+      .post<string>(`${environment.identityUrl}/Account/ForgotPassword`, JSON.stringify(model), {
+        headers: this.headers
+      });
   }
 
   register$(model: Register): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/Register`, JSON.stringify(model));
+      .post<string>(`${environment.identityUrl}/Account/Register`, JSON.stringify(model), {
+        headers: this.headers
+      });
   }
 
   resetPassword$(model: ResetPassword): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/ResetPassword`, JSON.stringify(model));
+      .post<string>(`${environment.identityUrl}/Account/ResetPassword`, JSON.stringify(model), {
+        headers: this.headers
+      });
   }
 
   signinSilent(): Promise<User> {
