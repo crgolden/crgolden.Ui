@@ -16,7 +16,7 @@ export class PaymentStripeComponent implements OnInit {
   private card: stripe.elements.Element;
   error: stripe.Error;
 
-  constructor(private readonly modal: NgbActiveModal) {
+  constructor(readonly modal: NgbActiveModal) {
     this.stripe = Stripe(`${environment.stripePublishableKey}`, this.stripeOptions());
   }
 

@@ -18,7 +18,7 @@ export class ShippingAddressComponent {
   unableToValidateShippingAddress: boolean;
 
   constructor(
-    private readonly modal: NgbActiveModal,
+    readonly modal: NgbActiveModal,
     private readonly addressService: AddressService) {
   }
 
