@@ -2,19 +2,19 @@
   <div class="row" *ngIf="model.recoveryCodesLeft === 0">
     <div class="col-12 alert alert-danger">
       <strong>You have no recovery codes left.</strong>
-      <p>You must <a routerLink="/Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
+      <p>You must <a routerLink="/account/manage/generate-recovery-codes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
     </div>
   </div>
   <div class="row" *ngIf="model.recoveryCodesLeft === 1">
     <div class="col-12 alert alert-danger">
       <strong>You have 1 recovery code left.</strong>
-      <p>You can <a routerLink="/Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
+      <p>You can <a routerLink="/account/manage/generate-recovery-codes">generate a new set of recovery codes</a>.</p>
     </div>
   </div>
   <div class="row" *ngIf="model.recoveryCodesLeft > 1 && model.recoveryCodesLeft <= 3">
     <div class="col-12 alert alert-warning">
       <strong>You have {{model.recoveryCodesLeft}} recovery codes left.</strong>
-      <p>You should <a routerLink="/Account/Manage/GenerateRecoveryCodes">generate a new set of recovery codes</a>.</p>
+      <p>You should <a routerLink="/account/manage/generate-recovery-codes">generate a new set of recovery codes</a>.</p>
     </div>
   </div>
   <div class="row" *ngIf="model.isMachineRemembered && !model.message">
@@ -35,7 +35,7 @@
   <div class="row">
     <div class="col-12">
         <hr />
-        <a routerLink="/Account/Manage/Disable2fa"
+        <a routerLink="/account/manage/disable-2fa"
            class="btn btn-danger"
            title="Disable 2FA">
         Disable 2FA
@@ -45,7 +45,7 @@
   <div class="row">
     <div class="col-12">
         <hr />
-        <a routerLink="/Account/Manage/GenerateRecoveryCodes"
+        <a routerLink="/account/manage/generate-recovery-codes"
            class="btn btn-primary"
            title="Generate Recovery Codes">
         Reset recovery codes
@@ -61,7 +61,7 @@
 <div class="row" *ngIf="!model.hasAuthenticator">
   <div class="col-12">
     <hr />
-    <a routerLink="/Account/Manage/EnableAuthenticator"
+    <a routerLink="/account/manage/enable-authenticator"
        class="btn btn-primary"
        title="Add Authenticator App">
       Add authenticator app
@@ -71,7 +71,7 @@
 <div class="row" *ngIf="model.hasAuthenticator">
   <div class="col-12">
       <hr />
-      <a routerLink="/Account/Manage/EnableAuthenticator"
+      <a routerLink="/account/manage/enable-authenticator"
          class="btn btn-primary"
          title="Setup Authenticator App">
       Setup authenticator app
@@ -81,7 +81,7 @@
 <div class="row" *ngIf="model.hasAuthenticator">
   <div class="col-12">
       <hr />
-      <a routerLink="/Account/Manage/ResetAuthenticator"
+      <a routerLink="/account/manage/reset-authenticator"
          class="btn btn-danger"
          title="Reset Authenticator App">
       Reset authenticator app

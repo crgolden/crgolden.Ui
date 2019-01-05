@@ -22,7 +22,7 @@ export class AppIsAdmin implements CanActivate {
       if (response) {
         return true;
       }
-      this.router.navigate(['/AccessDenied']);
+      this.router.navigate(['/access-denied']);
       return false;
     }));
   }

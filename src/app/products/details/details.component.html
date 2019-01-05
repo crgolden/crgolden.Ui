@@ -73,8 +73,7 @@
         <ng-container *ngIf="primaryImageUri">
           <img src="{{primaryImageUri}}"
                alt="Product Image"
-               title="Product Image"
-               width="500" />
+               title="Product Image" />
         </ng-container>
       </div>
     </div>
@@ -84,12 +83,12 @@
   <div class="col-12">
     <hr />
     <h4>
-      <a routerLink="/Products"
+      <a routerLink="/products"
          title="Products">
         <fa-icon [icon]="['fal', 'list']"></fa-icon> List
       </a>
       <span *ngIf="showEdit$() | async">
-        | <a routerLink="/Products/Edit/{{product.id}}"
+        | <a routerLink="/products/edit/{{product.id}}"
              title="Edit Product">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>

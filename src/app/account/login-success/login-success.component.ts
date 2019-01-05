@@ -38,17 +38,17 @@ export class LoginSuccessComponent implements OnInit {
         this.cartService.details$(cartId).subscribe(
           (cart: Cart) => {
             this.cartService.cart$.next(cart);
-            const returnUrl = window.sessionStorage.getItem('returnUrl');
-            if (returnUrl != null) {
-              window.sessionStorage.removeItem('returnUrl');
-              this.router.navigate([returnUrl]);
-            } else {
-              this.router.navigate(['/Home']);
-            }
           },
           (errors) => this.errors = errors,
           () => this.blockUI.stop());
       }
-    }).finally(() => this.blockUI.stop());
+      const returnUrl = window.sessionStorage.getItem('returnUrl');
+      if (returnUrl != null) {
+        window.sessionStorage.removeItem('returnUrl');
+        this.router.navigate([returnUrl]).finally(() => this.blockUI.stop());
+      } else {
+        this.router.navigate(['/home']).finally(() => this.blockUI.stop());
+      }
+    });
   }
 }

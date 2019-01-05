@@ -16,30 +16,35 @@ import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
 import { ProductFile } from '../../product-files/product-file';
+import { ProductCategory } from '../../product-categories/product-category';
 
 const product1: Product = {
   id: '1',
   name: 'Product 1',
   active: true,
   description: 'Description 1',
-  price: 1.00,
+  unitPrice: 1.00,
+  quantityPerUnit: undefined,
   isDownload: true,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>(),
-  productFiles: new Array<ProductFile>()
+  productFiles: new Array<ProductFile>(),
+  productCategories: new Array<ProductCategory>()
 };
 const product2: Product = {
   id: '2',
   name: 'Product 2',
   active: true,
   description: 'Description 2',
-  price: 2.00,
+  unitPrice: 2.00,
+  quantityPerUnit: undefined,
   isDownload: false,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>(),
-  productFiles: new Array<ProductFile>()
+  productFiles: new Array<ProductFile>(),
+  productCategories: new Array<ProductCategory>()
 };
 const products = [product1, product2];
 const productsGridDataResult: GridDataResult = {

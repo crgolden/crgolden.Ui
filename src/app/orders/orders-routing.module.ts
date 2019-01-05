@@ -18,7 +18,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'Details/:id',
+    path: 'details/:id',
     component: DetailsComponent,
     canActivate: [AppLoggedIn],
     resolve: {
@@ -26,7 +26,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'Edit/:id',
+    path: 'edit/:id',
     component: EditComponent,
     canActivate: [AppIsAdmin],
     resolve: {

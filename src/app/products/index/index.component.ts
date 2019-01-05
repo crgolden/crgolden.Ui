@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { exhaustMap, filter, map } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
@@ -38,11 +38,13 @@ export class IndexComponent implements OnInit {
   state: DataSourceRequestState;
   pageable: PagerSettings;
   sortable: SortSettings;
+  isList: boolean;
   private cartId: string;
 
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly accountService: AccountService,
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
@@ -102,7 +104,7 @@ export class IndexComponent implements OnInit {
         model2Name: product.name,
         created: undefined,
         quantity: 1,
-        price: product.price,
+        price: product.unitPrice,
         extendedPrice: undefined,
         isDownload: product.isDownload
       } as CartProduct).pipe(exhaustMap(
@@ -111,14 +113,14 @@ export class IndexComponent implements OnInit {
         id: undefined,
         name: 'Cart',
         created: undefined,
-        total: product.price,
+        total: product.unitPrice,
         cartProducts: new Array<CartProduct>({
           model1Id: undefined,
           model1Name: 'Cart',
           model2Id: product.id,
           model2Name: product.name,
           quantity: 1,
-          price: product.price,
+          price: product.unitPrice,
           extendedPrice: undefined,
           isDownload: product.isDownload,
           created: undefined
@@ -163,6 +165,42 @@ export class IndexComponent implements OnInit {
       () => this.blockUI.stop());
   }
 
+  getThumbnailUrl(product: Product): string {
+    if (!product.productFiles || product.productFiles.length === 0) {
+      return undefined;
+    }
+    const primaryImages = product.productFiles.filter(x => !x.uri.includes('thumbnail'));
+    let primaryImageFile = primaryImages.find(x => x.primary);
+    if (primaryImageFile == null) {
+      primaryImageFile = primaryImages[0];
+    }
+    if (primaryImageFile == null) {
+      return undefined;
+    }
+    const start = primaryImageFile.uri.lastIndexOf('/') + 1;
+    let end = primaryImageFile.uri.indexOf('?');
+    const fileName = primaryImageFile.uri.substring(start, end);
+    end = fileName.indexOf('.');
+    const id = fileName.substring(0, end);
+    const thumbnailImageFile = product.productFiles.find(x => x.uri.includes(id) && x.uri.includes('thumbnails'));
+    if (thumbnailImageFile == null) {
+      return undefined;
+    }
+    return thumbnailImageFile.uri;
+  }
+
+  gotToDetails(productId: string): void {
+    this.router.navigate([`/products/details/${productId}`]);
+  }
+
   showAdd$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
   showActive$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
+
+  showGrid(): void {
+    this.isList = false;
+  }
+
+  showList(): void {
+    this.isList = true;
+  }
 }

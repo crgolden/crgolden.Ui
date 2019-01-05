@@ -31,7 +31,7 @@ export class Disable2faComponent implements OnInit {
     this.manageService.disable2fa$().subscribe(
       (response: string) => {
         this.message = response;
-        this.router.navigate(['/Manage/TwoFactorAuthentication']);
+        this.router.navigate(['/manage/two-factor-authentication']);
       },
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());

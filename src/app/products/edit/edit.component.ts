@@ -53,7 +53,8 @@ export class EditComponent implements OnInit {
     if (!form.valid) { return; }
     this.blockUI.start();
     this.productsService.edit$(this.product).subscribe(
-      () => this.router.navigate([`/Products/Details/${this.product.id}`]),
+      () => this.router.navigate([`/products/details/${this.product.id}`]).finally(
+        () => this.blockUI.stop()),
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());
   }

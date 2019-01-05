@@ -1,6 +1,6 @@
 <nav class="navbar container fixed-top navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand"
-     routerLink="/Home"
+     routerLink="/home"
      title="Home">Clarity</a>
   <button type="button"
           class="navbar-toggler"
@@ -16,7 +16,7 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <a class="nav-link"
-           routerLink="/Products"
+           routerLink="/products"
            routerLinkActive="active"
            title="Products">
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
@@ -24,7 +24,7 @@
       </li>
       <li *ngIf="user$() | async" class="nav-item">
         <a class="nav-link"
-           routerLink="/Orders"
+           routerLink="/orders"
            routerLinkActive="active"
            title="Orders">
           <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Orders
@@ -32,7 +32,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link"
-           routerLink="/Cart"
+           routerLink="/cart"
            routerLinkActive="active"
            title="Cart">
           <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart
@@ -44,7 +44,7 @@
     <ng-template #loggedIn>
       <li class="nav-item">
         <a class="nav-link"
-           routerLink="/Account/Manage"
+           routerLink="/account/manage"
            routerLinkActive="active"
            title="Account">
           <fa-icon [icon]="['fal', 'user']"></fa-icon> Account
@@ -52,7 +52,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link"
-           routerLink="/Account/Logout"
+           routerLink="/account/logout"
            routerLinkActive="active"
            title="Logout">
           <fa-icon [icon]="['fal', 'sign-out']"></fa-icon> Logout
@@ -62,7 +62,7 @@
     <ng-template #loggedOut>
       <li class="nav-item">
         <a class="nav-link"
-           routerLink="/Account/Register"
+           routerLink="/account/register"
            routerLinkActive="active"
            title="Register">
           <fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register
@@ -70,7 +70,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link"
-           [routerLink]="['/Account/Login']"
+           [routerLink]="['/account/login']"
            [queryParams]="{ returnUrl: returnUrl }"
            title="Login">
           <fa-icon [icon]="['fal', 'sign-in']"></fa-icon> Login

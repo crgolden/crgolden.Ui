@@ -30,7 +30,7 @@ const routes: Routes = [
     },
     children: [
       {
-        path: 'ChangePassword',
+        path: 'change-password',
         component: ChangePasswordComponent,
         canActivate: [AppLoggedIn],
         resolve: {
@@ -38,7 +38,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'DeletePersonalData',
+        path: 'delete-personal-data',
         component: DeletePersonalDataComponent,
         canActivate: [AppLoggedIn],
         resolve: {
@@ -46,7 +46,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'Disable2fa',
+        path: 'disable-2fa',
         component: Disable2faComponent,
         canActivate: [
           AppLoggedIn,
@@ -54,7 +54,7 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'EnableAuthenticator',
+        path: 'enable-authenticator',
         component: EnableAuthenticatorComponent,
         canActivate: [AppLoggedIn],
         resolve: {
@@ -62,7 +62,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'ExternalLogins',
+        path: 'external-logins',
         component: ExternalLoginsComponent,
         canActivate: [AppLoggedIn],
         resolve: {
@@ -71,7 +71,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'GenerateRecoveryCodes',
+        path: 'generate-recovery-codes',
         component: GenerateRecoveryCodesComponent,
         canActivate: [
           AppLoggedIn,
@@ -79,22 +79,22 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'PersonalData',
+        path: 'personal-data',
         component: PersonalDataComponent,
         canActivate: [AppLoggedIn]
       },
       {
-        path: 'Profile',
+        path: 'profile',
         component: ProfileComponent,
         canActivate: [AppLoggedIn]
       },
       {
-        path: 'ResetAuthenticator',
+        path: 'reset-authenticator',
         component: ResetAuthenticatorComponent,
         canActivate: [AppLoggedIn]
       },
       {
-        path: 'SetPassword',
+        path: 'set-password',
         component: SetPasswordComponent,
         canActivate: [AppLoggedIn],
         resolve: {
@@ -102,7 +102,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'TwoFactorAuthentication',
+        path: 'two-factor-authentication',
         component: TwoFactorAuthenticationComponent,
         canActivate: [AppLoggedIn],
         resolve: {
@@ -111,7 +111,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'Profile',
+        redirectTo: 'profile',
         pathMatch: 'full'
       }
     ]

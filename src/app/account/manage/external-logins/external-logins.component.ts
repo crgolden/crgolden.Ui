@@ -29,7 +29,7 @@ export class ExternalLoginsComponent implements OnInit {
     this.model = this.route.snapshot.data['externalLogins'] as ExternalLogins;
     const hasPassword = this.route.snapshot.data['hasPassword'] as boolean;
     if (this.model.currentLogins.length === 0) {
-      this.router.navigate(['/Account/Manage']);
+      this.router.navigate(['/account/manage']);
     } else {
       this.model.showRemoveButton = (hasPassword) || this.model.currentLogins.length > 1;
       this.manageService.hasPassword.subscribe(
@@ -45,7 +45,7 @@ export class ExternalLoginsComponent implements OnInit {
         this.model = externalLogins;
         this.manageService.externalLogins.next(externalLogins);
         if (this.model.currentLogins.length === 0) {
-          this.router.navigate(['/Account/Manage']);
+          this.router.navigate(['/account/manage']);
         }
       },
       (errors: Array<string>) => this.errors = errors,

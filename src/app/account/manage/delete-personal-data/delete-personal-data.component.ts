@@ -38,7 +38,7 @@ export class DeletePersonalDataComponent implements OnInit {
     if (!form.valid) { return; }
     this.blockUI.start();
     this.manageService.deletePersonalData$(this.model).subscribe(
-      () => this.router.navigate(['/Home']),
+      () => this.router.navigate(['/home']).finally(() => this.blockUI.stop()),
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());
   }

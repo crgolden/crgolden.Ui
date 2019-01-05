@@ -38,7 +38,7 @@ export class ConfirmEmailComponent implements OnInit {
         if (model.userId != null && model.code != null) {
           return this.accountService.confirmEmail$(model);
         } else {
-          this.router.navigate(['/Home']);
+          this.router.navigate(['/home']);
           return of('');
         }
       })).subscribe(

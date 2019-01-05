@@ -23,7 +23,7 @@
                 (dataStateChange)="dataStateChange($event)">
       <kendo-grid-column field="name" title="Name">
         <ng-template kendoGridCellTemplate let-order>
-          <a routerLink="/Orders/Details/{{order.id}}"
+          <a routerLink="/orders/details/{{order.id}}"
              title="Order Details">
             {{order.name}}
           </a>

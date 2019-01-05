@@ -57,7 +57,7 @@ export class DetailsComponent implements OnInit {
         model2Name: this.product.name,
         created: undefined,
         quantity: 1,
-        price: this.product.price,
+        price: this.product.unitPrice,
         extendedPrice: undefined,
         isDownload: this.product.isDownload
       } as CartProduct).pipe(exhaustMap(
@@ -66,14 +66,14 @@ export class DetailsComponent implements OnInit {
         id: undefined,
         name: 'Cart',
         created: undefined,
-        total: this.product.price,
+        total: this.product.unitPrice,
         cartProducts: new Array<CartProduct>({
           model1Id: undefined,
           model1Name: 'Cart',
           model2Id: this.product.id,
           model2Name: this.product.name,
           quantity: 1,
-          price: this.product.price,
+          price: this.product.unitPrice,
           extendedPrice: undefined,
           isDownload: this.product.isDownload,
           created: undefined

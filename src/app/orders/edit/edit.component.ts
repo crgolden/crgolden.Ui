@@ -113,7 +113,8 @@ export class EditComponent implements OnInit {
     }
     this.blockUI.start();
     this.ordersService.edit$(this.order).subscribe(
-      () => this.router.navigate([`/Orders/Details/${this.order.id}`]),
+      () => this.router.navigate([`/Orders/Details/${this.order.id}`]).finally(
+        () => this.blockUI.stop()),
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());
   }

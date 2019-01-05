@@ -17,19 +17,19 @@ const routes: Routes = [
     }
   },
   {
-    path: 'Create',
+    path: 'create',
     component: CreateComponent,
     canActivate: [AppIsAdmin]
   },
   {
-    path: 'Details/:id',
+    path: 'details/:id',
     component: DetailsComponent,
     resolve: {
       product: ProductResolver,
     }
   },
   {
-    path: 'Edit/:id',
+    path: 'edit/:id',
     component: EditComponent,
     canActivate: [AppIsAdmin],
     resolve: {

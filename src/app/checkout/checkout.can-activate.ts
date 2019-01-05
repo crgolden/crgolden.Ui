@@ -25,7 +25,7 @@ export class CheckoutCanActivate implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     if (this.cartId.length === 0) {
-      this.router.navigate(['/Cart']);
+      this.router.navigate(['/cart']);
       return of(false);
     }
     return this.cartService.details$(this.cartId)
@@ -33,7 +33,7 @@ export class CheckoutCanActivate implements CanActivate {
         if (cart != null && cart.cartProducts != null && cart.cartProducts.length > 0) {
           return true;
         }
-        this.router.navigate(['/Cart']);
+        this.router.navigate(['/cart']);
         return false;
       }));
   }

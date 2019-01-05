@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { UrlSerializer } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUIModule } from 'ng-block-ui';
@@ -46,6 +47,7 @@ import { AppInterceptor } from './app.interceptor';
 import { AppLoggedIn } from './app.logged-in';
 import { AppNotLoggedIn } from './app.not-logged-in';
 import { AppIsAdmin } from './app.is-admin';
+import { LowerCaseUrlSerializer } from './app.lower-case.serializer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AccountService } from './account/account.service';
@@ -114,6 +116,10 @@ library.add(
       provide: HTTP_INTERCEPTORS,
       useClass: AppInterceptor,
       multi: true
+    },
+    {
+      provide: UrlSerializer,
+      useClass: LowerCaseUrlSerializer
     },
     NgbActiveModal,
     CookieService,

@@ -35,12 +35,12 @@
   <div class="col-12">
     <hr />
     <h4>
-      <a routerLink="/Orders/Details/{{payment.orderId}}"
+      <a routerLink="/orders/details/{{payment.orderId}}"
          title="Order Details">
         <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order
       </a>
       <span *ngIf="showEdit$() | async">
-        | <a routerLink="/Payments/Edit/{{payment.id}}">
+        | <a routerLink="/payments/edit/{{payment.id}}">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>
       </span>

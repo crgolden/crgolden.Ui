@@ -37,7 +37,8 @@ export class EditComponent implements OnInit {
     if (!form.valid) { return; }
     this.blockUI.start();
     this.paymentsService.edit$(this.payment).subscribe(
-      () => this.router.navigate([`/Payments/Details/${this.payment.id}`]),
+      () => this.router.navigate([`/payments/details/${this.payment.id}`]).finally(
+        () => this.blockUI.stop()),
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());
   }

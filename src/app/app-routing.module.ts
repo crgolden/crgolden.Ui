@@ -5,31 +5,31 @@ import { AccessDeniedComponent } from './access-denied/access-denied.component';
 
 const routes: Routes = [
   {
-    path: 'Home',
+    path: 'home',
     component: HomeComponent
   },
   {
-    path: 'AccessDenied',
+    path: 'access-denied',
     component: AccessDeniedComponent
   },
   {
-    path: 'Account',
+    path: 'account',
     loadChildren: './account/account.module#AccountModule'
   },
   {
-    path: 'Payments',
+    path: 'payments',
     loadChildren: './payments/payments.module#PaymentsModule'
   },
   {
-    path: 'Products',
+    path: 'products',
     loadChildren: './products/products.module#ProductsModule'
   },
   {
-    path: 'Orders',
+    path: 'orders',
     loadChildren: './orders/orders.module#OrdersModule'
   },
   {
-    path: 'Cart',
+    path: 'cart',
     loadChildren: './cart/cart.module#CartModule'
   },
   {

@@ -16,18 +16,21 @@ import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
 import { ProductsService } from '../../products/products.service';
 import { ProductFile } from '../../product-files/product-file';
+import { ProductCategory } from '../../product-categories/product-category';
 
 const product: Product = {
   id: '1',
   name: 'Product 1',
   active: true,
   description: 'Description 1',
-  price: 1.00,
+  unitPrice: 1.00,
+  quantityPerUnit: undefined,
   isDownload: false,
   created: new Date(),
   cartProducts: new Array<CartProduct>(),
   orderProducts: new Array<OrderProduct>(),
-  productFiles: new Array<ProductFile>()
+  productFiles: new Array<ProductFile>(),
+  productCategories: new Array<ProductCategory>()
 };
 let component: EditComponent;
 let fixture: ComponentFixture<EditComponent>;

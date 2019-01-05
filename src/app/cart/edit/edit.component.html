@@ -8,7 +8,7 @@
       <div class="col-12 col-md-6">
         <h2 *ngIf="showProceedToCheckout$() | async">
           <span class="float-md-right">
-            <a routerLink="/Checkout">
+            <a routerLink="/checkout">
               <fa-icon [icon]="['fal', 'cash-register']"></fa-icon> Proceed to Checkout
             </a>
           </span>
@@ -38,7 +38,7 @@
       </ng-template>
       <kendo-grid-column field="model2Name" title="Name">
         <ng-template kendoGridCellTemplate let-cartProduct>
-          <a routerLink="/Products/Details/{{cartProduct.model2Id}}">
+          <a routerLink="/products/details/{{cartProduct.model2Id}}">
             {{cartProduct.model2Name}}
           </a>
         </ng-template>

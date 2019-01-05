@@ -39,7 +39,7 @@ export class EnableAuthenticatorComponent implements OnInit {
         if (response.recoveryCodes && response.recoveryCodes.length > 0) {
           this.model = response;
         } else {
-          this.router.navigate(['/Manage/TwoFactorAuthentication']);
+          this.router.navigate(['/manage/two-factor-authentication']);
         }
       },
       (errors: Array<string>) => this.errors = errors,

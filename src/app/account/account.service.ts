@@ -105,10 +105,10 @@ export class AccountService {
     const userManagerSettings: UserManagerSettings = {
       authority: environment.identityUrl,
       client_id: environment.identityClientId,
-      redirect_uri: `${domain}/Account/LoginSuccess`,
+      redirect_uri: `${domain}/account/login-success`,
       response_type: this.responseTypes.join(' '),
       scope: this.scopes.join(' '),
-      post_logout_redirect_uri: `${domain}/Account/LogoutSuccess`,
+      post_logout_redirect_uri: `${domain}/account/logout-success`,
       filterProtocolClaims: true,
       automaticSilentRenew: true,
       silent_redirect_uri: `${domain}/silent-callback.html`

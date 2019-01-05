@@ -13,45 +13,45 @@ import { AppNotLoggedIn } from '../app.not-logged-in';
 
 const routes: Routes = [
   {
-    path: 'ConfirmEmail',
+    path: 'confirm-email',
     component: ConfirmEmailComponent,
     canActivate: [AppNotLoggedIn]
   },
   {
-    path: 'ForgotPassword',
+    path: 'forgot-password',
     component: ForgotPasswordComponent,
     canActivate: [AppNotLoggedIn]
   },
   {
-    path: 'Login',
+    path: 'login',
     component: LoginComponent,
     canActivate: [AppNotLoggedIn]
   },
   {
-    path: 'LoginSuccess',
+    path: 'login-success',
     component: LoginSuccessComponent
   },
   {
-    path: 'Logout',
+    path: 'logout',
     component: LogoutComponent,
     canActivate: [AppLoggedIn]
   },
   {
-    path: 'LogoutSuccess',
+    path: 'logout-success',
     component: LogoutSuccessComponent
   },
   {
-    path: 'Register',
+    path: 'register',
     component: RegisterComponent,
     canActivate: [AppNotLoggedIn]
   },
   {
-    path: 'ResetPassword',
+    path: 'reset-password',
     component: ResetPasswordComponent,
     canActivate: [AppNotLoggedIn]
   },
   {
-    path: 'Manage',
+    path: 'manage',
     loadChildren: './manage/manage.module#ManageModule'
   }
 ];

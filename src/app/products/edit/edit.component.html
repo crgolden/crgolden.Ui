@@ -109,11 +109,11 @@
                   Save
                 </button> |
               </span>
-              <a routerLink="/Products/Details/{{product.id}}"
+              <a routerLink="/products/details/{{product.id}}"
                  title="Product Details">
                 <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
               </a> |
-              <a routerLink="/Products"
+              <a routerLink="/products"
                  title="Products">
                 <fa-icon [icon]="['fal', 'list']"></fa-icon> List
               </a>
@@ -131,8 +131,7 @@
         <ng-container *ngIf="primaryImageUri">
           <img src="{{primaryImageUri}}"
                alt="Product Image"
-               title="Product Image"
-               width="500" />
+               title="Product Image" />
         </ng-container>
       </div>
     </div>

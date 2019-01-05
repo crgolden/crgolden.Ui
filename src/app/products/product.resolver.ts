@@ -31,7 +31,7 @@ export class ProductResolver implements Resolve<Product> {
         if (isAdmin || product.active) {
           return product;
         }
-        this.router.navigate(['/AccessDenied']);
+        this.router.navigate(['/access-denied']);
         return undefined;
       }));
   }

@@ -30,11 +30,11 @@ export class OrderResolver implements Resolve<Order> {
         map((latest: [User, Order, boolean]) => {
           const [user, order, isAdmin] = latest;
           if (order == null) {
-            this.router.navigate(['/Orders']);
+            this.router.navigate(['/orders']);
             return undefined;
           }
           if (user == null || !order.userId === user.profile['sub'] && !isAdmin) {
-            this.router.navigate(['/AccessDenied']);
+            this.router.navigate(['/access-denied']);
             return undefined;
           }
           return order;

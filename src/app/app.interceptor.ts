@@ -45,14 +45,14 @@ export class AppInterceptor implements HttpInterceptor {
     if (response.status < 500) {
       switch (response.status) {
         case 401:
-          this.router.navigate(['/Account/Login'], {
+          this.router.navigate(['/account/login'], {
             queryParams: {
               returnUrl: this.router.routerState.snapshot.url
             }
           });
           break;
         case 403:
-          this.router.navigate(['/AccessDenied']);
+          this.router.navigate(['/access-denied']);
           break;
       }
       if (response.error) {

@@ -24,7 +24,7 @@ export class AppLoggedIn implements CanActivate {
         if (user != null && !user.expired) {
           return true;
         } else {
-          this.router.navigate(['/Account/Login'], {
+          this.router.navigate(['/account/login'], {
             queryParams: {
               returnUrl: state.url
             }

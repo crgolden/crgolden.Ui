@@ -30,7 +30,7 @@ export class SetPasswordComponent implements OnInit {
     this.titleService.setTitle('Clarity: Set Password');
     const hasPassword = this.route.snapshot.data['hasPassword'] as boolean;
     if (hasPassword) {
-      this.router.navigate(['/Account/Manage/ChangePassword']);
+      this.router.navigate(['/account/manage/change-password']);
     }
   }
 
@@ -42,7 +42,7 @@ export class SetPasswordComponent implements OnInit {
       (response: string) => {
         this.message = response;
         this.manageService.hasPassword.next(true);
-        this.router.navigate(['/Account/Manage/ChangePassword']);
+        this.router.navigate(['/account/manage/change-password']);
       },
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());

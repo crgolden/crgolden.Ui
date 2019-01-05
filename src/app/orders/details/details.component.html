@@ -67,7 +67,7 @@
       <kendo-grid-column field="model2Name"
                          title="Name">
         <ng-template kendoGridCellTemplate let-orderProduct>
-          <a routerLink="/Products/Details/{{orderProduct.model2Id}}"
+          <a routerLink="/products/details/{{orderProduct.model2Id}}"
              title="Product Details">
             {{orderProduct.model2Name}}
           </a>
@@ -109,7 +109,7 @@
                          title="Name"
                          [filterable]="false">
         <ng-template kendoGridCellTemplate let-payment>
-          <a routerLink="/Payments/Details/{{payment.id}}">
+          <a routerLink="/payments/details/{{payment.id}}">
             {{payment.name}}
           </a>
         </ng-template>
@@ -136,12 +136,12 @@
   <div class="col-12">
     <hr />
     <h4>
-      <a routerLink="/Orders"
+      <a routerLink="/orders"
          title="Orders">
         <fa-icon [icon]="['fal', 'list']"></fa-icon> List
       </a>
       <span *ngIf="showEdit$() | async">
-        | <a routerLink="/Orders/Edit/{{order.id}}"
+        | <a routerLink="/orders/edit/{{order.id}}"
              title="Edit Order">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>

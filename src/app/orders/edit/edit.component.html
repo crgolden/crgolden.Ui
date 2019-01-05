@@ -139,7 +139,7 @@
             <kendo-grid-column field="model2Id" [hidden]="true"></kendo-grid-column>
             <kendo-grid-column field="model2Name" title="Name" [editable]="false">
               <ng-template kendoGridCellTemplate let-orderProduct>
-                <a routerLink="/Products/Details/{{orderProduct.model2Id}}"
+                <a routerLink="/products/details/{{orderProduct.model2Id}}"
                    title="Product Details">
                   {{orderProduct.model2Name}}
                 </a>
@@ -168,11 +168,11 @@
               Save
             </button> |
           </span>
-          <a routerLink="/Orders/Details/{{order.id}}"
+          <a routerLink="/orders/details/{{order.id}}"
              title="Orders">
             <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
           </a> |
-          <a routerLink="/Orders"
+          <a routerLink="/orders"
              title="Orders">
             <fa-icon [icon]="['fal', 'list']"></fa-icon> List
           </a>

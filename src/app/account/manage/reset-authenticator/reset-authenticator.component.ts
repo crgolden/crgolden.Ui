@@ -31,7 +31,7 @@ export class ResetAuthenticatorComponent implements OnInit {
     this.manageService.resetAuthenticator$().subscribe(
       (response: string) => {
         this.message = response;
-        this.router.navigate(['/Manage/EnableAuthenticator']);
+        this.router.navigate(['/manage/enable-authenticator']);
       },
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());

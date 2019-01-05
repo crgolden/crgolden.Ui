@@ -10,6 +10,7 @@ import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 import { OrderProduct } from '../../order-products/order-product';
 import { ProductFile } from '../../product-files/product-file';
+import { ProductCategory } from '../../product-categories/product-category';
 
 @Component({
   selector: 'app-products-create',
@@ -34,13 +35,16 @@ export class CreateComponent implements OnInit {
       created: undefined,
       updated: undefined,
       isDownload: false,
-      price: 0,
+      unitPrice: 0,
+      quantityPerUnit: undefined,
+      unitsInStock: undefined,
+      unitsOnOrder: undefined,
+      reorderLevel: undefined,
       description: undefined,
-      pictureFileName: undefined,
-      pictureUri: undefined,
       cartProducts: new Array<CartProduct>(),
       orderProducts: new Array<OrderProduct>(),
-      productFiles: new Array<ProductFile>()
+      productFiles: new Array<ProductFile>(),
+      productCategories: new Array<ProductCategory>()
     } as Product;
   }
 
@@ -53,7 +57,8 @@ export class CreateComponent implements OnInit {
     if (!form.valid) { return; }
     this.blockUI.start();
     this.productsService.create$(this.product).subscribe(
-      (product: Product) => this.router.navigate([`/Products/Details/${product.id}`]),
+      (product: Product) => this.router.navigate([`/products/details/${product.id}`]).finally(
+        () => this.blockUI.stop),
       (errors: Array<string>) => this.errors = errors,
       () => this.blockUI.stop());
   }

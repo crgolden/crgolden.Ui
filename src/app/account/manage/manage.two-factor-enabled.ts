@@ -17,7 +17,7 @@ export class ManageTwoFactorEnabled implements CanActivate {
       if (isTwoFactorEnabled) {
         return true;
       } else {
-        this.router.navigate(['/Home']);
+        this.router.navigate(['/home']);
         return false;
       }
     }));
