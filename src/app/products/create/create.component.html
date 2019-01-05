@@ -53,20 +53,20 @@
       <div class="row">
         <div class="col-12 col-md-6">
           <div class="form-group">
-            <label for="price">Price</label>
-            <kendo-numerictextbox id="price"
+            <label for="unitPrice">Price</label>
+            <kendo-numerictextbox id="unitPrice"
                                   class="form-control"
-                                  name="price"
+                                  name="unitPrice"
                                   required
                                   placeholder="price"
-                                  [value]="product.price"
-                                  [title]="Price"
+                                  [value]="product.unitPrice"
+                                  title="Price"
                                   [min]="0"
                                   [decimals]="2"
                                   [format]="'c2'"
                                   [autoCorrect]="true"
-                                  #price="ngModel"
-                                  [(ngModel)]="product.price">
+                                  #unitPrice="ngModel"
+                                  [(ngModel)]="product.unitPrice">
             </kendo-numerictextbox>
           </div>
         </div>
