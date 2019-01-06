@@ -1,24 +1,24 @@
 <div *ngIf="model.is2faEnabled">
   <div class="row" *ngIf="model.recoveryCodesLeft === 0">
-    <div class="col-12 alert alert-danger">
+    <div class="col alert alert-danger">
       <strong>You have no recovery codes left.</strong>
       <p>You must <a routerLink="/account/manage/generate-recovery-codes">generate a new set of recovery codes</a> before you can log in with a recovery code.</p>
     </div>
   </div>
   <div class="row" *ngIf="model.recoveryCodesLeft === 1">
-    <div class="col-12 alert alert-danger">
+    <div class="col alert alert-danger">
       <strong>You have 1 recovery code left.</strong>
       <p>You can <a routerLink="/account/manage/generate-recovery-codes">generate a new set of recovery codes</a>.</p>
     </div>
   </div>
   <div class="row" *ngIf="model.recoveryCodesLeft > 1 && model.recoveryCodesLeft <= 3">
-    <div class="col-12 alert alert-warning">
+    <div class="col alert alert-warning">
       <strong>You have {{model.recoveryCodesLeft}} recovery codes left.</strong>
       <p>You should <a routerLink="/account/manage/generate-recovery-codes">generate a new set of recovery codes</a>.</p>
     </div>
   </div>
   <div class="row" *ngIf="model.isMachineRemembered && !model.message">
-    <div class="col-12">
+    <div class="col">
         <hr />
         <button type="button"
               class="btn btn-primary"
@@ -28,12 +28,12 @@
     </div>
   </div>
   <div class="row" *ngIf="!model.isMachineRemembered && model.message">
-    <div class="col-12">
+    <div class="col">
       {{model.message}}
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col">
         <hr />
         <a routerLink="/account/manage/disable-2fa"
            class="btn btn-danger"
@@ -43,7 +43,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col">
         <hr />
         <a routerLink="/account/manage/generate-recovery-codes"
            class="btn btn-primary"
@@ -54,37 +54,42 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <h4>Authenticator app</h4>
   </div>
 </div>
-<div class="row" *ngIf="!model.hasAuthenticator">
-  <div class="col-12">
-    <hr />
-    <a routerLink="/account/manage/enable-authenticator"
-       class="btn btn-primary"
-       title="Add Authenticator App">
-      Add authenticator app
-    </a>
-  </div>
-</div>
-<div class="row" *ngIf="model.hasAuthenticator">
-  <div class="col-12">
+<ng-container *ngIf="model.hasAuthenticator; then hasAuthenticator; else noAuthenticator"></ng-container>
+<ng-template #hasAuthenticator>
+  <div class="row">
+    <div class="col">
       <hr />
       <a routerLink="/account/manage/enable-authenticator"
          class="btn btn-primary"
          title="Setup Authenticator App">
-      Setup authenticator app
-    </a>
+        Setup authenticator app
+      </a>
+    </div>
   </div>
-</div>
-<div class="row" *ngIf="model.hasAuthenticator">
-  <div class="col-12">
+  <div class="row">
+    <div class="col">
       <hr />
       <a routerLink="/account/manage/reset-authenticator"
          class="btn btn-danger"
          title="Reset Authenticator App">
-      Reset authenticator app
-    </a>
+        Reset authenticator app
+      </a>
+    </div>
   </div>
-</div>
+</ng-template>
+<ng-template #noAuthenticator>
+  <div class="row">
+    <div class="col">
+      <hr />
+      <a routerLink="/account/manage/enable-authenticator"
+         class="btn btn-primary"
+         title="Add Authenticator App">
+        Add authenticator app
+      </a>
+    </div>
+  </div>
+</ng-template>

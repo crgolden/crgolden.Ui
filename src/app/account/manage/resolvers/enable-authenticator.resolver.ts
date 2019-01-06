@@ -23,7 +23,7 @@ export class EnableAuthenticatorResolver implements Resolve<EnableAuthenticator>
     return this.manageService.enableAuthenticator.pipe(
       concatMap(
         (enableAuthenticator: EnableAuthenticator) => enableAuthenticator == null
-          ? this.http.get<EnableAuthenticator>(`${environment.identityUrl}/Manage/EnableAuthenticator`).pipe(map(
+          ? this.http.get<EnableAuthenticator>(`${environment.identityUrl}/manage/enable-authenticator`).pipe(map(
             (response: EnableAuthenticator) => {
               this.manageService.enableAuthenticator.next(response);
               return response;

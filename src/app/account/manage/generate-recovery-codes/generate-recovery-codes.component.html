@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <div class="alert alert-warning" role="alert">
       <p>
         <fa-icon [icon]="['fal', 'exclamation']"></fa-icon>
@@ -18,15 +18,10 @@
             (click)="generateRecoveryCodes()">
       Generate Recovery Codes
     </button>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
   </div>
 </div>
 <div class="row" *ngIf="model.recoveryCodes.length > 0">
-  <div class="col-12">
+  <div class="col">
     <span *ngIf="model.message">{{model.message}}</span>
     <span *ngFor="let recoveryCode of model.recoveryCodes">
       <code>{{recoveryCode}}</code><br />

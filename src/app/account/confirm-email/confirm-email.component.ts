@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConfirmEmail } from '../models/confirm-email';
 import { AccountService } from '../account.service';
@@ -15,15 +16,14 @@ import { AccountService } from '../account.service';
 export class ConfirmEmailComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   success: string;
 
   constructor(
     private readonly titleService: Title,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
-    this.errors = new Array<string>();
   }
 
   ngOnInit(): void {
@@ -45,7 +45,9 @@ export class ConfirmEmailComponent implements OnInit {
         (message: string) => this.success = message.length > 0
           ? message
           : undefined,
-        (errors: Array<string>) => this.errors = errors,
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
   }
 }

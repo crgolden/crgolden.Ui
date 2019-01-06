@@ -7,6 +7,6 @@ import { File } from './file';
 export class FilesService extends BaseModelService<File> {
 
   constructor(protected readonly http: HttpClient) {
-    super('Carts', http);
+    super('files', http);
   }
 }

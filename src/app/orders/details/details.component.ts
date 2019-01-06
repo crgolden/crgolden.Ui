@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import {
   DataStateChangeEvent,
   PagerSettings,
@@ -25,7 +26,6 @@ import { Address } from '../../address/address';
 })
 export class DetailsComponent implements OnInit {
 
-  errors: Array<string>;
   order: Order;
   orderProducts: GridDataResult;
   payments: GridDataResult;
@@ -39,6 +39,7 @@ export class DetailsComponent implements OnInit {
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService) {
     this.orderProductsState = {
       skip: 0,
@@ -76,6 +77,11 @@ export class DetailsComponent implements OnInit {
     this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
     this.payments = process(this.order.payments, this.paymentsState);
     this.setFormattedShippingAddress();
+    const message = window.sessionStorage.getItem('success');
+    if (message != null) {
+      window.sessionStorage.removeItem('success');
+      setTimeout(() => this.toastr.success(message));
+    }
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {

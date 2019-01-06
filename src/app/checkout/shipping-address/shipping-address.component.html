@@ -39,7 +39,7 @@
              [(ngModel)]="shippingAddress.locality">
     </div>
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col">
         <div class="form-group">
           <label for="region">State</label>
           <input id="region"
@@ -52,7 +52,7 @@
                  [(ngModel)]="shippingAddress.region">
         </div>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col">
         <div class="form-group">
           <label for="postalCode">ZIP Code</label>
           <input id="postalCode"
@@ -103,11 +103,6 @@
               (click)="useAnyway(false)">
         No
       </button>
-    </div>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
     </div>
   </ng-template>
 </form>

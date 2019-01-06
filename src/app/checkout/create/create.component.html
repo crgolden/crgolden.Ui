@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'cash-register']"></fa-icon> Checkout
@@ -7,11 +7,11 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div class="row">
-      <div class="col-12 col-md-6">
-        <div *ngIf="needsShippingAddress$() | async">
+      <div class="col">
+        <ng-container *ngIf="needsShippingAddress$() | async">
           <ng-container *ngIf="validShippingAddress; then showShipping; else enterShipping"></ng-container>
           <ng-template #showShipping>
             <h4>
@@ -30,7 +30,7 @@
             </button>
           </ng-template>
           <hr/>
-        </div>
+        </ng-container>
         <ng-container *ngIf="(!needsShippingAddress$() | async) || validShippingAddress">
           <ng-container *ngIf="needsPayment$() | async">
             <ng-container *ngIf="validPayment; then showPayment; else enterPayment"></ng-container>
@@ -38,7 +38,7 @@
               <h4>
                 Payment Information:
               </h4>
-              <p *ngIf="token && token.type === 'card'" [ngSwitch]="token.card.brand">
+              <ng-container *ngIf="token && token.type === 'card'" [ngSwitch]="token.card.brand">
                 <span *ngSwitchCase="'Visa'">
                   <fa-icon [icon]="['fab', 'cc-visa']"></fa-icon>
                 </span>
@@ -61,7 +61,7 @@
                   <fa-icon [icon]="['fab', 'cc-stripe']"></fa-icon>
                 </span>
                 <span> **** **** **** {{token.card.last4}}</span>
-              </p>
+              </ng-container>
               <button class="btn btn-primary"
                       (click)="openPaymentInformationModal()">
                 Change Payment Information
@@ -83,7 +83,7 @@
           Submit Checkout
         </button>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col">
         <h4>
           Total: {{total$() | async | currency}}
         </h4>

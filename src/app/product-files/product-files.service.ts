@@ -7,6 +7,6 @@ import { BaseRelationshipService } from '../base/base-relationship.service';
 export class ProductFilesService extends BaseRelationshipService<ProductFile> {
 
   constructor(protected readonly http: HttpClient) {
-    super('ProductFiles', http);
+    super('product-files', http);
   }
 }

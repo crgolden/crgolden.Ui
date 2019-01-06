@@ -1,24 +1,26 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div class="row">
-      <div class="col-12 col-md-6">
-        <h2><fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart</h2>
+      <div class="col">
+        <h2>
+          <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart
+        </h2>
       </div>
-      <div class="col-12 col-md-6">
-        <h2 *ngIf="showProceedToCheckout$() | async">
-          <span class="float-md-right">
+      <div class="col">
+        <ng-container *ngIf="showProceedToCheckout$() | async">
+          <h2 class="float-md-right">
             <a routerLink="/checkout">
               <fa-icon [icon]="['fal', 'cash-register']"></fa-icon> Proceed to Checkout
             </a>
-          </span>
-        </h2>
+          </h2>
+        </ng-container>
       </div>
     </div>
   </div>
 </div>
 <div class="row" *ngIf="cart$() | async as cart">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <kendo-grid [data]="cart.cartProducts"
                 [pageSize]="state.take"
@@ -71,12 +73,10 @@
     </kendo-grid>
     <hr />
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col">
         <h4>
           Total: {{cart.total | currency}}
         </h4>
-      </div>
-      <div class="col-12 col-md-6">
       </div>
     </div>
   </div>

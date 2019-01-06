@@ -5,6 +5,7 @@ import { UrlSerializer } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { BlockUIModule } from 'ng-block-ui';
+import { ToastrModule } from 'ngx-toastr';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faHome,
@@ -108,6 +109,7 @@ library.add(
     BrowserAnimationsModule,
     HttpClientModule,
     BlockUIModule.forRoot(),
+    ToastrModule.forRoot(),
     FontAwesomeModule,
     AppRoutingModule
   ],

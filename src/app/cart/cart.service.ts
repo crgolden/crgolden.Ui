@@ -17,14 +17,13 @@ export class CartService extends BaseModelService<Cart> {
     protected readonly http: HttpClient,
     router: Router,
     cookieService: CookieService) {
-    super('Carts', http);
+    super('carts', http);
     this.cart$ = new BehaviorSubject<Cart>(undefined);
     combineLatest(router.events, this.cart$).pipe(
       filter((latest: [Event, Cart]) => {
         const [event, cart] = latest;
         return event instanceof NavigationEnd &&
-          !event.url.includes('/Account/Login') &&
-          !event.url.includes('/Account/Logout') &&
+          !event.url.includes('/account/login') &&
           cart == null;
       }),
       switchMap(() => {

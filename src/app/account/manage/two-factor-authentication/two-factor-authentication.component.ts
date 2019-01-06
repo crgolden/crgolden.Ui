@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { TwoFactorAuthentication } from '../models/two-factor-authentication';
@@ -14,29 +15,34 @@ export class TwoFactorAuthenticationComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
   model: TwoFactorAuthentication;
-  message: string;
-  errors: Array<string>;
 
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
+    private readonly toastr: ToastrService,
     private readonly manageService: ManageService) {
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Two-factor authentication (2FA)');
     this.model = this.route.snapshot.data['twoFactorAuthentication'];
+    const message = window.sessionStorage.getItem('success');
+    if (message != null) {
+      window.sessionStorage.removeItem('success');
+      setTimeout(() => this.toastr.success(message));
+    }
   }
 
   forgetBrowser(): void {
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.manageService.forgetTwoFactorClient$().subscribe(
       (response: string) => {
-        this.message = response;
+        this.toastr.success(response);
         this.model.isMachineRemembered = false;
       },
-      (errors: Array<string>) => this.errors = errors,
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 }

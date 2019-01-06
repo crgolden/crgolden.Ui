@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastrService } from 'ngx-toastr';
 import {
   GridDataResult,
   PagerSettings,
@@ -26,8 +26,6 @@ import { OrdersService } from '../orders.service';
 })
 export class IndexComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   orders: GridDataResult;
   state: DataSourceRequestState;
   pageable: PagerSettings;
@@ -36,6 +34,7 @@ export class IndexComponent implements OnInit {
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly ordersService: OrdersService) {
     this.state = {
@@ -80,14 +79,13 @@ export class IndexComponent implements OnInit {
   }
 
   dataStateChange(state: DataSourceRequestState): void {
-    this.errors = new Array<string>();
     this.state = state;
-    this.blockUI.start();
     this.ordersService
       .index$(state)
       .subscribe(
         (result: GridDataResult) => this.orders = result,
-        (errors: Array<string>) => this.errors = errors,
-        () => this.blockUI.stop());
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })));
   }
 }

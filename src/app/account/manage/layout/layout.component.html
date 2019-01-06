@@ -1,7 +1,9 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
-    <h2><fa-icon [icon]="['fal', 'user']"></fa-icon> Account</h2>
+    <h2>
+      <fa-icon [icon]="['fal', 'user']"></fa-icon> Account
+    </h2>
     <hr />
   </div>
 </div>
@@ -14,50 +16,75 @@
         </a>
       </li>
       <li class="nav-item">
-        <a *ngIf="hasPassword" class="nav-link" routerLink="/account/manage/change-password" routerLinkActive="active">
-          Password
-        </a>
-        <a *ngIf="!hasPassword" class="nav-link" routerLink="/account/manage/set-password" routerLinkActive="active">
-          Password
-        </a>
+        <ng-container *ngIf="hasPassword; then showChangePassword; else showSetPassword"></ng-container>
+        <ng-template #showChangePassword>
+          <a class="nav-link"
+             routerLink="/account/manage/change-password"
+             routerLinkActive="active">
+            Password
+          </a>
+        </ng-template>
+        <ng-template #showSetPassword>
+          <a class="nav-link"
+             routerLink="/account/manage/set-password"
+             routerLinkActive="active">
+            Password
+          </a>
+        </ng-template>
       </li>
       <li class="nav-item" *ngIf="externalLogins && externalLogins.currentLogins && externalLogins.currentLogins.length > 0">
-        <a class="nav-link" routerLink="/account/manage/external-logins" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/external-logins"
+           routerLinkActive="active">
           External Logins
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/account/manage/two-factor-authentication" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/two-factor-authentication"
+           routerLinkActive="active">
           Two-factor authentication
         </a>
       </li>
       <li class="nav-item" *ngIf="showResetAuthenticator$() | async">
-        <a class="nav-link" routerLink="/account/manage/reset-authenticator" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/reset-authenticator"
+           routerLinkActive="active">
           Reset Authenticator
         </a>
       </li>
       <li class="nav-item" *ngIf="showEnableAuthenticator$() | async">
-        <a class="nav-link" routerLink="/account/manage/enable-authenticator" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/enable-authenticator"
+           routerLinkActive="active">
           Enable Authenticator
         </a>
       </li>
       <li class="nav-item" *ngIf="showGenerateRecoveryCodes$() | async">
-        <a class="nav-link" routerLink="/account/manage/generate-recovery-codes" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/generate-recovery-codes"
+           routerLinkActive="active">
           Generate Recovery Codes
         </a>
       </li>
       <li class="nav-item" *ngIf="showDisable2fa$() | async">
-        <a class="nav-link" routerLink="/account/manage/disable-2fa" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/disable-2fa"
+           routerLinkActive="active">
           Disable 2FA
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/account/manage/personal-data" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/personal-data"
+           routerLinkActive="active">
           Personal data
         </a>
       </li>
       <li class="nav-item" *ngIf="showDeletePersonalData$() | async">
-        <a class="nav-link" routerLink="/account/manage/delete-personal-data" routerLinkActive="active">
+        <a class="nav-link"
+           routerLink="/account/manage/delete-personal-data"
+           routerLinkActive="active">
           Delete Personal data
         </a>
       </li>

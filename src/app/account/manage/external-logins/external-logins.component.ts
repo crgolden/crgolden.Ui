@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ExternalLogins } from '../models/external-logins';
 import { ManageService } from '../manage.service';
@@ -14,13 +15,12 @@ export class ExternalLoginsComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
   model: ExternalLogins;
-  errors: Array<string>;
-  message: string;
 
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly toastr: ToastrService,
     private readonly manageService: ManageService) {
   }
 
@@ -31,24 +31,28 @@ export class ExternalLoginsComponent implements OnInit {
     if (this.model.currentLogins.length === 0) {
       this.router.navigate(['/account/manage']);
     } else {
-      this.model.showRemoveButton = (hasPassword) || this.model.currentLogins.length > 1;
+      this.model.showRemoveButton = hasPassword || this.model.currentLogins.length > 1;
       this.manageService.hasPassword.subscribe(
         (value: boolean) => this.model.showRemoveButton = value || this.model.currentLogins.length > 1);
     }
   }
 
   removeLogin(loginProvider: string, providerKey: string): void {
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.manageService.removeLogin$(loginProvider, providerKey).subscribe(
       (externalLogins: ExternalLogins) => {
         this.model = externalLogins;
         this.manageService.externalLogins.next(externalLogins);
         if (this.model.currentLogins.length === 0) {
+          window.sessionStorage.setItem('success', 'All external logins removed');
           this.router.navigate(['/account/manage']);
+        } else {
+          this.toastr.success(`${loginProvider} removed`);
         }
       },
-      (errors: Array<string>) => this.errors = errors,
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 }

@@ -1,6 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@progress/kendo-theme-bootstrap/scss/all";
 @import '~bootstrap/scss/bootstrap';
+@import '~ngx-toastr/toastr-bs4-alert';
+
+// https://github.com/scttcper/ngx-toastr/issues/602
+// https://github.com/scttcper/ngx-toastr/issues/605
+#toast-container > div {
+  opacity: 1;
+}
 
 .loading {
   font-size: 64px;
@@ -22,6 +29,10 @@
 
 .k-icon-64 {
   font-size: 64px;
+}
+
+.k-upload .k-upload-button {
+  margin: 0px;
 }
 
 a:not([href]):not([tabindex]) {

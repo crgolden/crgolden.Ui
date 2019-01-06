@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   CellClickEvent,
@@ -51,7 +52,6 @@ export class EditComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
   formGroup: FormGroup;
-  errors: Array<string>;
   order: Order;
   orderProducts: GridDataResult;
   shippingAddress: Address;
@@ -65,6 +65,7 @@ export class EditComponent implements OnInit {
 
   constructor(
     private readonly titleService: Title,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly ordersService: OrdersService,
     private readonly orderProductsService: OrderProductsService,
@@ -106,7 +107,6 @@ export class EditComponent implements OnInit {
   }
 
   edit(form: NgForm): void {
-    this.errors = new Array<string>();
     if (!form.valid) { return; }
     if (this.shippingAddress != null) {
       this.order.shippingAddress = JSON.stringify(this.shippingAddress);
@@ -114,8 +114,13 @@ export class EditComponent implements OnInit {
     this.blockUI.start();
     this.ordersService.edit$(this.order).subscribe(
       () => this.router.navigate([`/Orders/Details/${this.order.id}`]).finally(
-        () => this.blockUI.stop()),
-      (errors: Array<string>) => this.errors = errors,
+        () => {
+          window.sessionStorage.setItem('success', `${this.order.name} updated`);
+          this.blockUI.stop();
+        }),
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 
@@ -166,7 +171,6 @@ export class EditComponent implements OnInit {
   }
 
   private saveCurrent(): void {
-    this.errors = new Array<string>();
     if (!this.formGroup) {
       return;
     }
@@ -182,8 +186,11 @@ export class EditComponent implements OnInit {
         (order: Order) => {
           this.order = order;
           this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
+          window.sessionStorage.setItem('success', `${this.order.name} updated`);
         },
-        (errors: Array<string>) => this.errors = errors,
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
     this.closeEditor();
   }

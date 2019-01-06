@@ -18,7 +18,7 @@ export class AddressService {
 
   validate(address: Address): Observable<boolean> {
     return this.http
-      .post<boolean>(`${environment.apiUrl}/Addresses/Validate`, JSON.stringify(address), {
+      .post<boolean>(`${environment.apiUrl}/addresses/validate`, JSON.stringify(address), {
         headers: this.headers
       });
   }

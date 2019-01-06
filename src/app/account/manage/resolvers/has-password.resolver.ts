@@ -22,7 +22,7 @@ export class HasPasswordResolver implements Resolve<boolean> {
     return this.manageService.hasPassword.pipe(
       concatMap(
         (hasPassword: boolean) => hasPassword == null
-          ? this.http.get<boolean>(`${environment.identityUrl}/Manage/HasPassword`).pipe(map(
+          ? this.http.get<boolean>(`${environment.identityUrl}/manage/has-password`).pipe(map(
             (response: boolean) => {
               this.manageService.hasPassword.next(response);
               return response;

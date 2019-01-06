@@ -42,28 +42,28 @@ export class AccountService {
 
   confirmEmail$(model: ConfirmEmail): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/ConfirmEmail`, JSON.stringify(model), {
+      .post<string>(`${environment.identityUrl}/account/confirm-email`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   forgotPassword$(model: ForgotPassword): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/ForgotPassword`, JSON.stringify(model), {
+      .post<string>(`${environment.identityUrl}/cccount/forgot-password`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   register$(model: Register): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/Register`, JSON.stringify(model), {
+      .post<string>(`${environment.identityUrl}/account/register`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   resetPassword$(model: ResetPassword): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Account/ResetPassword`, JSON.stringify(model), {
+      .post<string>(`${environment.identityUrl}/cccount/reset-password`, JSON.stringify(model), {
         headers: this.headers
       });
   }

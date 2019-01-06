@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Edit Order
@@ -7,13 +7,13 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <form #f="ngForm"
           ngNativeValidate
           (ngSubmit)="edit(f)">
       <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col">
           <div class="form-group">
             <label for="name">Name</label>
             <input id="name"
@@ -40,7 +40,7 @@
             </dd>
           </dl>
         </div>
-        <div class="col-12 col-md-6" *ngIf="shippingAddress">
+        <div class="col" *ngIf="shippingAddress">
           <div class="form-group">
             <label for="streetAddress">
               Street Address
@@ -66,7 +66,7 @@
                    [(ngModel)]="shippingAddress.locality">
           </div>
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col">
               <div class="form-group">
                 <label for="region">State</label>
                 <input id="region"
@@ -79,7 +79,7 @@
                        [(ngModel)]="shippingAddress.region">
               </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col">
               <div class="form-group">
                 <label for="postalCode">ZIP Code</label>
                 <input id="postalCode"
@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12">
+        <div class="col">
           <hr />
           <kendo-grid id="orderProductsGrid"
                       [data]="orderProducts"
@@ -125,13 +125,13 @@
                       (cellClick)="orderProductsClick($event)">
             <ng-template kendoGridToolbarTemplate>
               <h4>
-                <fa-icon [icon]="['fal', 'box']"></fa-icon> Products<span *ngIf="formGroup">
+                <fa-icon [icon]="['fal', 'box']"></fa-icon> Products<ng-container *ngIf="formGroup">
                   | <a id="cancel"
                        title="Cancel"
                        (click)="cancelHandler()">
                     Cancel
                   </a>
-                </span>
+                </ng-container>
               </h4>
             </ng-template>
             <kendo-grid-column field="model1Id" [hidden]="true"></kendo-grid-column>
@@ -161,13 +161,13 @@
       <div class="form-group">
         <hr />
         <h4>
-          <span *ngIf="showSave$() | async">
+          <ng-container *ngIf="showSave$() | async">
             <button type="submit"
                     class="btn btn-primary"
                     [disabled]="f.pristine || f.invalid">
               Save
             </button> |
-          </span>
+          </ng-container>
           <a routerLink="/orders/details/{{order.id}}"
              title="Orders">
             <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
@@ -177,11 +177,6 @@
             <fa-icon [icon]="['fal', 'list']"></fa-icon> List
           </a>
         </h4>
-      </div>
-      <div *ngFor="let error of errors">
-        <div class="alert alert-danger" role="alert">
-          {{error}}
-        </div>
       </div>
     </form>
     <hr />

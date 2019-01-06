@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'user-plus']"></fa-icon> Register
@@ -7,17 +7,20 @@
   </div>
 </div>
 <hr />
-<div *ngIf="success" class="alert alert-success" role="alert">
-  {{success}}
-</div>
-<div *ngIf="!success">
+<ng-container *ngIf="success; then hideForm; else showForm"></ng-container>
+<ng-template #hideForm>
+  <span class="alert alert-success" role="alert">
+    {{success}}
+  </span>
+</ng-template>
+<ng-template #showForm>
   <form #f="ngForm"
         ngNativeValidate
         (ngSubmit)="register(f)">
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col">
         <div class="row">
-          <div class="col-12 col-md-6">
+          <div class="col">
             <div class="form-group">
               <label for="firstName">
                 First Name
@@ -32,7 +35,7 @@
                      [(ngModel)]="model.firstName">
             </div>
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col">
             <div class="form-group">
               <label for="lastName">
                 Last Name
@@ -80,7 +83,7 @@
                  [(ngModel)]="model.password">
         </div>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col">
         <div class="form-group">
           <label for="streetAddress">
             Street Address
@@ -108,7 +111,7 @@
                  class="form-control" />
         </div>
         <div class="row">
-          <div class="col-12 col-md-6">
+          <div class="col">
             <div class="form-group">
               <label for="region">
                 State
@@ -123,7 +126,7 @@
                      class="form-control" />
             </div>
           </div>
-          <div class="col-12 col-md-6">
+          <div class="col">
             <div class="form-group">
               <label for="postalCode">
                 ZIP Code
@@ -153,7 +156,7 @@
                  class="form-control" />
         </div>
       </div>
-      <div class="col-12">
+      <div class="col">
         <div class="form-group">
           <button type="submit"
                   class="btn btn-primary"
@@ -161,12 +164,7 @@
             Submit
           </button>
         </div>
-        <div *ngFor="let error of errors">
-          <div class="alert alert-danger" role="alert">
-            {{error}}
-          </div>
-        </div>
       </div>
     </div>
   </form>
-</div>
+</ng-template>

@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account/account.service';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
@@ -20,14 +21,15 @@ import { ProductCategory } from '../../product-categories/product-category';
 export class CreateComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   product: Product;
+  primaryImageUri: string;
 
   constructor(
     private readonly titleService: Title,
+    private readonly router: Router,
     private readonly accountService: AccountService,
     private readonly productsService: ProductsService,
-    private readonly router: Router) {
+    private readonly toastr: ToastrService) {
     this.product = {
       id: undefined,
       name: undefined,
@@ -53,13 +55,17 @@ export class CreateComponent implements OnInit {
   }
 
   create(form: NgForm): void {
-    this.errors = new Array<string>();
     if (!form.valid) { return; }
     this.blockUI.start();
     this.productsService.create$(this.product).subscribe(
-      (product: Product) => this.router.navigate([`/products/details/${product.id}`]).finally(
-        () => this.blockUI.stop),
-      (errors: Array<string>) => this.errors = errors,
+      (product: Product) => {
+        window.sessionStorage.setItem('success', `${this.product.name} created`);
+        this.router.navigate([`/products/details/${product.id}`]).finally(
+          () => this.blockUI.stop());
+      },
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 

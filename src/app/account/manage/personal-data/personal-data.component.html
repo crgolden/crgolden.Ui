@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <p>
       Your account contains personal data that you have given us. This page allows you to download or delete that data.
     </p>
@@ -8,11 +8,6 @@
             (click)="downloadPersonalData()">
       Download
     </button>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
     <hr />
     <p>
       <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>

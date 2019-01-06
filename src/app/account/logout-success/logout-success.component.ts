@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from '../account.service';
-import { CartService } from '../../cart/cart.service';
 
 @Component({
   selector: 'app-account-logout-success',
@@ -16,17 +14,12 @@ export class LogoutSuccessComponent implements OnInit {
 
   constructor(
     private readonly titleService: Title,
-    private readonly cookieService: CookieService,
-    private readonly accountService: AccountService,
-    private readonly cartService: CartService) {
+    private readonly accountService: AccountService) {
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Logout');
     this.blockUI.start();
-    this.accountService.signoutRedirectCallback$().then(() => {
-      this.cookieService.delete('CartId');
-      this.cartService.cart$.next(undefined);
-    }).finally(() => this.blockUI.stop());
+    this.accountService.signoutRedirectCallback$().finally(() => this.blockUI.stop());
   }
 }

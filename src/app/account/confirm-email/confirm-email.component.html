@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'at']"></fa-icon> Confirm Email
@@ -8,7 +8,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col">
     <div *ngIf="success" class="alert alert-success" role="alert">
       {{success}}
       <br />
@@ -16,11 +16,6 @@
          title="Login">
         <fa-icon [icon]="['fal', 'sign-in']"></fa-icon> Login
       </a>
-    </div>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
     </div>
   </div>
 </div>

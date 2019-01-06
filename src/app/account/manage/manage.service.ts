@@ -35,33 +35,33 @@ export class ManageService {
 
   addExternalLogin$(name: string): Observable<void> {
     return this.http.get<void>(
-      `${environment.identityUrl}/Manage/LinkLogin?provider=${name}`);
+      `${environment.identityUrl}/manage/link-login?provider=${name}`);
   }
 
   changePassword$(model: ChangePassword): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Manage/ChangePassword`, JSON.stringify(model), {
+      .post<string>(`${environment.identityUrl}/manage/change-password`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   disable2fa$(): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Manage/Disable2fa`, {}, {
+      .post<string>(`${environment.identityUrl}/manage/disable2fa`, {}, {
         headers: this.headers
       });
   }
 
   deletePersonalData$(model: DeletePersonalData): Observable<void> {
     return this.http
-      .post<void>(`${environment.identityUrl}/Manage/DeletePersonalData`, JSON.stringify(model), {
+      .post<void>(`${environment.identityUrl}/manage/delete-personal-data`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   downloadPersonalData$(): Observable<HttpResponse<Blob>> {
     return this.http
-      .get(`${environment.identityUrl}/Manage/DownloadPersonalData`,
+      .get(`${environment.identityUrl}/manage/download-personal-data`,
         {
           observe: 'response',
           responseType: 'blob'
@@ -70,36 +70,36 @@ export class ManageService {
 
   externalAuthenticationSchemes$(): Observable<Array<AuthenticationScheme>> {
     return this.http
-      .get<Array<AuthenticationScheme>>(`${environment.identityUrl}/Manage/ExternalAuthenticationSchemes`);
+      .get<Array<AuthenticationScheme>>(`${environment.identityUrl}/manage/external-authentication-schemes`);
   }
 
   forgetTwoFactorClient$(): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Manage/ForgetTwoFactorClient`, {}, {
+      .post<string>(`${environment.identityUrl}/manage/forget-two-factor-client`, {}, {
         headers: this.headers
       });
   }
 
   generateRecoveryCodes$(): Observable<GenerateRecoveryCodes> {
     return this.http
-      .get<GenerateRecoveryCodes>(`${environment.identityUrl}/GenerateRecoveryCodes`);
+      .get<GenerateRecoveryCodes>(`${environment.identityUrl}/generate-recovery-codes`);
   }
 
   isTwoFactorEnabled$(): Observable<boolean> {
     return this.http
-      .get<boolean>(`${environment.identityUrl}/Manage/IsTwoFactorEnabled`);
+      .get<boolean>(`${environment.identityUrl}/manage/is-two-factor-enabled`);
   }
 
   profile$(model: Profile): Observable<Profile> {
     return this.http
-      .post<Profile>(`${environment.identityUrl}/Manage/Profile`, JSON.stringify(model), {
+      .post<Profile>(`${environment.identityUrl}/manage/profile`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   removeLogin$(loginProvider: string, providerKey: string): Observable<ExternalLogins> {
     return this.http
-      .post<ExternalLogins>(`${environment.identityUrl}/Manage/RemoveLogin`, JSON.stringify({
+      .post<ExternalLogins>(`${environment.identityUrl}/manage/remove-login`, JSON.stringify({
         loginProvider: loginProvider,
         providerKey: providerKey
       }), {
@@ -109,26 +109,26 @@ export class ManageService {
 
   resetAuthenticator$(): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Manage/ResetAuthenticator`, {}, {
+      .post<string>(`${environment.identityUrl}/manage/reset-authenticator`, {}, {
         headers: this.headers
       });
   }
 
   sendVerificationEmail$(): Observable<string> {
     return this.http
-      .get<string>(`${environment.identityUrl}/Manage/SendVerificationEmail`);
+      .get<string>(`${environment.identityUrl}/manage/send-verification-email`);
   }
 
   setPassword$(model: SetPassword): Observable<string> {
     return this.http
-      .post<string>(`${environment.identityUrl}/Manage/SetPassword`, JSON.stringify(model), {
+      .post<string>(`${environment.identityUrl}/manage/set-password`, JSON.stringify(model), {
         headers: this.headers
       });
   }
 
   verifyAuthenticator$(model: EnableAuthenticator): Observable<EnableAuthenticator> {
     return this.http
-      .post<EnableAuthenticator>(`${environment.identityUrl}/Manage/VerifyAuthenticator`, JSON.stringify(model), {
+      .post<EnableAuthenticator>(`${environment.identityUrl}/manage/verify-authenticator`, JSON.stringify(model), {
         headers: this.headers
       });
   }

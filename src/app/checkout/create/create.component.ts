@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap, exhaustMap, filter, map, mergeMap } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgbModal, NgbModalRef, NgbModalOptions, } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'oidc-client';
@@ -26,7 +27,6 @@ import { Address } from '../../address/address';
 export class CreateComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   private modalRef: NgbModalRef;
   payment: Payment;
   shippingAddress: Address;
@@ -38,6 +38,7 @@ export class CreateComponent implements OnInit {
   constructor(
     private readonly titleService: Title,
     private readonly modalService: NgbModal,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly cartService: CartService,
     private readonly ordersService: OrdersService,
@@ -126,7 +127,6 @@ export class CreateComponent implements OnInit {
               this.payment.amount = order.total;
               order.payments.push(this.payment);
             }
-            this.errors = new Array<string>();
             this.blockUI.start();
             return this.ordersService.create$(order).pipe(mergeMap(
               (newOrder: Order) => this.cartService.edit$(cart).pipe(concatMap(
@@ -138,8 +138,13 @@ export class CreateComponent implements OnInit {
           }))
       .subscribe(
         (order: Order) => this.router.navigate([`/orders/details/${order.id}`]).finally(
-          () => this.blockUI.stop()),
-        (errors: Array<string>) => this.errors = errors,
+          () => {
+            window.sessionStorage.setItem('success', `${order.name} created`);
+            this.blockUI.stop();
+          }),
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
   }
 

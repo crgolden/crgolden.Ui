@@ -31,7 +31,7 @@ export abstract class BaseRelationshipService<T extends BaseRelationship> {
     const queryStr = toDataSourceRequestString(state);
 
     return this.http
-      .get<GridDataResult>(`${environment.apiUrl}/${this.controllerName}/Index?${queryStr}`)
+      .get<GridDataResult>(`${environment.apiUrl}/${this.controllerName}/index?${queryStr}`)
       .pipe(map((res: GridDataResult) => ({
         data: hasGroups ? translateDataSourceResultGroups(res.data) : res.data,
         total: res.total
@@ -40,19 +40,19 @@ export abstract class BaseRelationshipService<T extends BaseRelationship> {
 
   details$(id1: string, id2: string): Observable<T> {
     return this.http
-      .get<T>(`${environment.apiUrl}/${this.controllerName}/Details/${id1}/${id2}`);
+      .get<T>(`${environment.apiUrl}/${this.controllerName}/details/${id1}/${id2}`);
   }
 
   create$(relationship: T): Observable<T> {
     return this.http
-      .post<T>(`${environment.apiUrl}/${this.controllerName}/Create`, JSON.stringify(relationship), {
+      .post<T>(`${environment.apiUrl}/${this.controllerName}/create`, JSON.stringify(relationship), {
         headers: this.headers
       });
   }
 
   createRange$(relationships: Array<T>): Observable<Array<T>> {
     return this.http
-      .post<Array<T>>(`${environment.apiUrl}/${this.controllerName}/CreateRange`, JSON.stringify(relationships), {
+      .post<Array<T>>(`${environment.apiUrl}/${this.controllerName}/create-range`, JSON.stringify(relationships), {
         headers: this.headers
       });
   }
@@ -60,7 +60,7 @@ export abstract class BaseRelationshipService<T extends BaseRelationship> {
   edit$(relationship: T): Observable<Object> {
     return this.http
       /* tslint:disable-next-line:max-line-length */
-      .put(`${environment.apiUrl}/${this.controllerName}/Edit/${relationship.model1Id}/${relationship.model2Id}`, JSON.stringify(relationship), {
+      .put(`${environment.apiUrl}/${this.controllerName}/edit/${relationship.model1Id}/${relationship.model2Id}`, JSON.stringify(relationship), {
         headers: this.headers
       });
   }
@@ -68,13 +68,13 @@ export abstract class BaseRelationshipService<T extends BaseRelationship> {
   editRange$(relationships: Array<T>): Observable<Object> {
     return this.http
       /* tslint:disable-next-line:max-line-length */
-      .put(`${environment.apiUrl}/${this.controllerName}/EditRange`, JSON.stringify(relationships), {
+      .put(`${environment.apiUrl}/${this.controllerName}/edit-range`, JSON.stringify(relationships), {
         headers: this.headers
       });
   }
 
   delete$(id1: string, id2: string): Observable<Object> {
     return this.http
-      .delete(`${environment.apiUrl}/${this.controllerName}/Delete/${id1}/${id2}`);
+      .delete(`${environment.apiUrl}/${this.controllerName}/delete/${id1}/${id2}`);
   }
 }

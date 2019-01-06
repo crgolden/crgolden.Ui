@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'dollar-sign']"></fa-icon> Payment Details
@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <dl>
       <dt>
@@ -32,23 +32,17 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h4>
       <a routerLink="/orders/details/{{payment.orderId}}"
          title="Order Details">
         <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order
-      </a>
-      <span *ngIf="showEdit$() | async">
+      </a><ng-container *ngIf="showEdit$() | async">
         | <a routerLink="/payments/edit/{{payment.id}}">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>
-      </span>
+      </ng-container>
     </h4>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
   </div>
 </div>

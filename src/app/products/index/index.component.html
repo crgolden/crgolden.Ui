@@ -1,13 +1,13 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div class="row">
-      <div class="col-12 col-md-4">
+      <div class="col">
         <h2>
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
         </h2>
       </div>
-      <div class="col-12 col-md-4 d-flex justify-content-center">
+      <div class="col d-flex justify-content-center">
         <div class="btn-toolbar" role="toolbar">
           <div class="btn-group" role="group">
             <button type="button"
@@ -27,21 +27,21 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-4">
-        <h2 *ngIf="showAdd$() | async">
-          <span class="float-md-right">
+      <div class="col">
+        <ng-container *ngIf="showAdd$() | async">
+          <h2 class="float-md-right">
             <a routerLink="/products/create"
                title="Create Product">
               <fa-icon [icon]="['fal', 'plus']"></fa-icon> Create Product
             </a>
-          </span>
-        </h2>
+          </h2>
+        </ng-container>
       </div>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div [hidden]="isList" class="products-grid">
       <kendo-grid
@@ -59,8 +59,10 @@
         <kendo-grid-column>
           <ng-template kendoGridCellTemplate let-product>
             <div class="product" (click)="gotToDetails(product.id)">
-              <img src="{{getThumbnailUrl(product)}}"
-                   alt="{{product.name}}" />
+              <ng-container *ngIf="getThumbnailUrl(product) as thumbnailUrl">
+                <img src="{{thumbnailUrl}}"
+                     alt="{{product.name}}" />
+              </ng-container>
               <h3>{{product.name}}</h3>
               <p>{{product.unitPrice | currency}}</p>
             </div>
@@ -83,7 +85,12 @@
                   (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column field="name" title="Name">
           <ng-template kendoGridCellTemplate let-product>
-            <a routerLink="/products/details/{{product.id}}"
+            <ng-container *ngIf="getThumbnailUrl(product) as thumbnailUrl">
+              <img src="{{thumbnailUrl}}"
+                   alt="{{product.name}}"
+                   height="25"
+                   width="25" />
+            </ng-container> <a routerLink="/products/details/{{product.id}}"
                title="Product Details">
               {{product.name}}
             </a>
@@ -123,11 +130,6 @@
           </ng-template>
         </kendo-grid-column>
       </kendo-grid>
-    </div>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
     </div>
     <hr />
   </div>

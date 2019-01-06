@@ -2,9 +2,9 @@
       ngNativeValidate
       (ngSubmit)="profile(f)">
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col">
       <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col">
           <div class="form-group">
             <label for="firstName">
               First Name
@@ -18,7 +18,7 @@
                   [(ngModel)]="model.firstName" />
           </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col">
           <div class="form-group">
             <label for="lastName">
               Last Name
@@ -39,28 +39,29 @@
         </label>
         <div [ngClass]="{'input-group': model.emailConfirmed}">
           <input id="email"
-                name="email"
-                type="email"
-                class="form-control"
-                required
-                email
-                #email="ngModel"
-                [(ngModel)]="model.email">
-          <div class="input-group-append" *ngIf="model.emailConfirmed">
-            <span class="input-group-text text-success" aria-hidden="true">
-              <fa-icon [icon]="['fal', 'check']"></fa-icon>
-            </span>
-          </div>
-          <div *ngIf="!model.emailConfirmed">
-            <button type="button"
-                    (click)="sendVerificationEmail()"
-                    class="btn btn-link">
-              Send verification email
-            </button>
-            <div *ngIf="message" class="alert alert-success" role="alert">
-              {{message}}
+                 name="email"
+                 type="email"
+                 class="form-control"
+                 required
+                 email
+                 #email="ngModel"
+                 [(ngModel)]="model.email">
+          <ng-container *ngIf="model.emailConfirmed; then showEmailConfirmed; else hideEmailConfirmed">
+          </ng-container>
+          <ng-template #showEmailConfirmed>
+            <div class="input-group-append">
+              <span class="input-group-text text-success" aria-hidden="true">
+                <fa-icon [icon]="['fal', 'check']"></fa-icon>
+              </span>
             </div>
-          </div>
+          </ng-template>
+          <ng-template #hideEmailConfirmed>
+              <button type="button"
+                      (click)="sendVerificationEmail()"
+                      class="btn btn-link">
+                Send verification email
+              </button>
+          </ng-template>
         </div>
       </div>
       <div class="form-group">
@@ -79,7 +80,7 @@
               minlength="12" />
       </div>
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col">
       <div class="form-group">
         <label for="streetAddress">
           Street Address
@@ -105,7 +106,7 @@
               class="form-control"/>
       </div>
       <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col">
           <div class="form-group">
             <label for="region">
               State
@@ -119,7 +120,7 @@
                   class="form-control"/>
           </div>
         </div>        
-        <div class="col-12 col-md-6">
+        <div class="col">
           <div class="form-group">
             <label for="postalCode">
               ZIP Code
@@ -153,9 +154,4 @@
           [disabled]=" f.pristine || f.invalid">
     Save
   </button>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
 </form>

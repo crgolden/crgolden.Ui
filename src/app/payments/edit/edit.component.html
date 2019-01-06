@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'dollar-sign']"></fa-icon> Edit Payment
@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <form #f="ngForm"
           ngNativeValidate
@@ -39,14 +39,14 @@
       <div class="form-group">
         <hr />
         <h4>
-          <span *ngIf="showSave$() | async">
+          <ng-container *ngIf="showSave$() | async">
             <button
               type="submit"
               class="btn btn-primary"
               [disabled]="f.pristine || f.invalid">
               Save
             </button> |
-          </span>
+          </ng-container>
           <a routerLink="/payments/details/{{payment.id}}"
              title="Payment Details">
             <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
@@ -56,11 +56,6 @@
             <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order
           </a>
         </h4>
-      </div>
-      <div *ngFor="let error of errors">
-        <div class="alert alert-danger" role="alert">
-          {{error}}
-        </div>
       </div>
     </form>
   </div>

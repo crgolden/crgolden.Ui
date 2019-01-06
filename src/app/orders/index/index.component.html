@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Orders
@@ -7,7 +7,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <kendo-grid [data]="orders"
                 [pageSize]="state.take"
@@ -45,11 +45,6 @@
         </ng-template>
       </kendo-grid-column>
     </kendo-grid>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
     <hr />
   </div>
 </div>

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from '../../account/account.service';
 import { Product } from '../product';
@@ -20,7 +21,6 @@ import { CartProduct } from '../../cart-products/cart-product';
 export class DetailsComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   product: Product;
   primaryImageUri: string;
   private cartId: string;
@@ -31,6 +31,7 @@ export class DetailsComponent implements OnInit {
     private readonly accountService: AccountService,
     private readonly cartService: CartService,
     private readonly cartProductsService: CartProductsService,
+    private readonly toastr: ToastrService,
     cookieService: CookieService) {
     this.cartId = cookieService.get('CartId');
   }
@@ -39,6 +40,11 @@ export class DetailsComponent implements OnInit {
     this.titleService.setTitle('Clarity: Product Details');
     this.product = this.route.snapshot.data['product'] as Product;
     this.setPrimaryImageUri();
+    const message = window.sessionStorage.getItem('success');
+    if (message != null) {
+      window.sessionStorage.removeItem('success');
+      setTimeout(() => this.toastr.success(message));
+    }
   }
 
   inCart$(): Observable<boolean> {
@@ -82,23 +88,25 @@ export class DetailsComponent implements OnInit {
         this.cartId = cart.id;
         return cart;
       }));
-    this.errors = new Array<string>();
     this.blockUI.start();
     observable.subscribe(
       (cart: Cart) => this.cartService.cart$.next(cart),
-      (errors: Array<string>) => this.errors = errors,
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 
   removeFromCart(): void {
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.cartProductsService.delete$(this.cartId, this.product.id)
       .pipe(exhaustMap(
         () => this.cartService.details$(this.cartId)))
       .subscribe(
         (updatedCart: Cart) => this.cartService.cart$.next(updatedCart),
-        (errors: Array<string>) => this.errors = errors,
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
   }
 
@@ -106,8 +114,8 @@ export class DetailsComponent implements OnInit {
   showEdit$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
 
   private setPrimaryImageUri(): void {
-    if (this.product.productFiles.some(x => x.primary)) {
-      this.primaryImageUri = this.product.productFiles.find(x => x.primary).uri;
+    if (this.product.productFiles.some(productFile => productFile.primary)) {
+      this.primaryImageUri = this.product.productFiles.find(productFile => productFile.primary).uri;
     }
   }
 }

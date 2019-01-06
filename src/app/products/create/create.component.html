@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'box']"></fa-icon> Create Product
@@ -7,13 +7,13 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <form #f="ngForm"
           ngNativeValidate
           (ngSubmit)="create(f)">
       <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col">
           <div class="form-group">
             <label for="name">Name</label>
             <input id="name"
@@ -26,80 +26,114 @@
                    [(ngModel)]="product.name">
           </div>
         </div>
-        <div class="col-12 col-md-6">
-          <div class="form-check">
+        <div class="col">
+          <div class="form-group">
             <input id="active"
                    name="active"
-                   class="form-check-input"
+                   class="k-checkbox"
                    type="checkbox"
                    #active="ngModel"
                    [(ngModel)]="product.active">
-            <label class="form-check-label" for="active">
+            <label class="k-checkbox-label" for="active">
               Active
             </label>
           </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea kendoTextArea
-                  id="description"
-                  class="form-control"
-                  name="description"
-                  placeholder="Description"
-                  #description="ngModel"
-                  [(ngModel)]="product.description"></textarea>
-      </div>
-      <div class="row">
-        <div class="col-12 col-md-6">
           <div class="form-group">
-            <label for="unitPrice">Price</label>
-            <kendo-numerictextbox id="unitPrice"
-                                  class="form-control"
-                                  name="unitPrice"
-                                  required
-                                  placeholder="price"
-                                  [value]="product.unitPrice"
-                                  title="Price"
-                                  [min]="0"
-                                  [decimals]="2"
-                                  [format]="'c2'"
-                                  [autoCorrect]="true"
-                                  #unitPrice="ngModel"
-                                  [(ngModel)]="product.unitPrice">
-            </kendo-numerictextbox>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="form-check">
             <input id="isDownload"
-                   name="isDownload"
-                   class="form-check-input"
                    type="checkbox"
+                   class="k-checkbox"
+                   name="isDownload"
                    #isDownload="ngModel"
                    [(ngModel)]="product.isDownload">
-            <label class="form-check-label" for="isDownload">
+            <label class="k-checkbox-label" for="isDownload">
               Download
             </label>
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <hr />
-        <h4>
-          <span *ngIf="showCreate$() | async">
-            <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
-              Create
-            </button> |
-          </span>
-          <a routerLink="/products"
-             title="Products">
-            <fa-icon [icon]="['fal', 'list']"></fa-icon> List
-          </a>
-        </h4>
-        <div *ngFor="let error of errors">
-          <div class="alert alert-danger" role="alert">
-            {{error}}
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea kendoTextArea
+                      id="description"
+                      class="form-control"
+                      name="description"
+                      placeholder="Description"
+                      #description="ngModel"
+                      [(ngModel)]="product.description"></textarea>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Images</label>
+            <br />
+            <ng-container *ngIf="primaryImageUri">
+              <img src="{{primaryImageUri}}"
+                   alt="Product Image"
+                   title="Product Image" />
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="unitPrice">Price</label>
+                <kendo-numerictextbox id="unitPrice"
+                                      class="form-control"
+                                      name="unitPrice"
+                                      required
+                                      placeholder="price"
+                                      [value]="product.unitPrice"
+                                      title="Price"
+                                      [min]="0"
+                                      [decimals]="2"
+                                      [format]="'c2'"
+                                      [autoCorrect]="true"
+                                      #unitPrice="ngModel"
+                                      [(ngModel)]="product.unitPrice">
+                </kendo-numerictextbox>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="quantityPerUnit">Quantity per Unit</label>
+                <input id="quantityPerUnit"
+                       name="quantityPerUnit"
+                       type="text"
+                       required
+                       class="form-control"
+                       placeholder="Quantity per Unit"
+                       #quantityPerUnit="ngModel"
+                       [(ngModel)]="product.quantityPerUnit">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Upload</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <hr />
+            <h4>
+              <ng-container *ngIf="showCreate$() | async">
+                <button type="submit" class="btn btn-primary" [disabled]="f.invalid">
+                  Create
+                </button> |
+              </ng-container>
+              <a routerLink="/products"
+                 title="Products">
+                <fa-icon [icon]="['fal', 'list']"></fa-icon> List
+              </a>
+            </h4>
           </div>
         </div>
       </div>

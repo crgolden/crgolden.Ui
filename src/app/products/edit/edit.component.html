@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'box']"></fa-icon> Edit Product
@@ -7,42 +7,54 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <form #f="ngForm"
-              ngNativeValidate
-              (ngSubmit)="edit(f)">
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input id="name"
-                       name="name"
-                       type="text"
-                       required
-                       class="form-control"
-                       placeholder="Name"
-                       #name="ngModel"
-                       [(ngModel)]="product.name">
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="form-check">
-                <input id="active"
-                       name="active"
-                       class="form-check-input"
-                       type="checkbox"
-                       [checked]="product.active"
-                       #active="ngModel"
-                       [(ngModel)]="product.active">
-                <label class="form-check-label" for="active">
-                  Active
-                </label>
-              </div>
-            </div>
+    <form #f="ngForm"
+          ngNativeValidate
+          (ngSubmit)="edit(f)">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name"
+                   name="name"
+                   type="text"
+                   required
+                   class="form-control"
+                   placeholder="Name"
+                   #name="ngModel"
+                   [(ngModel)]="product.name">
           </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <input id="active"
+                   name="active"
+                   class="k-checkbox"
+                   type="checkbox"
+                   [checked]="product.active"
+                   #active="ngModel"
+                   [(ngModel)]="product.active">
+            <label class="k-checkbox-label" for="active">
+              Active
+            </label>
+          </div>
+          <div class="form-group">
+            <input id="isDownload"
+                   name="isDownload"
+                   class="k-checkbox"
+                   type="checkbox"
+                   [checked]="product.isDownload"
+                   #isDownload="ngModel"
+                   [(ngModel)]="product.isDownload">
+            <label class="k-checkbox-label" for="isDownload">
+              Download
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="form-group">
             <label for="description">Description</label>
             <textarea kendoTextArea
@@ -53,19 +65,23 @@
                       #description="ngModel"
                       [(ngModel)]="product.description"></textarea>
           </div>
+        </div>
+        <div class="col">
           <div class="form-group">
             <label>Images</label>
-            <kendo-upload name="images"
-                          #myUpload="ngModel"
-                          [saveUrl]="uploadSaveUrl"
-                          [removeUrl]="uploadRemoveUrl"
-                          [restrictions]="uploadTypes"
-                          (success)="onSuccess($event)"
-                          [(ngModel)]="product.productFiles">
-            </kendo-upload>
+            <br />
+            <ng-container *ngIf="primaryImageUri">
+              <img src="{{primaryImageUri}}"
+                   alt="Product Image"
+                   title="Product Image" />
+            </ng-container>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col">
               <div class="form-group">
                 <label for="unitPrice">Price</label>
                 <kendo-numerictextbox id="unitPrice"
@@ -84,31 +100,47 @@
                 </kendo-numerictextbox>
               </div>
             </div>
-            <div class="col-12 col-md-6">
-              <div class="form-check">
-                <input id="isDownload"
-                       name="isDownload"
-                       class="form-check-input"
-                       type="checkbox"
-                       [checked]="product.isDownload"
-                       #isDownload="ngModel"
-                       [(ngModel)]="product.isDownload">
-                <label class="form-check-label" for="isDownload">
-                  Download
-                </label>
+            <div class="col">
+              <div class="form-group">
+                <label for="quantityPerUnit">Quantity per Unit</label>
+                <input id="quantityPerUnit"
+                       name="quantityPerUnit"
+                       type="text"
+                       required
+                       class="form-control"
+                       placeholder="Quantity per Unit"
+                       #quantityPerUnit="ngModel"
+                       [(ngModel)]="product.quantityPerUnit">
               </div>
             </div>
           </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Upload</label>
+            <kendo-upload name="images"
+                          #myUpload="ngModel"
+                          [saveUrl]="uploadSaveUrl"
+                          [removeUrl]="uploadRemoveUrl"
+                          [restrictions]="uploadTypes"
+                          (success)="onSuccess($event)"
+                          [(ngModel)]="product.productFiles">
+            </kendo-upload>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="form-group">
             <hr />
             <h4>
-              <span *ngIf="showSave$() | async">
+              <ng-container *ngIf="showSave$() | async">
                 <button type="submit"
                         class="btn btn-primary"
                         [disabled]="f.pristine || f.invalid">
                   Save
                 </button> |
-              </span>
+              </ng-container>
               <a routerLink="/products/details/{{product.id}}"
                  title="Product Details">
                 <fa-icon [icon]="['fal', 'info-square']"></fa-icon> Details
@@ -119,21 +151,9 @@
               </a>
             </h4>
           </div>
-          <div *ngFor="let error of errors">
-            <div class="alert alert-danger" role="alert">
-              {{error}}
-            </div>
-          </div>
-        </form>
-        <hr />
+        </div>
       </div>
-      <div class="col-12 col-md-6">
-        <ng-container *ngIf="primaryImageUri">
-          <img src="{{primaryImageUri}}"
-               alt="Product Image"
-               title="Product Image" />
-        </ng-container>
-      </div>
-    </div>
+    </form>
+    <hr />
   </div>
 </div>

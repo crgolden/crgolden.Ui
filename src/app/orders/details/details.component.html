@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h2>
       <fa-icon [icon]="['fal', 'shopping-bag']"></fa-icon> Order Details
@@ -7,10 +7,10 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col">
         <dl>
           <dt>
             Name
@@ -32,20 +32,21 @@
           </dd>
         </dl>
       </div>
-      <div class="col-12 col-md-6">
-        <dl>
-          <dt *ngIf="shippingAddress">
-            Shipping Address
-          </dt>
-          <dd *ngIf="shippingAddress" [innerHTML]="formattedShippingAddress">
-          </dd>
-        </dl>
+      <div class="col">
+        <ng-container *ngIf="shippingAddress">
+          <dl>
+            <dt>
+              Shipping Address
+            </dt>
+            <dd [innerHTML]="formattedShippingAddress"></dd>
+          </dl>
+        </ng-container>
       </div>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <kendo-grid [data]="orderProducts"
                 [pageSize]="orderProductsState.take"
@@ -86,7 +87,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <kendo-grid [data]="payments"
                 [pageSize]="paymentsState.take"
@@ -133,25 +134,19 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h4>
       <a routerLink="/orders"
          title="Orders">
         <fa-icon [icon]="['fal', 'list']"></fa-icon> List
-      </a>
-      <span *ngIf="showEdit$() | async">
+      </a><ng-container *ngIf="showEdit$() | async">
         | <a routerLink="/orders/edit/{{order.id}}"
              title="Edit Order">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>
-      </span>
+      </ng-container>
     </h4>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
     <hr />
   </div>
 </div>

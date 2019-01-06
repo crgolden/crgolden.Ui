@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   PagerSettings,
@@ -28,11 +29,11 @@ export class EditComponent implements OnInit {
   sortable: SortSettings;
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   cart$ = (): Observable<Cart> => this.cartService.cart$;
 
   constructor(
     private readonly titleService: Title,
+    private readonly toastr: ToastrService,
     private readonly cartService: CartService,
     private readonly cartProductsService: CartProductsService) {
     this.state = {
@@ -61,26 +62,28 @@ export class EditComponent implements OnInit {
 
   updateQuantity(quantity: number, cartProduct: CartProduct): void {
     cartProduct.quantity = quantity;
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.cartProductsService.edit$(cartProduct)
       .pipe(exhaustMap(
         () => this.cartService.details$(cartProduct.model1Id)))
       .subscribe(
         (cart: Cart) => this.cartService.cart$.next(cart),
-        (errors: Array<string>) => this.errors = errors,
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
   }
 
   removeCartProduct(cartProduct: CartProduct): void {
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.cartProductsService.delete$(cartProduct.model1Id, cartProduct.model2Id)
       .pipe(exhaustMap(
         () => this.cartService.details$(cartProduct.model1Id)))
       .subscribe(
         (cart: Cart) => this.cartService.cart$.next(cart),
-        (errors: Array<string>) => this.errors = errors,
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
   }
 

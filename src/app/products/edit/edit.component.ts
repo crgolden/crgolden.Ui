@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastrService } from 'ngx-toastr';
 import { FileRestrictions, SuccessEvent } from '@progress/kendo-angular-upload';
 import { environment } from '../../../environments/environment';
 import { AccountService } from '../../account/account.service';
@@ -22,7 +23,6 @@ import { ProductFile } from '../../product-files/product-file';
 export class EditComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   product: Product;
   images: Array<File>;
   uploadSaveUrl: string;
@@ -34,11 +34,12 @@ export class EditComponent implements OnInit {
 
   constructor(
     private readonly titleService: Title,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly productsService: ProductsService,
-    private readonly productFilesService: ProductFilesService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute) {
+    private readonly productFilesService: ProductFilesService) {
     this.uploadSaveUrl = `${environment.apiUrl}/Images/Upload`;
   }
 
@@ -49,18 +50,21 @@ export class EditComponent implements OnInit {
   }
 
   edit(form: NgForm): void {
-    this.errors = new Array<string>();
     if (!form.valid) { return; }
     this.blockUI.start();
     this.productsService.edit$(this.product).subscribe(
-      () => this.router.navigate([`/products/details/${this.product.id}`]).finally(
-        () => this.blockUI.stop()),
-      (errors: Array<string>) => this.errors = errors,
+      () => {
+        window.sessionStorage.setItem('success', `${this.product.name} updated`);
+        this.router.navigate([`/products/details/${this.product.id}`]).finally(
+          () => this.blockUI.stop());
+      },
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 
   onSuccess(event: SuccessEvent): void {
-    this.errors = new Array<string>();
     if (event.response.body instanceof Array && event.response.body.length > 0) {
       this.blockUI.start();
       const productFiles = event.response.body.map((file: any) => {
@@ -75,15 +79,23 @@ export class EditComponent implements OnInit {
         } as ProductFile;
       });
       if (!this.primaryImageUri) {
-        productFiles.filter(x => !x.uri.includes('thumbnail'))[0].primary = true;
+        const imageFiles = productFiles.filter(productFile =>
+          productFile.contentType.includes('image') &&
+          !productFile.uri.includes('thumbnail'));
+        if (imageFiles.length > 0) {
+          imageFiles[0].primary = true;
+        }
       }
       this.productFilesService.createRange$(productFiles).pipe(concatMap(
         () => this.productsService.details$(this.product.id))).subscribe(
           (product: Product) => {
             this.product = product;
             this.setPrimaryImageUri();
+            this.toastr.success('Images(s) added');
           },
-          (errors: Array<string>) => this.errors = errors,
+          (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+            disableTimeOut: true
+          })),
           () => this.blockUI.stop());
     }
   }
@@ -91,8 +103,8 @@ export class EditComponent implements OnInit {
   showSave$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
 
   private setPrimaryImageUri(): void {
-    if (this.product.productFiles.some(x => x.primary)) {
-      this.primaryImageUri = this.product.productFiles.find(x => x.primary).uri;
+    if (this.product.productFiles.some(productFile => productFile.primary)) {
+      this.primaryImageUri = this.product.productFiles.find(productFile => productFile.primary).uri;
     }
   }
 }

@@ -7,6 +7,6 @@ import { BaseModelService } from '../base/base-model.service';
 export class ProductsService extends BaseModelService<Product> {
 
   constructor(protected readonly http: HttpClient) {
-    super('Products', http);
+    super('products', http);
   }
 }

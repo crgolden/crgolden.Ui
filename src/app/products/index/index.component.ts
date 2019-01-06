@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { exhaustMap, filter, map } from 'rxjs/operators';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import {
   GridDataResult,
@@ -33,7 +34,6 @@ import { CartProduct } from '../../cart-products/cart-product';
 export class IndexComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   products: GridDataResult;
   state: DataSourceRequestState;
   pageable: PagerSettings;
@@ -45,6 +45,7 @@ export class IndexComponent implements OnInit {
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
@@ -129,19 +130,19 @@ export class IndexComponent implements OnInit {
         this.cartId = cart.id;
         return cart;
       }));
-    this.errors = new Array<string>();
     this.blockUI.start();
     observable.subscribe(
       (cart: Cart) => {
         this.cartService.cart$.next(cart);
         this.dataStateChange(this.state);
       },
-      (errors: Array<string>) => this.errors = errors,
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 
   removeFromCart(productId: string): void {
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.cartProductsService.delete$(this.cartId, productId)
       .pipe(exhaustMap(
@@ -151,27 +152,30 @@ export class IndexComponent implements OnInit {
           this.cartService.cart$.next(cart);
           this.dataStateChange(this.state);
         },
-        (errors: Array<string>) => this.errors = errors,
+        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })),
         () => this.blockUI.stop());
   }
 
   dataStateChange(state: DataSourceRequestState): void {
-    this.errors = new Array<string>();
     this.state = state;
-    this.blockUI.start();
     this.productsService.index$(state).subscribe(
       (result: GridDataResult) => this.products = result,
-      (errors: Array<string>) => this.errors = errors,
-      () => this.blockUI.stop());
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })));
   }
 
   getThumbnailUrl(product: Product): string {
     if (!product.productFiles || product.productFiles.length === 0) {
       return undefined;
     }
-    const primaryImages = product.productFiles.filter(x => !x.uri.includes('thumbnail'));
-    let primaryImageFile = primaryImages.find(x => x.primary);
-    if (primaryImageFile == null) {
+    const primaryImages = product.productFiles.filter(productFile =>
+      productFile.contentType.includes('image') &&
+      !productFile.uri.includes('thumbnail'));
+    let primaryImageFile = primaryImages.find(productFile => productFile.primary);
+    if (primaryImageFile == null && primaryImages.length > 0) {
       primaryImageFile = primaryImages[0];
     }
     if (primaryImageFile == null) {
@@ -182,7 +186,9 @@ export class IndexComponent implements OnInit {
     const fileName = primaryImageFile.uri.substring(start, end);
     end = fileName.indexOf('.');
     const id = fileName.substring(0, end);
-    const thumbnailImageFile = product.productFiles.find(x => x.uri.includes(id) && x.uri.includes('thumbnails'));
+    const thumbnailImageFile = product.productFiles.find(productFile =>
+      productFile.uri.includes(id) &&
+      productFile.uri.includes('thumbnails'));
     if (thumbnailImageFile == null) {
       return undefined;
     }

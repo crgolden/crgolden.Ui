@@ -7,6 +7,6 @@ import { BaseRelationshipService } from '../base/base-relationship.service';
 export class CartProductsService extends BaseRelationshipService<CartProduct> {
 
   constructor(protected readonly http: HttpClient) {
-    super('CartProducts', http);
+    super('cart-products', http);
   }
 }

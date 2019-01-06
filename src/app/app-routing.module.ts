@@ -33,17 +33,17 @@ const routes: Routes = [
     loadChildren: './cart/cart.module#CartModule'
   },
   {
-    path: 'Checkout',
+    path: 'checkout',
     loadChildren: './checkout/checkout.module#CheckoutModule'
   },
   {
     path: '',
-    redirectTo: 'Home',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
     path: '**',
-    redirectTo: 'Home'
+    redirectTo: 'home'
   }
 ];
 

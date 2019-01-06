@@ -1,13 +1,13 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col">
         <h2>
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Product Details
         </h2>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col">
         <ng-container *ngIf="inCart$() | async; then inCart; else notInCart"></ng-container>
         <ng-template #inCart>
           <h2>
@@ -32,44 +32,68 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <div class="row">
-      <div class="col-12 col-md-6">
-        <dl>
-          <dt *ngIf="showActive$() | async">
-            Active
-          </dt>
-          <dd *ngIf="showActive$() | async">
-            <input type="checkbox" [checked]="product.active" disabled />
-          </dd>
-          <dt>
-            Name
-          </dt>
-          <dd>
-            {{product.name}}
-          </dd>
-          <dt>
-            Description
-          </dt>
-          <dd>
-            {{product.description}}
-          </dd>
-          <dt>
-            Price
-          </dt>
-          <dd>
-            {{product.unitPrice | currency}}
-          </dd>
-          <dt>
-            Download
-          </dt>
-          <dd>
-            <input type="checkbox" [checked]="product.isDownload" disabled />
-          </dd>
-        </dl>
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <input id="isDownload"
+                     type="checkbox"
+                     class="k-checkbox"
+                     name="isDownload"
+                     [checked]="product.isDownload"
+                     disabled>
+              <label class="k-checkbox-label" for="isDownload">Download</label>
+            </div>
+          </div>
+          <div class="col">
+            <ng-container *ngIf="showActive$() | async">
+              <div class="form-group">
+                <input id="active"
+                       type="checkbox"
+                       class="k-checkbox"
+                       name="active"
+                       [checked]="product.active"
+                       disabled>
+                <label class="k-checkbox-label" for="active">Active</label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <dl>
+              <dt>
+                Name
+              </dt>
+              <dd>
+                {{product.name}}
+              </dd>
+              <dt>
+                Description
+              </dt>
+              <dd>
+                {{product.description}}
+              </dd>
+              <dt>
+                Unit Price
+              </dt>
+              <dd>
+                {{product.unitPrice | currency}}
+              </dd>
+              <dt>
+                Quantity per Unit
+              </dt>
+              <dd>
+                {{product.quantityPerUnit}}
+              </dd>
+            </dl>
+          </div>
+        </div>
       </div>
-      <div class="col-12 col-md-6">
+      <div class="col">
         <ng-container *ngIf="primaryImageUri">
           <img src="{{primaryImageUri}}"
                alt="Product Image"
@@ -80,25 +104,19 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <hr />
     <h4>
       <a routerLink="/products"
          title="Products">
         <fa-icon [icon]="['fal', 'list']"></fa-icon> List
-      </a>
-      <span *ngIf="showEdit$() | async">
+      </a><ng-container *ngIf="showEdit$() | async">
         | <a routerLink="/products/edit/{{product.id}}"
              title="Edit Product">
           <fa-icon [icon]="['fal', 'edit']"></fa-icon> Edit
         </a>
-      </span>
+      </ng-container>
     </h4>
-    <div *ngFor="let error of errors">
-      <div class="alert alert-danger" role="alert">
-        {{error}}
-      </div>
-    </div>
     <hr />
   </div>
 </div>

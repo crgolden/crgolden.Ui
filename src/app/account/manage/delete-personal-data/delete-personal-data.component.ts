@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { DeletePersonalData } from '../models/delete-personal-data';
@@ -15,13 +16,13 @@ export class DeletePersonalDataComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
   model: DeletePersonalData;
-  errors: Array<string>;
   requirePassword: boolean;
 
   constructor(
+    private readonly titleService: Title,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly titleService: Title,
+    private readonly toastr: ToastrService,
     private readonly manageService: ManageService) {
     this.model = new DeletePersonalData();
   }
@@ -34,12 +35,13 @@ export class DeletePersonalDataComponent implements OnInit {
   }
 
   deletePersonalData(form: NgForm): void {
-    this.errors = new Array<string>();
     if (!form.valid) { return; }
     this.blockUI.start();
     this.manageService.deletePersonalData$(this.model).subscribe(
       () => this.router.navigate(['/home']).finally(() => this.blockUI.stop()),
-      (errors: Array<string>) => this.errors = errors,
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 }

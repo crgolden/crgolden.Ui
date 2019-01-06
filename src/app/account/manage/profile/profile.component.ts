@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { User } from 'oidc-client';
+import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account.service';
 import { ManageService } from '../manage.service';
 import { Profile } from '../models/profile';
@@ -17,11 +18,10 @@ export class ProfileComponent implements OnInit {
 
   @BlockUI() blockUI: NgBlockUI;
   model: Profile;
-  errors: Array<string>;
-  message: string;
 
   constructor(
     private readonly titleService: Title,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly manageService: ManageService) {
     this.model = new Profile();
@@ -30,27 +30,36 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Profile');
     this.accountService.user$.subscribe((user: User) => this.setProfile(user));
+    const message = window.sessionStorage.getItem('success');
+    if (message != null) {
+      window.sessionStorage.removeItem('success');
+      setTimeout(() => this.toastr.success(message));
+    }
+
   }
 
   profile(form: NgForm): void {
-    this.errors = new Array<string>();
     if (!form.valid) { return; }
     this.blockUI.start();
     this.manageService.profile$(this.model).subscribe(
       (profile: Profile) => {
+        this.toastr.success('Profile updated');
         this.model = profile;
         this.accountService.signinSilent();
       },
-      (errors: Array<string>) => this.errors = errors,
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 
   sendVerificationEmail(): void {
-    this.errors = new Array<string>();
     this.blockUI.start();
     this.manageService.sendVerificationEmail$().subscribe(
-      (response: string) => this.message = response,
-      (errors: Array<string>) => this.errors = errors,
+      (response: string) => this.toastr.success(response),
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })),
       () => this.blockUI.stop());
   }
 

@@ -23,7 +23,7 @@ export class TwoFactorAuthenticationResolver implements Resolve<TwoFactorAuthent
     return this.manageService.twoFactorAuthentication.pipe(
       concatMap(
         (twoFactorAuthentication: TwoFactorAuthentication) => twoFactorAuthentication == null
-          ? this.http.get<TwoFactorAuthentication>(`${environment.identityUrl}/Manage/TwoFactorAuthentication`).pipe(map(
+          ? this.http.get<TwoFactorAuthentication>(`${environment.identityUrl}/manage/two-factor-authentication`).pipe(map(
             (response: TwoFactorAuthentication) => {
               this.manageService.twoFactorAuthentication.next(response);
               return response;

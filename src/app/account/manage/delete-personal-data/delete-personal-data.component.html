@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col">
     <div class="alert alert-warning" role="alert">
       <p>
         <fa-icon [icon]="['fal', 'exclamation']"></fa-icon>
@@ -10,31 +10,24 @@
       <form #f="ngForm"
             ngNativeValidate
             (ngSubmit)="deletePersonalData(f)">
-        <div *ngIf="requirePassword">
-          <div class="form-group row">
-            <label for="password" class="col-4 col-form-label">Password</label>
-            <div class="col-8">
-              <input id="password"
-                     name="password"
-                     type="password"
-                     class="form-control"
-                     placeholder="Password"
-                     required
-                     #password="ngModel"
-                     [(ngModel)]="model.password">
-            </div>
+        <ng-container *ngIf="requirePassword">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password"
+                   name="password"
+                   type="password"
+                   class="form-control"
+                   placeholder="Password"
+                   required
+                   #password="ngModel"
+                   [(ngModel)]="model.password">
           </div>
-        </div>
+        </ng-container>
         <button class="btn btn-danger"
                 type="submit"
-                [disabled]="f.invalid">
+                [disabled]="f.pristine || f.invalid">
           Delete data and close my account
         </button>
-        <div *ngFor="let error of errors">
-          <div class="alert alert-danger" role="alert">
-            {{error}}
-          </div>
-        </div>
       </form>
     </div>
   </div>
