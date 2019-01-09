@@ -4,8 +4,6 @@ import { NgModule } from '@angular/core';
 import { UrlSerializer } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { BlockUIModule } from 'ng-block-ui';
-import { ToastrModule } from 'ngx-toastr';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faHome,
@@ -43,7 +41,9 @@ import {
   faCcStripe
 } from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { BlockUIModule } from 'ng-block-ui';
 import { CookieService } from 'ngx-cookie-service';
+import { ToastrModule } from 'ngx-toastr';
 import { AppInterceptor } from './app.interceptor';
 import { AppLoggedIn } from './app.logged-in';
 import { AppNotLoggedIn } from './app.not-logged-in';

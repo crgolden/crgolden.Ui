@@ -118,7 +118,6 @@ export class CreateComponent implements OnInit {
               }),
               payments: new Array<Payment>()
             };
-            cart.cartProducts = new Array<CartProduct>();
             if (this.shippingAddress != null) {
               order.shippingAddress = JSON.stringify(this.shippingAddress);
             }
@@ -129,17 +128,31 @@ export class CreateComponent implements OnInit {
             }
             this.blockUI.start();
             return this.ordersService.create$(order).pipe(mergeMap(
-              (newOrder: Order) => this.cartService.edit$(cart).pipe(concatMap(
+              (newOrder: Order) => this.cartService.edit$({
+                id: cart.id,
+                name: cart.name,
+                created: cart.created,
+                updated: cart.updated,
+                userId: cart.userId,
+                total: cart.total,
+                cartProducts: new Array<CartProduct>()
+              } as Cart).pipe(concatMap(
                 () => this.cartService.details$(cart.id).pipe(map(
                   (updatedCart: Cart) => {
-                    this.cartService.cart$.next(updatedCart);
-                    return newOrder;
+                    return {
+                      order: newOrder,
+                      cart: updatedCart
+                    };
                   }))))));
           }))
       .subscribe(
-        (order: Order) => this.router.navigate([`/orders/details/${order.id}`]).finally(
+        (results: {
+          order: Order;
+          cart: Cart;
+        }) => this.router.navigate([`/orders/details/${results.order.id}`]).finally(
           () => {
-            window.sessionStorage.setItem('success', `${order.name} created`);
+            this.cartService.cart$.next(results.cart);
+            window.sessionStorage.setItem('success', `${results.order.name} created`);
             this.blockUI.stop();
           }),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {

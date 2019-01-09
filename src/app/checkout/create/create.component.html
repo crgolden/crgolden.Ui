@@ -29,7 +29,7 @@
               Enter Shipping Address
             </button>
           </ng-template>
-          <hr/>
+          <hr />
         </ng-container>
         <ng-container *ngIf="(!needsShippingAddress$() | async) || validShippingAddress">
           <ng-container *ngIf="needsPayment$() | async">
@@ -38,7 +38,7 @@
               <h4>
                 Payment Information:
               </h4>
-              <ng-container *ngIf="token && token.type === 'card'" [ngSwitch]="token.card.brand">
+              <p *ngIf="token && token.type === 'card'" [ngSwitch]="token.card.brand">
                 <span *ngSwitchCase="'Visa'">
                   <fa-icon [icon]="['fab', 'cc-visa']"></fa-icon>
                 </span>
@@ -61,7 +61,7 @@
                   <fa-icon [icon]="['fab', 'cc-stripe']"></fa-icon>
                 </span>
                 <span> **** **** **** {{token.card.last4}}</span>
-              </ng-container>
+              </p>
               <button class="btn btn-primary"
                       (click)="openPaymentInformationModal()">
                 Change Payment Information
@@ -74,7 +74,7 @@
               </button>
             </ng-template>
           </ng-container>
-          <hr/>
+          <hr />
         </ng-container>
         <button class="btn btn-primary"
                 type="button"
