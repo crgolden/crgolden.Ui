@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from '../../account/account.service';
 import { Product } from '../product';
+import { File } from '../../files/file';
+import { ProductFile } from '../../product-files/product-file';
 import { CartService } from '../../cart/cart.service';
 import { Cart } from '../../cart/cart';
 import { CartProductsService } from '../../cart-products/cart-products.service';
@@ -23,6 +25,7 @@ export class DetailsComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   product: Product;
   primaryImageUri: string;
+  images: Array<File>;
   private cartId: string;
 
   constructor(
@@ -39,6 +42,14 @@ export class DetailsComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Product Details');
     this.product = this.route.snapshot.data['product'] as Product;
+    this.images = this.product.productFiles.filter((productFile: ProductFile) =>
+      productFile.contentType.includes('image') &&
+      productFile.uri.includes('images/')).map((productFile: ProductFile) => {
+        return {
+          uri: productFile.uri,
+          name: productFile.model2Name
+      } as File;
+    });
     this.setPrimaryImageUri();
     const message = window.sessionStorage.getItem('success');
     if (message != null) {

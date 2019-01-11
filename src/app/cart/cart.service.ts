@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Event, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { switchMap, filter } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { BaseModelService } from '../base/base-model.service';
 import { Cart } from './cart';
@@ -36,7 +36,10 @@ export class CartService extends BaseModelService<Cart> {
             created: undefined,
             total: 0,
             cartProducts: new Array<CartProduct>()
-          } as Cart);
+          } as Cart).pipe(map((cart) => {
+            cookieService.set('CartId', cart.id);
+            return cart;
+          }));
       })).subscribe((cart: Cart) => this.cart$.next(cart));
   }
 }

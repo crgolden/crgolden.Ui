@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LabelModule } from '@progress/kendo-angular-label';
+import { ScrollViewModule } from '@progress/kendo-angular-scrollview';
 import { UploadModule } from '@progress/kendo-angular-upload';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ProductsRoutingModule } from './products-routing.module';
@@ -22,6 +23,7 @@ import { EditComponent } from './edit/edit.component';
     GridModule,
     InputsModule,
     LabelModule,
+    ScrollViewModule,
     UploadModule,
     FontAwesomeModule,
     ProductsRoutingModule

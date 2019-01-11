@@ -50,7 +50,10 @@ export class LoginSuccessComponent implements OnInit {
           total: 0,
           cartProducts: new Array<CartProduct>()
         } as Cart).subscribe(
-          (cart: Cart) => this.cartService.cart$.next(cart),
+          (cart: Cart) => {
+            this.cookieService.set('CartId', cart.id);
+            this.cartService.cart$.next(cart);
+          },
           (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
             disableTimeOut: true
           })),
