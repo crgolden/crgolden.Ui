@@ -4,6 +4,7 @@ import { Event, NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../../environments/environment';
 import { BaseModelService } from '../base/base-model.service';
 import { Cart } from './cart';
 import { CartProduct } from '../cart-products/cart-product';
@@ -37,7 +38,7 @@ export class CartService extends BaseModelService<Cart> {
             total: 0,
             cartProducts: new Array<CartProduct>()
           } as Cart).pipe(map((cart) => {
-            cookieService.set('CartId', cart.id);
+            cookieService.set('CartId', cart.id, null, '/', `${environment.cookieDomain}`);
             return cart;
           }));
       })).subscribe((cart: Cart) => this.cart$.next(cart));

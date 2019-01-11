@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { User } from 'oidc-client';
+import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from '../account.service';
 import { CartService } from '../../cart/cart.service';
@@ -51,7 +52,7 @@ export class LoginSuccessComponent implements OnInit {
           cartProducts: new Array<CartProduct>()
         } as Cart).subscribe(
           (cart: Cart) => {
-            this.cookieService.set('CartId', cart.id);
+            this.cookieService.set('CartId', cart.id, null, '/', `${environment.cookieDomain}`);
             this.cartService.cart$.next(cart);
           },
           (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
