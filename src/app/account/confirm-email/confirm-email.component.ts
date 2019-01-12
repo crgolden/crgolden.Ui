@@ -4,7 +4,6 @@ import { Params, ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ConfirmEmail } from '../models/confirm-email';
 import { AccountService } from '../account.service';
 
@@ -15,7 +14,6 @@ import { AccountService } from '../account.service';
 })
 export class ConfirmEmailComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   success: string;
 
   constructor(
@@ -28,7 +26,6 @@ export class ConfirmEmailComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Confirm Email');
-    this.blockUI.start();
     this.route.queryParams.pipe(concatMap(
       (params: Params) => {
         const model: ConfirmEmail = {
@@ -47,7 +44,6 @@ export class ConfirmEmailComponent implements OnInit {
           : undefined,
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
   }
 }

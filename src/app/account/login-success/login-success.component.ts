@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { User } from 'oidc-client';
 import { environment } from '../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
@@ -18,8 +17,6 @@ import { CartProduct } from '../../cart-products/cart-product';
 })
 export class LoginSuccessComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
-
   constructor(
     private readonly titleService: Title,
     private readonly router: Router,
@@ -31,18 +28,15 @@ export class LoginSuccessComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Login');
-    this.blockUI.start();
     this.accountService.signinRedirectCallback$().then((user: User) => {
       this.accountService.user$.next(user);
-      this.blockUI.start();
       const cartId = this.cookieService.get('CartId');
       if (cartId.length > 0) {
         this.cartService.details$(cartId).subscribe(
           (cart: Cart) => this.cartService.cart$.next(cart),
           (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
             disableTimeOut: true
-          })),
-          () => this.blockUI.stop());
+          })));
       } else {
         this.cartService.create$({
           id: undefined,
@@ -57,15 +51,14 @@ export class LoginSuccessComponent implements OnInit {
           },
           (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
             disableTimeOut: true
-          })),
-          () => this.blockUI.stop());
+          })));
       }
       const returnUrl = window.sessionStorage.getItem('returnUrl');
       if (returnUrl != null) {
         window.sessionStorage.removeItem('returnUrl');
-        this.router.navigate([returnUrl]).finally(() => this.blockUI.stop());
+        this.router.navigate([returnUrl]);
       } else {
-        this.router.navigate(['/home']).finally(() => this.blockUI.stop());
+        this.router.navigate(['/home']);
       }
     });
   }

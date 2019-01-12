@@ -3,6 +3,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { UrlSerializer } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BlockUIModule } from 'ng-block-ui';
+import { BlockUIHttpModule } from 'ng-block-ui/http';
+import { CookieService } from 'ngx-cookie-service';
+import { ToastrModule } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -41,9 +45,6 @@ import {
   faCcStripe
 } from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { BlockUIModule } from 'ng-block-ui';
-import { CookieService } from 'ngx-cookie-service';
-import { ToastrModule } from 'ngx-toastr';
 import { AppInterceptor } from './app.interceptor';
 import { AppLoggedIn } from './app.logged-in';
 import { AppNotLoggedIn } from './app.not-logged-in';
@@ -109,6 +110,9 @@ library.add(
     BrowserAnimationsModule,
     HttpClientModule,
     BlockUIModule.forRoot(),
+    BlockUIHttpModule.forRoot({
+      blockAllRequestsInProgress: true
+    }),
     ToastrModule.forRoot(),
     FontAwesomeModule,
     AppRoutingModule

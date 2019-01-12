@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   PagerSettings,
   SortSettings
@@ -27,9 +26,6 @@ export class EditComponent implements OnInit {
   state: DataSourceRequestState;
   pageable: PagerSettings;
   sortable: SortSettings;
-
-  @BlockUI() blockUI: NgBlockUI;
-  cart$ = (): Observable<Cart> => this.cartService.cart$;
 
   constructor(
     private readonly titleService: Title,
@@ -60,9 +56,10 @@ export class EditComponent implements OnInit {
     this.titleService.setTitle('Clarity: Cart');
   }
 
+  cart$ = (): Observable<Cart> => this.cartService.cart$;
+
   updateQuantity(quantity: number, cartProduct: CartProduct): void {
     cartProduct.quantity = quantity;
-    this.blockUI.start();
     this.cartProductsService.edit$(cartProduct)
       .pipe(exhaustMap(
         () => this.cartService.details$(cartProduct.model1Id)))
@@ -70,12 +67,10 @@ export class EditComponent implements OnInit {
         (cart: Cart) => this.cartService.cart$.next(cart),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
   }
 
   removeCartProduct(cartProduct: CartProduct): void {
-    this.blockUI.start();
     this.cartProductsService.delete$(cartProduct.model1Id, cartProduct.model2Id)
       .pipe(exhaustMap(
         () => this.cartService.details$(cartProduct.model1Id)))
@@ -83,8 +78,7 @@ export class EditComponent implements OnInit {
         (cart: Cart) => this.cartService.cart$.next(cart),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
   }
 
   showProceedToCheckout$(): Observable<boolean> {

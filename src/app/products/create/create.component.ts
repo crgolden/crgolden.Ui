@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account/account.service';
 import { ProductsService } from '../products.service';
@@ -20,7 +19,6 @@ import { ProductCategory } from '../../product-categories/product-category';
 })
 export class CreateComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   product: Product;
   primaryImageUri: string;
 
@@ -56,17 +54,14 @@ export class CreateComponent implements OnInit {
 
   create(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.productsService.create$(this.product).subscribe(
       (product: Product) => {
         window.sessionStorage.setItem('success', `${this.product.name} created`);
-        this.router.navigate([`/products/details/${product.id}`]).finally(
-          () => this.blockUI.stop());
+        this.router.navigate([`/products/details/${product.id}`]);
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   showCreate$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { SetPassword } from '../models/set-password';
 
@@ -14,7 +13,6 @@ import { SetPassword } from '../models/set-password';
 })
 export class SetPasswordComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   model: SetPassword;
 
   constructor(
@@ -36,17 +34,14 @@ export class SetPasswordComponent implements OnInit {
 
   setPassword(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.manageService.setPassword$(this.model).subscribe(
       (response: string) => {
         window.sessionStorage.setItem('success', response);
         this.manageService.hasPassword.next(true);
-        this.router.navigate(['/account/manage/change-password']).finally(
-          () => this.blockUI.stop());
+        this.router.navigate(['/account/manage/change-password']);
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

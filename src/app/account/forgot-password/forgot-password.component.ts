@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ForgotPassword } from '../models/forgot-password';
 import { AccountService } from '../account.service';
 
@@ -13,7 +12,6 @@ import { AccountService } from '../account.service';
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   success: string;
   model: ForgotPassword;
 
@@ -30,12 +28,10 @@ export class ForgotPasswordComponent implements OnInit {
 
   forgotPassword(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.accountService.forgotPassword$(this.model).subscribe(
       (response: string) => this.success = response,
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

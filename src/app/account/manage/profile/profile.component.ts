@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { User } from 'oidc-client';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account.service';
@@ -16,7 +15,6 @@ import { Address } from '../../../address/address';
 })
 export class ProfileComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   model: Profile;
 
   constructor(
@@ -40,7 +38,6 @@ export class ProfileComponent implements OnInit {
 
   profile(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.manageService.profile$(this.model).subscribe(
       (profile: Profile) => {
         this.toastr.success('Profile updated');
@@ -49,18 +46,15 @@ export class ProfileComponent implements OnInit {
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   sendVerificationEmail(): void {
-    this.blockUI.start();
     this.manageService.sendVerificationEmail$().subscribe(
       (response: string) => this.toastr.success(response),
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   private setProfile(user: User): void {

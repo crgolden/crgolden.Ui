@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -11,7 +10,6 @@ import { environment } from '../../../environments/environment';
 })
 export class PaymentStripeComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   private readonly stripe: stripe.Stripe;
   private card: stripe.elements.Element;
   error: stripe.Error;
@@ -26,10 +24,7 @@ export class PaymentStripeComponent implements OnInit {
 
   async validatePaymentInformation(form: NgForm): Promise<void> {
     if (!form.valid || this.error != null) { return; }
-    this.blockUI.start();
-    const { token, error } = await this.stripe
-      .createToken(this.card, this.tokenOptions())
-      .finally(() => this.blockUI.stop());
+    const { token, error } = await this.stripe.createToken(this.card, this.tokenOptions());
     if (error) {
       this.error = error;
     } else {

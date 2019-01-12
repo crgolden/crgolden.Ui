@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import { AccountService } from '../../account/account.service';
@@ -22,7 +21,6 @@ import { CartProduct } from '../../cart-products/cart-product';
 })
 export class DetailsComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   product: Product;
   primaryImageUri: string;
   images: Array<File>;
@@ -48,8 +46,8 @@ export class DetailsComponent implements OnInit {
         return {
           uri: productFile.uri,
           name: productFile.model2Name
-      } as File;
-    });
+        } as File;
+      });
     this.setPrimaryImageUri();
     const message = window.sessionStorage.getItem('success');
     if (message != null) {
@@ -99,17 +97,14 @@ export class DetailsComponent implements OnInit {
         this.cartId = cart.id;
         return cart;
       }));
-    this.blockUI.start();
     observable.subscribe(
       (cart: Cart) => this.cartService.cart$.next(cart),
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   removeFromCart(): void {
-    this.blockUI.start();
     this.cartProductsService.delete$(this.cartId, this.product.id)
       .pipe(exhaustMap(
         () => this.cartService.details$(this.cartId)))
@@ -117,8 +112,7 @@ export class DetailsComponent implements OnInit {
         (updatedCart: Cart) => this.cartService.cart$.next(updatedCart),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
   }
 
   showActive$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

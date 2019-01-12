@@ -12,9 +12,35 @@ import {
   faSignOut,
   faUser,
   faUserPlus,
+  faUserLock,
   faAt,
-  faEdit
+  faEdit,
+  faKey,
+  faLock,
+  faCheck,
+  faBox,
+  faList,
+  faInfoSquare,
+  faTrash,
+  faPlus,
+  faBan,
+  faShoppingCart,
+  faCartPlus,
+  faCashRegister,
+  faShoppingBag,
+  faDollarSign,
+  faExclamation
 } from '@fortawesome/pro-light-svg-icons';
+import {
+  faFacebook,
+  faCcVisa,
+  faCcAmex,
+  faCcMastercard,
+  faCcDiscover,
+  faCcJcb,
+  faCcDinersClub,
+  faCcStripe
+} from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
 library.add(
@@ -23,8 +49,32 @@ library.add(
   faSignOut,
   faUser,
   faUserPlus,
+  faUserLock,
   faAt,
-  faEdit
+  faEdit,
+  faKey,
+  faFacebook,
+  faLock,
+  faCheck,
+  faBox,
+  faList,
+  faInfoSquare,
+  faTrash,
+  faPlus,
+  faBan,
+  faShoppingCart,
+  faCartPlus,
+  faCashRegister,
+  faCcVisa,
+  faCcAmex,
+  faCcMastercard,
+  faCcDiscover,
+  faCcJcb,
+  faCcDinersClub,
+  faCcStripe,
+  faShoppingBag,
+  faDollarSign,
+  faExclamation
 );
 
 declare const require: any;

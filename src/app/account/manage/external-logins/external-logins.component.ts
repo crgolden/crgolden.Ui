@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ExternalLogins } from '../models/external-logins';
 import { ManageService } from '../manage.service';
 
@@ -13,7 +12,6 @@ import { ManageService } from '../manage.service';
 })
 export class ExternalLoginsComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   model: ExternalLogins;
 
   constructor(
@@ -38,7 +36,6 @@ export class ExternalLoginsComponent implements OnInit {
   }
 
   removeLogin(loginProvider: string, providerKey: string): void {
-    this.blockUI.start();
     this.manageService.removeLogin$(loginProvider, providerKey).subscribe(
       (externalLogins: ExternalLogins) => {
         this.model = externalLogins;
@@ -52,7 +49,6 @@ export class ExternalLoginsComponent implements OnInit {
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

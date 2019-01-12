@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { EnableAuthenticator } from '../models/enable-authenticator';
 
@@ -14,7 +13,6 @@ import { EnableAuthenticator } from '../models/enable-authenticator';
 })
 export class EnableAuthenticatorComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   model: EnableAuthenticator;
   message: string;
 
@@ -38,7 +36,6 @@ export class EnableAuthenticatorComponent implements OnInit {
 
   verifyAuthenticator(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.manageService.verifyAuthenticator$(this.model).subscribe(
       (response: EnableAuthenticator) => {
         if (response.recoveryCodes && response.recoveryCodes.length > 0) {
@@ -51,7 +48,6 @@ export class EnableAuthenticatorComponent implements OnInit {
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

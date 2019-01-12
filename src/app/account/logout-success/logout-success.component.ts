@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -10,8 +9,6 @@ import { AccountService } from '../account.service';
 })
 export class LogoutSuccessComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
-
   constructor(
     private readonly titleService: Title,
     private readonly accountService: AccountService) {
@@ -19,7 +16,6 @@ export class LogoutSuccessComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Logout');
-    this.blockUI.start();
-    this.accountService.signoutRedirectCallback$().finally(() => this.blockUI.stop());
+    this.accountService.signoutRedirectCallback$();
   }
 }

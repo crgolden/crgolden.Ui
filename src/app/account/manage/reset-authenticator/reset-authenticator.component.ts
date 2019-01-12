@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -11,8 +10,6 @@ import { ManageService } from '../manage.service';
   styleUrls: ['./reset-authenticator.component.scss']
 })
 export class ResetAuthenticatorComponent implements OnInit {
-
-  @BlockUI() blockUI: NgBlockUI;
 
   constructor(
     private readonly titleService: Title,
@@ -26,16 +23,13 @@ export class ResetAuthenticatorComponent implements OnInit {
   }
 
   resetAuthenticator(): void {
-    this.blockUI.start();
     this.manageService.resetAuthenticator$().subscribe(
       (response: string) => {
         window.sessionStorage.setItem('success', response);
-        this.router.navigate(['/manage/enable-authenticator']).finally(
-          () => this.blockUI.stop());
+        this.router.navigate(['/manage/enable-authenticator']);
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

@@ -5,7 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import {
   CellClickEvent,
   DataStateChangeEvent,
@@ -50,7 +49,6 @@ const createFormGroup = (orderProduct: OrderProduct): FormGroup => new FormGroup
 })
 export class EditComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   formGroup: FormGroup;
   order: Order;
   orderProducts: GridDataResult;
@@ -111,17 +109,14 @@ export class EditComponent implements OnInit {
     if (this.shippingAddress != null) {
       this.order.shippingAddress = JSON.stringify(this.shippingAddress);
     }
-    this.blockUI.start();
     this.ordersService.edit$(this.order).subscribe(
-      () => this.router.navigate([`/Orders/Details/${this.order.id}`]).finally(
-        () => {
-          window.sessionStorage.setItem('success', `${this.order.name} updated`);
-          this.blockUI.stop();
-        }),
+      () => {
+        window.sessionStorage.setItem('success', `${this.order.name} updated`);
+        this.router.navigate([`/Orders/Details/${this.order.id}`]);
+      },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {
@@ -178,7 +173,6 @@ export class EditComponent implements OnInit {
       this.closeEditor();
       return;
     }
-    this.blockUI.start();
     this.orderProductsService.edit$(this.formGroup.value)
       .pipe(concatMap(
         () => this.ordersService.details$(this.order.id)))
@@ -190,8 +184,7 @@ export class EditComponent implements OnInit {
         },
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
     this.closeEditor();
   }
 }

@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap, exhaustMap, filter, map, mergeMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { NgbModal, NgbModalRef, NgbModalOptions, } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'oidc-client';
 import { PaymentStripeComponent } from '../payment-stripe/payment-stripe.component';
@@ -26,7 +25,6 @@ import { Address } from '../../address/address';
 })
 export class CreateComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   private modalRef: NgbModalRef;
   payment: Payment;
   shippingAddress: Address;
@@ -126,7 +124,6 @@ export class CreateComponent implements OnInit {
               this.payment.amount = order.total;
               order.payments.push(this.payment);
             }
-            this.blockUI.start();
             return this.ordersService.create$(order).pipe(mergeMap(
               (newOrder: Order) => this.cartService.edit$({
                 id: cart.id,
@@ -153,12 +150,10 @@ export class CreateComponent implements OnInit {
           () => {
             this.cartService.cart$.next(results.cart);
             window.sessionStorage.setItem('success', `${results.order.name} created`);
-            this.blockUI.stop();
           }),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
   }
 
   needsPayment$(): Observable<boolean> {

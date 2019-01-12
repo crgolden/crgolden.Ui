@@ -3,7 +3,6 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { exhaustMap, filter, map } from 'rxjs/operators';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service';
 import {
@@ -33,7 +32,6 @@ import { CartProduct } from '../../cart-products/cart-product';
 })
 export class IndexComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   products: GridDataResult;
   state: DataSourceRequestState;
   pageable: PagerSettings;
@@ -130,7 +128,6 @@ export class IndexComponent implements OnInit {
         this.cartId = cart.id;
         return cart;
       }));
-    this.blockUI.start();
     observable.subscribe(
       (cart: Cart) => {
         this.cartService.cart$.next(cart);
@@ -138,12 +135,10 @@ export class IndexComponent implements OnInit {
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   removeFromCart(productId: string): void {
-    this.blockUI.start();
     this.cartProductsService.delete$(this.cartId, productId)
       .pipe(exhaustMap(
         () => this.cartService.details$(this.cartId)))
@@ -154,8 +149,7 @@ export class IndexComponent implements OnInit {
         },
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
-        })),
-        () => this.blockUI.stop());
+        })));
   }
 
   dataStateChange(state: DataSourceRequestState): void {

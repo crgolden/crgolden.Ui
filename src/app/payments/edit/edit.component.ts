@@ -4,7 +4,6 @@ import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AccountService } from '../../account/account.service';
 import { PaymentsService } from '../payments.service';
 import { Payment } from '../payment';
@@ -16,7 +15,6 @@ import { Payment } from '../payment';
 })
 export class EditComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   payment: Payment;
 
   constructor(
@@ -35,17 +33,14 @@ export class EditComponent implements OnInit {
 
   edit(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.paymentsService.edit$(this.payment).subscribe(
-      () => this.router.navigate([`/payments/details/${this.payment.id}`]).finally(
-        () => {
-          window.sessionStorage.setItem('success', `${this.payment.name} updated`);
-          this.blockUI.stop();
-        }),
+      () => {
+        window.sessionStorage.setItem('success', `${this.payment.name} updated`);
+        this.router.navigate([`/payments/details/${this.payment.id}`]);
+      },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   showSave$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

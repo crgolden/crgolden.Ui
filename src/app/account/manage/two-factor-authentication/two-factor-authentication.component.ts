@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { TwoFactorAuthentication } from '../models/two-factor-authentication';
 
@@ -13,7 +12,6 @@ import { TwoFactorAuthentication } from '../models/two-factor-authentication';
 })
 export class TwoFactorAuthenticationComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   model: TwoFactorAuthentication;
 
   constructor(
@@ -34,7 +32,6 @@ export class TwoFactorAuthenticationComponent implements OnInit {
   }
 
   forgetBrowser(): void {
-    this.blockUI.start();
     this.manageService.forgetTwoFactorClient$().subscribe(
       (response: string) => {
         this.toastr.success(response);
@@ -42,7 +39,6 @@ export class TwoFactorAuthenticationComponent implements OnInit {
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

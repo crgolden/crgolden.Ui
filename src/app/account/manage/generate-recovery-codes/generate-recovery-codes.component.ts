@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 import { GenerateRecoveryCodes } from '../models/generate-recovery-codes';
 
@@ -12,7 +11,6 @@ import { GenerateRecoveryCodes } from '../models/generate-recovery-codes';
 })
 export class GenerateRecoveryCodesComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   model: GenerateRecoveryCodes;
   message: string;
 
@@ -30,12 +28,10 @@ export class GenerateRecoveryCodesComponent implements OnInit {
   }
 
   generateRecoveryCodes(): void {
-    this.blockUI.start();
     this.manageService.generateRecoveryCodes$().subscribe(
       (response: GenerateRecoveryCodes) => this.model = response,
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

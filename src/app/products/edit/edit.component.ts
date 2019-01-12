@@ -4,7 +4,6 @@ import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ToastrService } from 'ngx-toastr';
 import { FileRestrictions, SuccessEvent } from '@progress/kendo-angular-upload';
 import { environment } from '../../../environments/environment';
@@ -22,7 +21,6 @@ import { ProductFile } from '../../product-files/product-file';
 })
 export class EditComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   product: Product;
   images: Array<File>;
   uploadSaveUrl: string;
@@ -51,22 +49,18 @@ export class EditComponent implements OnInit {
 
   edit(form: NgForm): void {
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.productsService.edit$(this.product).subscribe(
       () => {
         window.sessionStorage.setItem('success', `${this.product.name} updated`);
-        this.router.navigate([`/products/details/${this.product.id}`]).finally(
-          () => this.blockUI.stop());
+        this.router.navigate([`/products/details/${this.product.id}`]);
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 
   onSuccess(event: SuccessEvent): void {
     if (event.response.body instanceof Array && event.response.body.length > 0) {
-      this.blockUI.start();
       const productFiles = event.response.body.map((file: any) => {
         return {
           model1Id: this.product.id,
@@ -95,8 +89,7 @@ export class EditComponent implements OnInit {
           },
           (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
             disableTimeOut: true
-          })),
-          () => this.blockUI.stop());
+          })));
     }
   }
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -12,7 +11,6 @@ import { ManageService } from '../manage.service';
 })
 export class Disable2faComponent implements OnInit {
 
-  @BlockUI() blockUI: NgBlockUI;
   message: string;
 
   constructor(
@@ -27,7 +25,6 @@ export class Disable2faComponent implements OnInit {
   }
 
   disable2fa(): void {
-    this.blockUI.start();
     this.manageService.disable2fa$().subscribe(
       (response: string) => {
         this.message = response;
@@ -35,7 +32,6 @@ export class Disable2faComponent implements OnInit {
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
-      })),
-      () => this.blockUI.stop());
+      })));
   }
 }

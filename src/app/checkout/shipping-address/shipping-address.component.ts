@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { AddressService } from '../../address/address.service';
 import { Address } from '../../address/address';
 
@@ -12,13 +12,12 @@ import { Address } from '../../address/address';
 })
 export class ShippingAddressComponent {
 
-  @BlockUI() blockUI: NgBlockUI;
-  errors: Array<string>;
   shippingAddress: Address;
   unableToValidateShippingAddress: boolean;
 
   constructor(
     readonly modal: NgbActiveModal,
+    private readonly toastr: ToastrService,
     private readonly addressService: AddressService) {
   }
 
@@ -32,9 +31,7 @@ export class ShippingAddressComponent {
   }
 
   validateShippingAddress(form: NgForm): void {
-    this.errors = new Array<string>();
     if (!form.valid) { return; }
-    this.blockUI.start();
     this.addressService.validate(this.shippingAddress).subscribe(
       (isValid: boolean) => {
         if (isValid) {
@@ -44,8 +41,9 @@ export class ShippingAddressComponent {
           this.unableToValidateShippingAddress = true;
         }
       },
-      (errors: Array<string>) => this.errors = errors,
-      () => this.blockUI.stop());
+      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })));
   }
 
   private setFormatted(): void {

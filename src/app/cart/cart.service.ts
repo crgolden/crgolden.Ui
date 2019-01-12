@@ -37,7 +37,7 @@ export class CartService extends BaseModelService<Cart> {
             created: undefined,
             total: 0,
             cartProducts: new Array<CartProduct>()
-          } as Cart).pipe(map((cart) => {
+          } as Cart).pipe(map((cart: Cart) => {
             cookieService.set('CartId', cart.id, null, '/', `${environment.cookieDomain}`);
             return cart;
           }));
