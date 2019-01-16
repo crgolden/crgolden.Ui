@@ -29,10 +29,10 @@ export class DetailsComponent implements OnInit {
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly cartService: CartService,
     private readonly cartProductsService: CartProductsService,
-    private readonly toastr: ToastrService,
     cookieService: CookieService) {
     this.cartId = cookieService.get('CartId');
   }

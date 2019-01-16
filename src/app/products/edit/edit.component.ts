@@ -32,8 +32,8 @@ export class EditComponent implements OnInit {
 
   constructor(
     private readonly titleService: Title,
-    private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
     private readonly productsService: ProductsService,

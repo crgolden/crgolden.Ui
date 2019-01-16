@@ -4,16 +4,35 @@ import { QueryHelpers } from '../../helpers/query-helpers';
 
 export class EditPage {
 
-  fixture: ComponentFixture<EditComponent>;
+  inputs: Array<HTMLInputElement>;
+  textareas: Array<HTMLTextAreaElement>;
 
   constructor(fixture: ComponentFixture<EditComponent>) {
-    this.fixture = fixture;
+    this.inputs = QueryHelpers.queryAll<HTMLInputElement>(fixture, 'input');
+    this.textareas = QueryHelpers.queryAll<HTMLTextAreaElement>(fixture, 'textarea');
   }
 
-  get inputs() {
-    return QueryHelpers.queryAll<HTMLInputElement>(this.fixture, 'input');
-  }
-  get name() {
+  get name(): HTMLInputElement {
     return this.inputs[0];
+  }
+
+  get active(): HTMLInputElement {
+    return this.inputs[1];
+  }
+
+  get isDownload(): HTMLInputElement {
+    return this.inputs[2];
+  }
+
+  get description(): HTMLTextAreaElement {
+    return this.textareas[0];
+  }
+
+  get unitPrice(): HTMLInputElement {
+    return this.inputs[3];
+  }
+
+  get quantityPerUnit(): HTMLInputElement {
+    return this.inputs[4];
   }
 }

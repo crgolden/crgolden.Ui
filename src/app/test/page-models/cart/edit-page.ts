@@ -4,16 +4,9 @@ import { QueryHelpers } from '../../helpers/query-helpers';
 
 export class EditPage {
 
-  fixture: ComponentFixture<EditComponent>;
+  rows: Array<HTMLTableRowElement>;
 
   constructor(fixture: ComponentFixture<EditComponent>) {
-    this.fixture = fixture;
-  }
-
-  get inputs() {
-    return QueryHelpers.queryAll<HTMLInputElement>(this.fixture, 'input');
-  }
-  get name() {
-    return this.inputs[0];
+    this.rows = QueryHelpers.queryAll<HTMLTableRowElement>(fixture, 'tr');
   }
 }

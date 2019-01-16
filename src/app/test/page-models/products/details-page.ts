@@ -10,11 +10,19 @@ export class DetailsPage {
     this.fixture = fixture;
   }
 
-  get name() {
-    let name = QueryHelpers.query<HTMLDivElement>(this.fixture, '#name').textContent;
-    if (typeof name === 'string') {
-      name = name.trim();
-    }
-    return name;
+  get name(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#name');
+  }
+
+  get description(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#description');
+  }
+
+  get unitPrice(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#unitPrice');
+  }
+
+  get quantityPerUnit(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#quantityPerUnit');
   }
 }

@@ -4,16 +4,33 @@ import { QueryHelpers } from '../../helpers/query-helpers';
 
 export class EditPage {
 
-  fixture: ComponentFixture<EditComponent>;
+  inputs: Array<HTMLInputElement>;
 
   constructor(fixture: ComponentFixture<EditComponent>) {
-    this.fixture = fixture;
+    this.inputs = QueryHelpers.queryAll<HTMLInputElement>(fixture, 'input');
   }
 
-  get inputs() {
-    return QueryHelpers.queryAll<HTMLInputElement>(this.fixture, 'input');
-  }
-  get name() {
+  get name(): HTMLInputElement {
     return this.inputs[0];
+  }
+
+  get streetAddress(): HTMLInputElement {
+    return this.inputs[1];
+  }
+
+  get city(): HTMLInputElement {
+    return this.inputs[2];
+  }
+
+  get region(): HTMLInputElement {
+    return this.inputs[3];
+  }
+
+  get postalCode(): HTMLInputElement {
+    return this.inputs[4];
+  }
+
+  get country(): HTMLInputElement {
+    return this.inputs[5];
   }
 }

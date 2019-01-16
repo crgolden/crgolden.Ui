@@ -25,9 +25,9 @@ export class CreateComponent implements OnInit {
   constructor(
     private readonly titleService: Title,
     private readonly router: Router,
+    private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly productsService: ProductsService,
-    private readonly toastr: ToastrService) {
+    private readonly productsService: ProductsService) {
     this.product = {
       id: undefined,
       name: undefined,

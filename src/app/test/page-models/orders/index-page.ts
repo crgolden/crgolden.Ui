@@ -4,13 +4,9 @@ import { QueryHelpers } from '../../helpers/query-helpers';
 
 export class IndexPage {
 
-  fixture: ComponentFixture<IndexComponent>;
+  rows: Array<HTMLTableRowElement>;
 
   constructor(fixture: ComponentFixture<IndexComponent>) {
-    this.fixture = fixture;
-  }
-
-  get rows() {
-    return QueryHelpers.queryAll<HTMLElement>(this.fixture, 'tr');
+    this.rows = QueryHelpers.queryAll<HTMLTableRowElement>(fixture, 'tr');
   }
 }

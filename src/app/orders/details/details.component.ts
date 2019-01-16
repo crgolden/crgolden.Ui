@@ -97,6 +97,9 @@ export class DetailsComponent implements OnInit {
   showEdit$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
 
   private setFormattedShippingAddress(): void {
+    if (this.order.shippingAddress == null) {
+      return;
+    }
     const address = JSON.parse(this.order.shippingAddress) as Address;
     if (address.formatted == null) {
       return;

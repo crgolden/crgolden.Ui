@@ -10,11 +10,15 @@ export class DetailsPage {
     this.fixture = fixture;
   }
 
-  get name() {
-    let name = QueryHelpers.query<HTMLDivElement>(this.fixture, '#name').textContent;
-    if (typeof name === 'string') {
-      name = name.trim();
-    }
-    return name;
+  get name(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#name');
+  }
+
+  get amount(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#amount');
+  }
+
+  get description(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#description');
   }
 }

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { concatMap, exhaustMap, filter, map, mergeMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { NgbModal, NgbModalRef, NgbModalOptions, } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'oidc-client';
 import { PaymentStripeComponent } from '../payment-stripe/payment-stripe.component';
 import { ShippingAddressComponent } from '../shipping-address/shipping-address.component';
@@ -91,9 +91,10 @@ export class CreateComponent implements OnInit {
   create(): void {
     this.cartService.cart$
       .pipe(
-        filter((cart: Cart) => cart.cartProducts.length > 0 &&
+        filter((cart: Cart) =>
+          cart.cartProducts.length > 0 &&
           (cart.total === 0 || this.validPayment) &&
-          (!cart.cartProducts.some(x => !x.isDownload) || this.validShippingAddress)),
+          (cart.cartProducts.every((cartProduct: CartProduct) => cartProduct.isDownload) || this.validShippingAddress)),
         exhaustMap(
           (cart: Cart) => {
             const order: Order = {
@@ -102,16 +103,16 @@ export class CreateComponent implements OnInit {
               created: undefined,
               userId: cart.userId,
               total: cart.total,
-              orderProducts: cart.cartProducts.map(x => {
+              orderProducts: cart.cartProducts.map((cartProduct: CartProduct) => {
                 return {
                   model1Id: undefined,
                   model1Name: 'Order',
-                  model2Id: x.model2Id,
-                  model2Name: x.model2Name,
-                  price: x.price,
-                  quantity: x.quantity,
+                  model2Id: cartProduct.model2Id,
+                  model2Name: cartProduct.model2Name,
+                  price: cartProduct.price,
+                  quantity: cartProduct.quantity,
                   created: undefined,
-                  isDownload: x.isDownload,
+                  isDownload: cartProduct.isDownload,
                 } as OrderProduct;
               }),
               payments: new Array<Payment>()

@@ -1,48 +1,33 @@
 import { } from 'jasmine';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
 import { IndexPage } from '../../test/page-models/orders/index-page';
 import { IndexComponent } from './index.component';
+import { AccountService } from '../../account/account.service';
 import { Order } from '../order';
 import { OrderProduct } from '../../order-products/order-product';
 import { OrdersService } from '../../orders/orders.service';
 import { Payment } from '../../payments/payment';
 
-const order1: Order = {
-  id: '1',
-  userId: '1',
-  name: 'Order 1',
-  total: 1,
-  created: new Date(),
-  orderProducts: new Array<OrderProduct>(),
-  payments: new Array<Payment>()
-};
-const order2: Order = {
-  id: '2',
-  userId: '1',
-  name: 'Order 2',
-  total: 1,
-  created: new Date(),
-  orderProducts: new Array<OrderProduct>(),
-  payments: new Array<Payment>()
-};
-const orders = [order1, order2];
-const ordersGridDataResult = {
-  data: orders,
-  total: orders.length
-} as GridDataResult;
+let order1: Order;
+let order2: Order;
+let orders: Array<Order>;
+let ordersGridDataResult: GridDataResult;
 let component: IndexComponent;
 let fixture: ComponentFixture<IndexComponent>;
 let page: IndexPage;
-let routerLinks: RouterLinkDirectiveStub[];
-let routerLinkDebugElements: DebugElement[];
+let routerLinks: Array<RouterLinkDirectiveStub>;
+let routerLinkDebugElements: Array<DebugElement>;
+let accountService: AccountService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -50,7 +35,76 @@ class RouterOutletStubComponent { }
 
 describe('IndexComponent', () => {
 
-  beforeEach(() => setup());
+  beforeEach(() => {
+    order1 = {
+      id: '1',
+      userId: '1',
+      name: 'Order 1',
+      total: 1,
+      created: new Date(),
+      orderProducts: new Array<OrderProduct>(),
+      payments: new Array<Payment>()
+    };
+    order2 = {
+      id: '2',
+      userId: '1',
+      name: 'Order 2',
+      total: 1,
+      created: new Date(),
+      orderProducts: new Array<OrderProduct>(),
+      payments: new Array<Payment>()
+    };
+    orders = new Array<Order>(order1, order2);
+    ordersGridDataResult = {
+      data: orders,
+      total: orders.length
+    };
+    TestBed.configureTestingModule({
+      declarations: [
+        IndexComponent,
+        RouterLinkDirectiveStub,
+        RouterOutletStubComponent
+      ],
+      providers: [
+        {
+          provide: Title,
+          useValue: jasmine.createSpyObj('Title', ['setTitle'])
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: { 'orders': ordersGridDataResult }
+            }
+          }
+        },
+        {
+          provide: ToastrService,
+          useValue: jasmine.createSpyObj('ToastrService', ['error'])
+        },
+        {
+          provide: AccountService,
+          useValue: jasmine.createSpyObj('AccountService', ['user$, userHasRole$'])
+        },
+        {
+          provide: OrdersService,
+          useValue: jasmine.createSpyObj('ordersService', { index: of() })
+        }
+      ],
+      imports: [
+        GridModule,
+        FontAwesomeModule
+      ]
+    });
+    fixture = TestBed.createComponent(IndexComponent);
+    component = fixture.componentInstance;
+    accountService = fixture.debugElement.injector.get(AccountService);
+    accountService.userHasRole$ = (): Observable<boolean> => of(true);
+    fixture.detectChanges();
+    page = new IndexPage(fixture);
+    routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
+    routerLinks = routerLinkDebugElements.map(de => de.injector.get(RouterLinkDirectiveStub));
+  });
 
   it('should have the orders', () => {
     expect(component.orders.total).toBe(orders.length);
@@ -68,13 +122,12 @@ describe('IndexComponent', () => {
   });
 
   it('can get RouterLinks from template', () => {
-    expect(routerLinks.length).toBe(3, 'should have 3 routerLinks');
-    expect(routerLinks[0].linkParams).toBe(`/Orders/Details/${order1.id}`);
-    expect(routerLinks[1].linkParams).toBe(`/Orders/Details/${order2.id}`);
-    expect(routerLinks[2].linkParams).toBe('/Orders/Create');
+    expect(routerLinks.length).toBe(2, 'should have 2 routerLinks');
+    expect(routerLinks[0].linkParams).toBe(`/orders/details/${order1.id}`);
+    expect(routerLinks[1].linkParams).toBe(`/orders/details/${order2.id}`);
   });
 
-  it('can click Orders/Details/:orders[0].Id link in template', () => {
+  it('can click `orders/details/:orders[0].id` link in template', () => {
     const order1LinkDebugElement = routerLinkDebugElements[0];
     const order1Link = routerLinks[0];
 
@@ -83,10 +136,10 @@ describe('IndexComponent', () => {
     order1LinkDebugElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
-    expect(order1Link.navigatedTo).toBe(`/Orders/Details/${order1.id}`);
+    expect(order1Link.navigatedTo).toBe(`/orders/details/${order1.id}`);
   });
 
-  it('can click Orders/Details/:orders[1].Id link in template', () => {
+  it('can click `orders/details/:orders[1].id` link in template', () => {
     const order2LinkDebugElement = routerLinkDebugElements[1];
     const order2Link = routerLinks[1];
 
@@ -95,53 +148,19 @@ describe('IndexComponent', () => {
     order2LinkDebugElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
-    expect(order2Link.navigatedTo).toBe(`/Orders/Details/${order2.id}`);
+    expect(order2Link.navigatedTo).toBe(`/orders/details/${order2.id}`);
   });
 
-  it('can click Orders/Create link in template', () => {
-    const createLinkDebugElement = routerLinkDebugElements[2];
-    const createLink = routerLinks[2];
-
-    expect(createLink.navigatedTo).toBeNull('should not have navigated yet');
-
-    createLinkDebugElement.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    expect(createLink.navigatedTo).toBe('/Orders/Create');
+  afterEach(() => {
+    order1 = undefined;
+    order2 = undefined;
+    orders = undefined;
+    ordersGridDataResult = undefined;
+    component = undefined;
+    page = undefined;
+    routerLinkDebugElements = undefined;
+    routerLinks = undefined;
+    fixture.destroy();
   });
 
 });
-
-function setup() {
-  TestBed.configureTestingModule({
-    declarations: [
-      IndexComponent,
-      RouterLinkDirectiveStub,
-      RouterOutletStubComponent
-    ],
-    providers: [
-      {
-        provide: ActivatedRoute,
-        useValue: {
-          snapshot: {
-            data: { 'orders': ordersGridDataResult }
-          }
-        }
-      },
-      {
-        provide: OrdersService,
-        useValue: jasmine.createSpyObj('ordersService', { index: of() })
-      }
-    ],
-    imports: [
-      GridModule,
-      FontAwesomeModule
-    ]
-  });
-  fixture = TestBed.createComponent(IndexComponent);
-  component = fixture.componentInstance;
-  page = new IndexPage(fixture);
-  fixture.detectChanges();
-  routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
-  routerLinks = routerLinkDebugElements.map(de => de.injector.get(RouterLinkDirectiveStub));
-}

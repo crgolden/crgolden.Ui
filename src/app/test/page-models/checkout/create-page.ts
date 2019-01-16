@@ -12,7 +12,4 @@ export class CreatePage {
   get inputs() {
     return QueryHelpers.queryAll<HTMLInputElement>(this.fixture, 'input');
   }
-  get name() {
-    return this.inputs[0];
-  }
 }
