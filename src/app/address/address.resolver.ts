@@ -26,6 +26,13 @@ export class AddressResolver implements Resolve<boolean> {
           return of(false);
         }
         const address = JSON.parse(user.profile['address']) as Address;
+        if (address.street_address.length === 0 ||
+          address.locality.length === 0 ||
+          address.region.length === 0 ||
+          address.postal_code.length === 0 ||
+          address.country.length === 0) {
+          return of(false);
+        }
         return this.addressService.validate(address);
       }),
       take(1));

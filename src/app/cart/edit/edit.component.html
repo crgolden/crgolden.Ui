@@ -38,9 +38,17 @@
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
         </h4>
       </ng-template>
+      <ng-template kendoGridNoRecordsTemplate>
+        The cart is empty. <a routerLink="/products">Click here to browse products.</a>
+      </ng-template>
       <kendo-grid-column field="model2Name" title="Name">
         <ng-template kendoGridCellTemplate let-cartProduct>
-          <a routerLink="/products/details/{{cartProduct.model2Id}}">
+          <ng-container *ngIf="cartProduct.thumbnailUri">
+            <img src="{{cartProduct.thumbnailUri}}"
+                 alt="{{cartProduct.model2Name}}"
+                 height="25"
+                 width="25" />&nbsp;
+          </ng-container><a routerLink="/products/details/{{cartProduct.model2Id}}">
             {{cartProduct.model2Name}}
           </a>
         </ng-template>

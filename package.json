@@ -68,6 +68,8 @@
     "karma-jasmine-html-reporter": "latest",
     "karma-junit-reporter": "latest",
     "karma-typescript": "latest",
+    "karma-typescript-angular2-transform": "latest",
+    "karma-typescript-es6-transform": "latest",
     "ng-block-ui": "latest",
     "ngx-cookie-service": "latest",
     "ngx-toastr": "latest",
@@ -78,7 +80,7 @@
     "rxjs-compat": "latest",
     "ts-node": "latest",
     "tslint": "latest",
-    "typescript": "3.1.6",
+    "typescript": "latest",
     "zone.js": "latest"
   }
 }

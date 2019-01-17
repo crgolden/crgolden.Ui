@@ -5,4 +5,5 @@ export class OrderProduct extends BaseRelationship {
   price: number;
   extendedPrice: number;
   isDownload: boolean;
+  thumbnailUri?: string;
 }

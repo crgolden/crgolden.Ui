@@ -33,11 +33,17 @@ export class ProfileComponent implements OnInit {
       window.sessionStorage.removeItem('success');
       setTimeout(() => this.toastr.success(message));
     }
-
   }
 
   profile(form: NgForm): void {
     if (!form.valid) { return; }
+    if (this.model.address.street_address.length === 0 &&
+      this.model.address.locality.length === 0 &&
+      this.model.address.region.length === 0 &&
+      this.model.address.postal_code.length === 0 &&
+      this.model.address.country.length === 0) {
+      delete this.model.address;
+    }
     this.manageService.profile$(this.model).subscribe(
       (profile: Profile) => {
         this.toastr.success('Profile updated');

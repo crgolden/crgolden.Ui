@@ -59,8 +59,8 @@
         <kendo-grid-column>
           <ng-template kendoGridCellTemplate let-product>
             <div class="product" (click)="gotToDetails(product.id)">
-              <ng-container *ngIf="getThumbnailUrl(product) as thumbnailUrl">
-                <img src="{{thumbnailUrl}}"
+              <ng-container *ngIf="thumbnailUri(product) as thumbnailUri">
+                <img src="{{thumbnailUri}}"
                      alt="{{product.name}}" />
               </ng-container>
               <h3>{{product.name}}</h3>
@@ -85,12 +85,12 @@
                   (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column field="name" title="Name">
           <ng-template kendoGridCellTemplate let-product>
-            <ng-container *ngIf="getThumbnailUrl(product) as thumbnailUrl">
-              <img src="{{thumbnailUrl}}"
+            <ng-container *ngIf="thumbnailUri(product) as thumbnailUri">
+              <img src="{{thumbnailUri}}"
                    alt="{{product.name}}"
                    height="25"
-                   width="25" />
-            </ng-container> <a routerLink="/products/details/{{product.id}}"
+                   width="25" />&nbsp;
+            </ng-container><a routerLink="/products/details/{{product.id}}"
                title="Product Details">
               {{product.name}}
             </a>

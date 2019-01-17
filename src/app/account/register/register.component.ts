@@ -35,6 +35,13 @@ export class RegisterComponent implements OnInit {
 
   register(form: NgForm) {
     if (!form.valid) { return; }
+    if (this.model.address.street_address.length === 0 &&
+      this.model.address.locality.length === 0 &&
+      this.model.address.region.length === 0 &&
+      this.model.address.postal_code.length === 0 &&
+      this.model.address.country.length === 0) {
+      delete this.model.address;
+    }
     this.accountService.register$(this.model).subscribe(
       (response: string) => this.success = response,
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {

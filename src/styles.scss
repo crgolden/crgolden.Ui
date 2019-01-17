@@ -9,6 +9,22 @@
   opacity: 1;
 }
 
+/* Backdrop */
+div.block-ui-wrapper {
+  background-color: transparent;
+}
+
+/* Spinner */
+div.block-ui-wrapper .loader {
+  border-color: transparent; /* Circle color */
+  border-left-color: transparent; /* Spinning section in circle color */
+}
+
+/* Message */
+div.block-ui-spinner .message {
+  color: transparent; /* Loading text color */
+}
+
 .loading {
   font-size: 64px;
   position: fixed;

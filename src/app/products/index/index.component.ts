@@ -161,33 +161,7 @@ export class IndexComponent implements OnInit {
       })));
   }
 
-  getThumbnailUrl(product: Product): string {
-    if (!product.productFiles || product.productFiles.length === 0) {
-      return undefined;
-    }
-    const primaryImages = product.productFiles.filter(productFile =>
-      productFile.contentType.includes('image') &&
-      !productFile.uri.includes('thumbnail'));
-    let primaryImageFile = primaryImages.find(productFile => productFile.primary);
-    if (primaryImageFile == null && primaryImages.length > 0) {
-      primaryImageFile = primaryImages[0];
-    }
-    if (primaryImageFile == null) {
-      return undefined;
-    }
-    const start = primaryImageFile.uri.lastIndexOf('/') + 1;
-    let end = primaryImageFile.uri.indexOf('?');
-    const fileName = primaryImageFile.uri.substring(start, end);
-    end = fileName.indexOf('.');
-    const id = fileName.substring(0, end);
-    const thumbnailImageFile = product.productFiles.find(productFile =>
-      productFile.uri.includes(id) &&
-      productFile.uri.includes('thumbnails'));
-    if (thumbnailImageFile == null) {
-      return undefined;
-    }
-    return thumbnailImageFile.uri;
-  }
+  thumbnailUri = (product: Product): string => Product.thumbnailUri(product.productFiles);
 
   gotToDetails(productId: string): void {
     this.router.navigate([`/products/details/${productId}`]);

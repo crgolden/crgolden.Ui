@@ -68,8 +68,13 @@
       <kendo-grid-column field="model2Name"
                          title="Name">
         <ng-template kendoGridCellTemplate let-orderProduct>
-          <a routerLink="/products/details/{{orderProduct.model2Id}}"
-             title="Product Details">
+          <ng-container *ngIf="orderProduct.thumbnailUri">
+            <img src="{{orderProduct.thumbnailUri}}"
+                 alt="{{orderProduct.model2Name}}"
+                 height="25"
+                 width="25" />&nbsp;
+          </ng-container><a routerLink="/products/details/{{orderProduct.model2Id}}"
+                            title="Product Details">
             {{orderProduct.model2Name}}
           </a>
         </ng-template>
