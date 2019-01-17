@@ -26,10 +26,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const url = '/Account/Logout';
     this.router.events
-      .pipe(
-        filter((event: Event) => event instanceof NavigationEnd && !event.url.includes(url)))
+      .pipe(filter(
+        (event: Event) => event instanceof NavigationEnd && !event.url.includes('/account/logout')))
       .subscribe(
         (navigationEnd: NavigationEnd) => this.returnUrl = navigationEnd.url);
   }
