@@ -21,11 +21,11 @@
                 [filterable]="true"
                 [filter]="state.filter"
                 (dataStateChange)="dataStateChange($event)">
-      <kendo-grid-column field="name" title="Name">
+      <kendo-grid-column field="number" title="Number">
         <ng-template kendoGridCellTemplate let-order>
           <a routerLink="/orders/details/{{order.id}}"
              title="Order Details">
-            {{order.name}}
+            {{order.number}}
           </a>
         </ng-template>
       </kendo-grid-column>

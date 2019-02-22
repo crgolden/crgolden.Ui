@@ -24,7 +24,7 @@ export class ProductResolver implements Resolve<Product> {
     const id = route.paramMap.get('id');
     return combineLatest(
       this.accountService.userHasRole$('Admin'),
-      this.productsService.details$(id)).pipe(
+      this.productsService.details$(new Array<string>(id))).pipe(
       take(1),
       map((latest: [boolean, Product]) => {
         const [isAdmin, product] = latest;

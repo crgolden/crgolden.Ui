@@ -1,7 +1,12 @@
-import { BaseRelationship } from '../base/base-relationship';
+import { Entity } from '@clarity/entities';
 
-export class ProductFile extends BaseRelationship {
+export class ProductFile extends Entity {
+  name: string;
   uri: string;
-  primary: boolean;
   contentType: string;
+  primary: boolean;
+  productId: string;
+  productName: string;
+  fileId: string;
+  fileName: string;
 }

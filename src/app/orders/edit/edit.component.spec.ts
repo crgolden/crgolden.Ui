@@ -48,12 +48,12 @@ describe('EditComponent', () => {
     order = {
       id: '1',
       userId: '1',
-      name: 'Order 1',
+      number: 1,
       total: 1,
       created: new Date(),
       orderProducts: new Array<OrderProduct>(),
       payments: new Array<Payment>(),
-      shippingAddress: JSON.stringify(shippingAddress)
+      shippingAddress: shippingAddress
     };
     TestBed.configureTestingModule({
       imports: [
@@ -116,12 +116,16 @@ describe('EditComponent', () => {
 
   it('should have the order', () => {
     expect(component.order.id).toBe(order.id);
-    expect(component.order.name).toBe(order.name);
+    expect(component.order.number).toBe(order.number);
   });
 
   it('should display order details', () => {
     return fixture.whenStable().then(() => {
-      expect(page.name.value).toBe(component.order.name);
+      expect(page.streetAddress.value).toBe(component.order.shippingAddress.street_address);
+      expect(page.city.value).toBe(component.order.shippingAddress.locality);
+      expect(page.region.value).toBe(component.order.shippingAddress.region);
+      expect(page.postalCode.value).toBe(component.order.shippingAddress.postal_code);
+      expect(page.country.value).toBe(component.order.shippingAddress.country);
     });
   });
 

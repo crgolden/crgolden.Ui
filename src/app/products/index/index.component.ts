@@ -91,33 +91,30 @@ export class IndexComponent implements OnInit {
     return this.cartService.cart$.pipe(map(
       (cart: Cart) => cart != null &&
         cart.cartProducts != null &&
-        cart.cartProducts.some(x => x.model2Id === productId)));
+        cart.cartProducts.some(x => x.productId === productId)));
   }
 
   addToCart(product: Product): void {
     const observable = this.cartId.length > 0
       ? this.cartProductsService.create$({
-        model1Id: this.cartId,
-        model1Name: 'Cart',
-        model2Id: product.id,
-        model2Name: product.name,
+        cartId: this.cartId,
+        productId: product.id,
+        productName: product.name,
         created: undefined,
         quantity: 1,
         price: product.unitPrice,
         extendedPrice: undefined,
         isDownload: product.isDownload
       } as CartProduct).pipe(exhaustMap(
-        () => this.cartService.details$(this.cartId)))
+        () => this.cartService.details$(new Array<string>(this.cartId))))
       : this.cartService.create$({
         id: undefined,
-        name: 'Cart',
         created: undefined,
         total: product.unitPrice,
         cartProducts: new Array<CartProduct>({
-          model1Id: undefined,
-          model1Name: 'Cart',
-          model2Id: product.id,
-          model2Name: product.name,
+          cartId: undefined,
+          productId: product.id,
+          productName: product.name,
           quantity: 1,
           price: product.unitPrice,
           extendedPrice: undefined,
@@ -139,9 +136,9 @@ export class IndexComponent implements OnInit {
   }
 
   removeFromCart(productId: string): void {
-    this.cartProductsService.delete$(this.cartId, productId)
+    this.cartProductsService.delete$(new Array<string>(this.cartId, productId))
       .pipe(exhaustMap(
-        () => this.cartService.details$(this.cartId)))
+        () => this.cartService.details$(new Array<string>(this.cartId))))
       .subscribe(
         (cart: Cart) => {
           this.cartService.cart$.next(cart);

@@ -14,18 +14,13 @@
           (ngSubmit)="edit(f)">
       <div class="row">
         <div class="col">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name"
-                   name="name"
-                   type="text"
-                   required
-                   class="form-control"
-                   placeholder="Name"
-                   #name="ngModel"
-                   [(ngModel)]="order.name">
-          </div>
           <dl>
+            <dt>
+              Number
+            </dt>
+            <dd>
+              {{order.number}}
+            </dd>
             <dt>
               Total
             </dt>
@@ -134,19 +129,18 @@
                 </ng-container>
               </h4>
             </ng-template>
-            <kendo-grid-column field="model1Id" [hidden]="true"></kendo-grid-column>
-            <kendo-grid-column field="model1Name" [hidden]="true"></kendo-grid-column>
-            <kendo-grid-column field="model2Id" [hidden]="true"></kendo-grid-column>
-            <kendo-grid-column field="model2Name" title="Name" [editable]="false">
+            <kendo-grid-column field="orderId" [hidden]="true"></kendo-grid-column>
+            <kendo-grid-column field="productId" [hidden]="true"></kendo-grid-column>
+            <kendo-grid-column field="productName" title="Name" [editable]="false">
               <ng-template kendoGridCellTemplate let-orderProduct>
                 <ng-container *ngIf="orderProduct.thumbnailUri">
                   <img src="{{orderProduct.thumbnailUri}}"
-                       alt="{{orderProduct.model2Name}}"
+                       alt="{{orderProduct.productName}}"
                        height="25"
                        width="25" />&nbsp;
-                </ng-container><a routerLink="/products/details/{{orderProduct.model2Id}}"
+                </ng-container><a routerLink="/products/details/{{orderProduct.productId}}"
                                   title="Product Details">
-                  {{orderProduct.model2Name}}
+                  {{orderProduct.productName}}
                 </a>
               </ng-template>
             </kendo-grid-column>

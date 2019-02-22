@@ -10,27 +10,23 @@ export class EditPage {
     this.inputs = QueryHelpers.queryAll<HTMLInputElement>(fixture, 'input');
   }
 
-  get name(): HTMLInputElement {
+  get streetAddress(): HTMLInputElement {
     return this.inputs[0];
   }
 
-  get streetAddress(): HTMLInputElement {
+  get city(): HTMLInputElement {
     return this.inputs[1];
   }
 
-  get city(): HTMLInputElement {
+  get region(): HTMLInputElement {
     return this.inputs[2];
   }
 
-  get region(): HTMLInputElement {
+  get postalCode(): HTMLInputElement {
     return this.inputs[3];
   }
 
-  get postalCode(): HTMLInputElement {
-    return this.inputs[4];
-  }
-
   get country(): HTMLInputElement {
-    return this.inputs[5];
+    return this.inputs[4];
   }
 }

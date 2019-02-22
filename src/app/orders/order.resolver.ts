@@ -25,7 +25,7 @@ export class OrderResolver implements Resolve<Order> {
     const id = route.paramMap.get('id');
     return combineLatest(
       this.accountService.user$,
-      this.ordersService.details$(id),
+      this.ordersService.details$(new Array<string>(id)),
       this.accountService.userHasRole$('Admin')).pipe(
         map((latest: [User, Order, boolean]) => {
           const [user, order, isAdmin] = latest;

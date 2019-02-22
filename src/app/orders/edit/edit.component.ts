@@ -27,10 +27,9 @@ import { OrderProduct } from '../../order-products/order-product';
 import { Address } from '../../address/address';
 
 const createFormGroup = (orderProduct: OrderProduct): FormGroup => new FormGroup({
-  'model1Id': new FormControl(orderProduct.model1Id),
-  'model1Name': new FormControl(orderProduct.model1Name),
-  'model2Id': new FormControl(orderProduct.model2Id),
-  'model2Name': new FormControl(orderProduct.model2Name),
+  'orderId': new FormControl(orderProduct.orderId),
+  'productId': new FormControl(orderProduct.productId),
+  'productName': new FormControl(orderProduct.productName),
   'price': new FormControl(orderProduct.price, Validators.compose([
     Validators.required,
     Validators.min(0)
@@ -73,7 +72,7 @@ export class EditComponent implements OnInit {
       skip: 0,
       take: 5,
       sort: new Array<SortDescriptor>({
-        field: 'model2Name',
+        field: 'productName',
         dir: 'asc'
       }),
       aggregates: new Array<AggregateDescriptor>()
@@ -94,9 +93,8 @@ export class EditComponent implements OnInit {
     this.titleService.setTitle('Clarity: Edit Order');
     this.order = this.route.snapshot.data['order'] as Order;
     this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
-    const address = JSON.parse(this.order.shippingAddress) as Address;
-    if (address != null && address.formatted != null) {
-      this.shippingAddress = address;
+    if (this.order.shippingAddress != null && this.order.shippingAddress.formatted != null) {
+      this.shippingAddress = this.order.shippingAddress;
     }
   }
 
@@ -107,11 +105,11 @@ export class EditComponent implements OnInit {
   edit(form: NgForm): void {
     if (!form.valid) { return; }
     if (this.shippingAddress != null) {
-      this.order.shippingAddress = JSON.stringify(this.shippingAddress);
+      this.order.shippingAddress = this.shippingAddress;
     }
     this.ordersService.edit$(this.order).subscribe(
       () => {
-        window.sessionStorage.setItem('success', `${this.order.name} updated`);
+        window.sessionStorage.setItem('success', `Order #${this.order.number} updated`);
         this.router.navigate([`/Orders/Details/${this.order.id}`]);
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
@@ -175,12 +173,12 @@ export class EditComponent implements OnInit {
     }
     this.orderProductsService.edit$(this.formGroup.value)
       .pipe(concatMap(
-        () => this.ordersService.details$(this.order.id)))
+        () => this.ordersService.details$(new Array<string>(this.order.id))))
       .subscribe(
         (order: Order) => {
           this.order = order;
           this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
-          window.sessionStorage.setItem('success', `${this.order.name} updated`);
+          window.sessionStorage.setItem('success', `Order #${this.order.number} updated`);
         },
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true

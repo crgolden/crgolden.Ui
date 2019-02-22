@@ -1,22 +1,25 @@
-import { BaseModel } from '../base/base-model';
+import { Entity } from '@clarity/entities';
 import { CartProduct } from '../cart-products/cart-product';
 import { OrderProduct } from '../order-products/order-product';
 import { ProductFile } from '../product-files/product-file';
 import { ProductCategory } from '../product-categories/product-category';
 
-export class Product extends BaseModel {
+export class Product extends Entity {
+  id: string;
   active: boolean;
   description?: string;
-  unitPrice: number;
-  quantityPerUnit: string;
-  unitsInStock?: number;
-  unitsOnOrder?: number;
-  reorderLevel?: number;
   isDownload: boolean;
+  name: string;
+  quantityPerUnit: string;
+  reorderLevel?: number;
+  sku?: string;
+  unitsInStock?: number;
+  unitPrice: number;
+  unitsOnOrder?: number;
   cartProducts: Array<CartProduct>;
   orderProducts: Array<OrderProduct>;
-  productFiles: Array<ProductFile>;
   productCategories: Array<ProductCategory>;
+  productFiles: Array<ProductFile>;
 
   static thumbnailUri(productFiles: Array<ProductFile>): string {
     if (!productFiles || productFiles.length === 0) {

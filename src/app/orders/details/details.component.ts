@@ -45,7 +45,7 @@ export class DetailsComponent implements OnInit {
       skip: 0,
       take: 5,
       sort: new Array<SortDescriptor>({
-        field: 'model2Name',
+        field: 'productName',
         dir: 'asc'
       }),
       aggregates: new Array<AggregateDescriptor>()
@@ -97,14 +97,11 @@ export class DetailsComponent implements OnInit {
   showEdit$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
 
   private setFormattedShippingAddress(): void {
-    if (this.order.shippingAddress == null) {
+    if (this.order.shippingAddress == null ||
+      this.order.shippingAddress.formatted == null) {
       return;
     }
-    const address = JSON.parse(this.order.shippingAddress) as Address;
-    if (address.formatted == null) {
-      return;
-    }
-    this.shippingAddress = address;
-    this.formattedShippingAddress = address.formatted.replace(/\r\n/g, '<br />');
+    this.shippingAddress = this.order.shippingAddress;
+    this.formattedShippingAddress = this.order.shippingAddress.formatted.replace(/\r\n/g, '<br />');
   }
 }

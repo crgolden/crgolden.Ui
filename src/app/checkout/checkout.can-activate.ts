@@ -28,7 +28,7 @@ export class CheckoutCanActivate implements CanActivate {
       this.router.navigate(['/cart']);
       return of(false);
     }
-    return this.cartService.details$(this.cartId)
+    return this.cartService.details$(new Array<string>(this.cartId))
       .pipe(map((cart: Cart) => {
         if (cart != null && cart.cartProducts != null && cart.cartProducts.length > 0) {
           return true;

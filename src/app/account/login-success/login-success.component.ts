@@ -32,7 +32,7 @@ export class LoginSuccessComponent implements OnInit {
       this.accountService.user$.next(user);
       const cartId = this.cookieService.get('CartId');
       if (cartId.length > 0) {
-        this.cartService.details$(cartId).subscribe(
+        this.cartService.details$(new Array<string>(cartId)).subscribe(
           (cart: Cart) => this.cartService.cart$.next(cart),
           (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
             disableTimeOut: true

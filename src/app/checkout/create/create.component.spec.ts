@@ -103,10 +103,9 @@ describe('CreateComponent', () => {
       }
     } as User;
     cartProduct1 = {
-      model1Id: '1',
-      model1Name: 'Cart 1',
-      model2Id: '1',
-      model2Name: 'Product 1',
+      cartId: '1',
+      productId: '1',
+      productName: 'Product 1',
       price: 1.00,
       extendedPrice: 1.00,
       isDownload: false,
@@ -114,10 +113,9 @@ describe('CreateComponent', () => {
       quantity: 1
     };
     cartProduct2 = {
-      model1Id: '1',
-      model1Name: 'Cart 1',
-      model2Id: '2',
-      model2Name: 'Product 2',
+      cartId: '1',
+      productId: '2',
+      productName: 'Product 2',
       price: 2.00,
       extendedPrice: 2.00,
       isDownload: true,
@@ -127,7 +125,6 @@ describe('CreateComponent', () => {
     cartProducts = new Array<CartProduct>(cartProduct1, cartProduct2);
     cart = {
       id: '1',
-      name: 'Cart',
       userId: user.profile['sub'],
       created: new Date(),
       total: cartProducts
@@ -206,23 +203,23 @@ describe('CreateComponent', () => {
 function setOrder(): void {
   order = {
     id: undefined,
-    name: 'Order',
+    number: undefined,
     created: undefined,
     userId: cart.userId,
     total: cart.total,
     orderProducts: cartProducts.map((cartProduct: CartProduct) => {
       return {
-        model1Id: undefined,
-        model1Name: 'Order',
-        model2Id: cartProduct.model2Id,
-        model2Name: cartProduct.model2Name,
+        orderId: undefined,
+        productId: cartProduct.productId,
+        productName: cartProduct.productName,
         price: cartProduct.price,
+        extendedPrice: undefined,
         quantity: cartProduct.quantity,
         created: undefined,
         isDownload: cartProduct.isDownload
       } as OrderProduct;
     }),
     payments: new Array<Payment>(),
-    shippingAddress: JSON.stringify(address)
+    shippingAddress: address
   }
 }

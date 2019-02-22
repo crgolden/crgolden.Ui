@@ -63,10 +63,10 @@ export class EditComponent implements OnInit {
     if (event.response.body instanceof Array && event.response.body.length > 0) {
       const productFiles = event.response.body.map((file: any) => {
         return {
-          model1Id: this.product.id,
-          model1Name: this.product.name,
-          model2Id: file['id'],
-          model2Name: file['name'],
+          productId: this.product.id,
+          productName: this.product.name,
+          fileId: file['id'],
+          fileName: file['name'],
           created: new Date(file['created']),
           uri: file['uri'],
           contentType: file['contentType']
@@ -81,7 +81,7 @@ export class EditComponent implements OnInit {
         }
       }
       this.productFilesService.createRange$(productFiles).pipe(concatMap(
-        () => this.productsService.details$(this.product.id))).subscribe(
+        () => this.productsService.details$(new Array<string>(this.product.id)))).subscribe(
           (product: Product) => {
             this.product = product;
             this.setPrimaryImageUri();

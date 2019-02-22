@@ -44,12 +44,12 @@ describe('DetailsComponent', () => {
     order = {
       id: '1',
       userId: '1',
-      name: 'Order 1',
+      number: 1,
       total: 1,
       created: new Date(),
       orderProducts: new Array<OrderProduct>(),
       payments: new Array<Payment>(),
-      shippingAddress: JSON.stringify(shippingAddress)
+      shippingAddress: shippingAddress
     };
     TestBed.configureTestingModule({
       declarations: [
@@ -106,7 +106,7 @@ describe('DetailsComponent', () => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     const created = component.order.created.toLocaleDateString('en-US', options);
 
-    expect(page.name.textContent.trim()).toBe(component.order.name);
+    expect(parseInt(page.number.textContent.trim())).toBe(component.order.number);
     expect(page.total.textContent.trim()).toBe(`$${component.order.total.toFixed(2)}`);
     expect(page.created.textContent.trim()).toBe(created);
   });

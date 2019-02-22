@@ -99,17 +99,17 @@ export class CreateComponent implements OnInit {
           (cart: Cart) => {
             const order: Order = {
               id: undefined,
-              name: 'Order',
+              number: undefined,
               created: undefined,
               userId: cart.userId,
               total: cart.total,
               orderProducts: cart.cartProducts.map((cartProduct: CartProduct) => {
                 return {
-                  model1Id: undefined,
-                  model1Name: 'Order',
-                  model2Id: cartProduct.model2Id,
-                  model2Name: cartProduct.model2Name,
+                  orderId: undefined,
+                  productId: cartProduct.productId,
+                  productName: cartProduct.productName,
                   price: cartProduct.price,
+                  extendedPrice: undefined,
                   quantity: cartProduct.quantity,
                   created: undefined,
                   isDownload: cartProduct.isDownload,
@@ -118,7 +118,7 @@ export class CreateComponent implements OnInit {
               payments: new Array<Payment>()
             };
             if (this.shippingAddress != null) {
-              order.shippingAddress = JSON.stringify(this.shippingAddress);
+              order.shippingAddress = this.shippingAddress;
             }
             if (this.payment != null) {
               this.payment.userId = order.userId;
@@ -128,14 +128,13 @@ export class CreateComponent implements OnInit {
             return this.ordersService.create$(order).pipe(mergeMap(
               (newOrder: Order) => this.cartService.edit$({
                 id: cart.id,
-                name: cart.name,
                 created: cart.created,
                 updated: cart.updated,
                 userId: cart.userId,
                 total: cart.total,
                 cartProducts: new Array<CartProduct>()
               } as Cart).pipe(concatMap(
-                () => this.cartService.details$(cart.id).pipe(map(
+                () => this.cartService.details$(new Array<string>(cart.id)).pipe(map(
                   (updatedCart: Cart) => {
                     return {
                       order: newOrder,
@@ -150,7 +149,7 @@ export class CreateComponent implements OnInit {
         }) => this.router.navigate([`/orders/details/${results.order.id}`]).finally(
           () => {
             this.cartService.cart$.next(results.cart);
-            window.sessionStorage.setItem('success', `${results.order.name} created`);
+            window.sessionStorage.setItem('success', `Order #${results.order.number} created`);
           }),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
@@ -196,7 +195,7 @@ export class CreateComponent implements OnInit {
     if (tokenId != null) {
       this.payment = {
         id: undefined,
-        name: 'Payment',
+        orderId: undefined,
         userId: undefined,
         amount: undefined,
         currency: 'USD',

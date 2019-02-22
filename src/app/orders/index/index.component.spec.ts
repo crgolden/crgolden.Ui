@@ -39,7 +39,7 @@ describe('IndexComponent', () => {
     order1 = {
       id: '1',
       userId: '1',
-      name: 'Order 1',
+      number: 1,
       total: 1,
       created: new Date(),
       orderProducts: new Array<OrderProduct>(),
@@ -48,7 +48,7 @@ describe('IndexComponent', () => {
     order2 = {
       id: '2',
       userId: '1',
-      name: 'Order 2',
+      number: 2,
       total: 1,
       created: new Date(),
       orderProducts: new Array<OrderProduct>(),
@@ -111,14 +111,14 @@ describe('IndexComponent', () => {
   });
 
   it('should display orders', () => {
-    const cleanText = (text: string): string => text == null ? '' : text.trim();
+    const cleanText = (text: string): number => text == null ? undefined : parseInt(text.trim());
     const orderRow1 = page.rows[2];
     const orderRow2 = page.rows[3];
-    const orderRow1Name = cleanText(orderRow1.children[0].textContent);
-    const orderRow2Name = cleanText(orderRow2.children[0].textContent);
+    const orderRow1Number = cleanText(orderRow1.children[0].textContent);
+    const orderRow2Number = cleanText(orderRow2.children[0].textContent);
 
-    expect(orderRow1Name).toBe(order1.name);
-    expect(orderRow2Name).toBe(order2.name);
+    expect(orderRow1Number).toBe(order1.number);
+    expect(orderRow2Number).toBe(order2.number);
   });
 
   it('can get RouterLinks from template', () => {

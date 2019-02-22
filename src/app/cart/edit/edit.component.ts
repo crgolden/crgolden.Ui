@@ -62,7 +62,7 @@ export class EditComponent implements OnInit {
     cartProduct.quantity = quantity;
     this.cartProductsService.edit$(cartProduct)
       .pipe(exhaustMap(
-        () => this.cartService.details$(cartProduct.model1Id)))
+        () => this.cartService.details$(new Array<string>(cartProduct.cartId))))
       .subscribe(
         (cart: Cart) => this.cartService.cart$.next(cart),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
@@ -71,9 +71,9 @@ export class EditComponent implements OnInit {
   }
 
   removeCartProduct(cartProduct: CartProduct): void {
-    this.cartProductsService.delete$(cartProduct.model1Id, cartProduct.model2Id)
+    this.cartProductsService.delete$(new Array<string>(cartProduct.cartId, cartProduct.productId))
       .pipe(exhaustMap(
-        () => this.cartService.details$(cartProduct.model1Id)))
+        () => this.cartService.details$(new Array<string>(cartProduct.cartId))))
       .subscribe(
         (cart: Cart) => this.cartService.cart$.next(cart),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {

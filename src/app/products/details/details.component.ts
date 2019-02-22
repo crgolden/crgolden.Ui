@@ -45,7 +45,7 @@ export class DetailsComponent implements OnInit {
       productFile.uri.includes('images/')).map((productFile: ProductFile) => {
         return {
           uri: productFile.uri,
-          name: productFile.model2Name
+          name: productFile.fileName
         } as File;
       });
     this.setPrimaryImageUri();
@@ -60,33 +60,30 @@ export class DetailsComponent implements OnInit {
     return this.cartService.cart$.pipe(map(
       (cart: Cart) => cart != null &&
         cart.cartProducts != null &&
-        cart.cartProducts.some(cartProduct => cartProduct.model2Id === this.product.id)));
+        cart.cartProducts.some(cartProduct => cartProduct.productId === this.product.id)));
   }
 
   addToCart(): void {
     const observable = this.cartId.length > 0
       ? this.cartProductsService.create$({
-        model1Id: this.cartId,
-        model1Name: 'Cart',
-        model2Id: this.product.id,
-        model2Name: this.product.name,
+        cartId: this.cartId,
+        productId: this.product.id,
+        productName: this.product.name,
         created: undefined,
         quantity: 1,
         price: this.product.unitPrice,
         extendedPrice: undefined,
         isDownload: this.product.isDownload
       } as CartProduct).pipe(exhaustMap(
-        () => this.cartService.details$(this.cartId)))
+        () => this.cartService.details$(new Array<string>(this.cartId))))
       : this.cartService.create$({
         id: undefined,
-        name: 'Cart',
         created: undefined,
         total: this.product.unitPrice,
         cartProducts: new Array<CartProduct>({
-          model1Id: undefined,
-          model1Name: 'Cart',
-          model2Id: this.product.id,
-          model2Name: this.product.name,
+          cartId: undefined,
+          productId: this.product.id,
+          productName: this.product.name,
           quantity: 1,
           price: this.product.unitPrice,
           extendedPrice: undefined,
@@ -105,9 +102,9 @@ export class DetailsComponent implements OnInit {
   }
 
   removeFromCart(): void {
-    this.cartProductsService.delete$(this.cartId, this.product.id)
+    this.cartProductsService.delete$(new Array<string>(this.cartId, this.product.id))
       .pipe(exhaustMap(
-        () => this.cartService.details$(this.cartId)))
+        () => this.cartService.details$(new Array<string>(this.cartId))))
       .subscribe(
         (updatedCart: Cart) => this.cartService.cart$.next(updatedCart),
         (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {

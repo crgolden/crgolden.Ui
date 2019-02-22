@@ -36,10 +36,9 @@ describe('EditComponent', () => {
 
   beforeEach(() => {
     cartProduct1 = {
-      model1Id: '1',
-      model1Name: 'Cart',
-      model2Id: '1',
-      model2Name: 'Product 1',
+      cartId: '1',
+      productId: '1',
+      productName: 'Product 1',
       created: new Date(),
       isDownload: false,
       extendedPrice: 1.00,
@@ -47,10 +46,9 @@ describe('EditComponent', () => {
       price: 0.50
     };
     cartProduct2 = {
-      model1Id: '1',
-      model1Name: 'Cart',
-      model2Id: '2',
-      model2Name: 'Product 2',
+      cartId: '1',
+      productId: '2',
+      productName: 'Product 2',
       created: new Date(),
       isDownload: false,
       extendedPrice: 2.00,
@@ -60,7 +58,6 @@ describe('EditComponent', () => {
     cartProducts = new Array<CartProduct>(cartProduct1, cartProduct2);
     cart = {
       id: '1',
-      name: 'Cart',
       created: new Date(),
       cartProducts: cartProducts,
       total: cartProducts
@@ -115,8 +112,8 @@ describe('EditComponent', () => {
   it('can get RouterLinks from template', () => {
     expect(routerLinks.length).toBe(3, 'should have 3 routerLinks');
     expect(routerLinks[0].linkParams).toBe('/checkout');
-    expect(routerLinks[1].linkParams).toBe(`/products/details/${cartProduct1.model2Id}`);
-    expect(routerLinks[2].linkParams).toBe(`/products/details/${cartProduct2.model2Id}`);
+    expect(routerLinks[1].linkParams).toBe(`/products/details/${cartProduct1.productId}`);
+    expect(routerLinks[2].linkParams).toBe(`/products/details/${cartProduct2.productId}`);
   });
 
   it('can click `checkout` link in template', () => {
@@ -140,7 +137,7 @@ describe('EditComponent', () => {
     product1LinkDebugElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
-    expect(product1Link.navigatedTo).toBe(`/products/details/${cartProduct1.model2Id}`);
+    expect(product1Link.navigatedTo).toBe(`/products/details/${cartProduct1.productId}`);
   });
 
   it('can click `products/details/:cartProduct2.model2Id` link in template', () => {
@@ -152,7 +149,7 @@ describe('EditComponent', () => {
     product2LinkDebugElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
-    expect(product2Link.navigatedTo).toBe(`/products/details/${cartProduct2.model2Id}`);
+    expect(product2Link.navigatedTo).toBe(`/products/details/${cartProduct2.productId}`);
   });
 
   afterEach(() => {

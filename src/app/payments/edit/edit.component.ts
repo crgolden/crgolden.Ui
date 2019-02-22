@@ -35,7 +35,7 @@ export class EditComponent implements OnInit {
     if (!form.valid) { return; }
     this.paymentsService.edit$(this.payment).subscribe(
       () => {
-        window.sessionStorage.setItem('success', `${this.payment.name} updated`);
+        window.sessionStorage.setItem('success', `Payment #${this.payment.chargeId} updated`);
         this.router.navigate([`/payments/details/${this.payment.id}`]);
       },
       (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {

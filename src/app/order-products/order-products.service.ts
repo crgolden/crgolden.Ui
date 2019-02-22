@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Service } from '@clarity/services';
+import { environment } from '../../environments/environment';
 import { OrderProduct } from './order-product';
-import { BaseRelationshipService } from '../base/base-relationship.service';
 
 @Injectable()
-export class OrderProductsService extends BaseRelationshipService<OrderProduct> {
+export class OrderProductsService extends Service<OrderProduct, string> {
 
   constructor(protected readonly http: HttpClient) {
-    super('order-products', http);
+    super('order-products', environment.apiUrl, http);
   }
 }

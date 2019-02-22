@@ -31,7 +31,7 @@ describe('DetailsComponent', () => {
   beforeEach(() => {
     payment = {
       id: '1',
-      name: 'Payment 1',
+      chargeId: 'Payment 1',
       userId: '1',
       description: 'Description 1',
       currency: 'usd',
@@ -92,7 +92,7 @@ describe('DetailsComponent', () => {
   });
 
   it('should display payment details', () => {
-    expect(page.name.textContent.trim()).toBe(component.payment.name);
+    expect(page.chargeId.textContent.trim()).toBe(component.payment.chargeId);
     expect(page.amount.textContent.trim()).toBe(`$${component.payment.amount.toFixed(2)}`);
     expect(page.description.textContent.trim()).toBe(component.payment.description);
   });

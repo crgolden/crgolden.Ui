@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Event, NavigationEnd, Router } from '@angular/router';
+import { Service } from '@clarity/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../environments/environment';
-import { BaseModelService } from '../base/base-model.service';
 import { Cart } from './cart';
 import { CartProduct } from '../cart-products/cart-product';
 
 @Injectable()
-export class CartService extends BaseModelService<Cart> {
+export class CartService extends Service<Cart, string> {
 
   cart$: BehaviorSubject<Cart>;
 
@@ -18,7 +18,7 @@ export class CartService extends BaseModelService<Cart> {
     protected readonly http: HttpClient,
     router: Router,
     cookieService: CookieService) {
-    super('carts', http);
+    super('carts', environment.apiUrl, http);
     this.cart$ = new BehaviorSubject<Cart>(undefined);
     combineLatest(router.events, this.cart$).pipe(
       filter((latest: [Event, Cart]) => {
@@ -30,7 +30,7 @@ export class CartService extends BaseModelService<Cart> {
       switchMap(() => {
         const cartId = cookieService.get('CartId');
         return cartId.length > 0
-          ? this.details$(cartId)
+          ? this.details$(new Array<string>(cartId))
           : this.create$({
             id: undefined,
             name: 'Cart',

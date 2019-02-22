@@ -17,7 +17,7 @@ export class PaymentResolver implements Resolve<Payment> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Payment> {
     const id = route.paramMap.get('id');
-    return this.paymentsService.details$(id).pipe(
+    return this.paymentsService.details$(new Array<string>(id)).pipe(
       take(1),
       map((payment: Payment) => payment)
     );

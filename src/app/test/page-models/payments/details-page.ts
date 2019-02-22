@@ -10,8 +10,8 @@ export class DetailsPage {
     this.fixture = fixture;
   }
 
-  get name(): HTMLElement {
-    return QueryHelpers.query<HTMLElement>(this.fixture, '#name');
+  get chargeId(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#chargeId');
   }
 
   get amount(): HTMLElement {

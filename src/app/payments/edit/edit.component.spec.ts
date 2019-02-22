@@ -37,20 +37,28 @@ describe('EditComponent', () => {
   beforeEach(() => {
     order = {
       id: '1',
-      name: 'Order 1',
-      total: 1,
       userId: '1',
+      number: 1,
+      total: 1,
       created: new Date(),
       orderProducts: new Array<OrderProduct>(),
-      payments: new Array<Payment>()
+      payments: new Array<Payment>(),
+      shippingAddress: {
+        street_address: 'Street',
+        locality: 'City',
+        region: 'Region',
+        postal_code: '12345',
+        country: 'Country'
+      }
     };
     payment = {
       id: '1',
-      name: 'Payment 1',
+      chargeId: 'Payment 1',
+      customerCode: 'Code 1',
       userId: order.userId,
       description: 'Description 1',
       currency: 'usd',
-      tokenId: 'tokenId 1',
+      tokenId: 'TokenId 1',
       amount: 1.00,
       created: new Date(),
       orderId: order.id
@@ -116,7 +124,7 @@ describe('EditComponent', () => {
 
   it('should display payment details', () => {
     return fixture.whenStable().then(() => {
-      expect(page.name.textContent.trim()).toBe(component.payment.name);
+      expect(page.chargeId.textContent.trim()).toBe(component.payment.chargeId);
       expect(page.amount.textContent.trim()).toBe(`$${component.payment.amount.toFixed(2)}`);
       expect(page.description.value).toBe(component.payment.description);
     });

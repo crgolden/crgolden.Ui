@@ -13,10 +13,10 @@
       <div class="col">
         <dl>
           <dt>
-            Name
+            Number
           </dt>
-          <dd id="name">
-            {{order.name}}
+          <dd id="number">
+            {{order.number}}
           </dd>
           <dt>
             Total
@@ -65,17 +65,17 @@
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
         </h4>
       </ng-template>
-      <kendo-grid-column field="model2Name"
+      <kendo-grid-column field="productName"
                          title="Name">
         <ng-template kendoGridCellTemplate let-orderProduct>
           <ng-container *ngIf="orderProduct.thumbnailUri">
             <img src="{{orderProduct.thumbnailUri}}"
-                 alt="{{orderProduct.model2Name}}"
+                 alt="{{orderProduct.productName}}"
                  height="25"
                  width="25" />&nbsp;
-          </ng-container><a routerLink="/products/details/{{orderProduct.model2Id}}"
+          </ng-container><a routerLink="/products/details/{{orderProduct.productId}}"
                             title="Product Details">
-            {{orderProduct.model2Name}}
+            {{orderProduct.productName}}
           </a>
         </ng-template>
       </kendo-grid-column>

@@ -12,8 +12,8 @@ export class EditPage {
     this.textareas = QueryHelpers.queryAll<HTMLTextAreaElement>(fixture, 'textarea');
   }
 
-  get name(): HTMLElement {
-    return QueryHelpers.query<HTMLElement>(this.fixture, '#name');
+  get chargeId(): HTMLElement {
+    return QueryHelpers.query<HTMLElement>(this.fixture, '#chargeId');
   }
 
   get amount(): HTMLElement {
