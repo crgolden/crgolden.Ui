@@ -41,8 +41,6 @@ describe('EditComponent', () => {
       number: 1,
       total: 1,
       created: new Date(),
-      orderProducts: new Array<OrderProduct>(),
-      payments: new Array<Payment>(),
       shippingAddress: {
         street_address: 'Street',
         locality: 'City',

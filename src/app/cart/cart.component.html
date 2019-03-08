@@ -1,0 +1,97 @@
+<div class="row">
+  <div class="col">
+    <hr />
+    <div class="row">
+      <div class="col">
+        <h2>
+          <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart
+        </h2>
+      </div>
+      <div class="col">
+        <ng-container *ngIf="(quantity$() | async) > 0">
+          <h2 class="float-md-right">
+            <a routerLink="/checkout">
+              <fa-icon [icon]="['fal', 'cash-register']"></fa-icon> Proceed to Checkout
+            </a>
+          </h2>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col">
+  <hr />
+  <kendo-grid [data]="cartProductsData"
+              [pageSize]="cartProductsState.take"
+              [skip]="cartProductsState.skip"
+              [sort]="cartProductsState.sort"
+              [sortable]="cartProductsSortable"
+              [pageable]="cartProductsPageable"
+              [scrollable]="'none'"
+              [groupable]="false"
+              [group]="cartProductsState.group"
+              [filterable]="false"
+              [filter]="cartProductsState.filter"
+              (dataStateChange)="dataStateChange($event)">
+    <ng-template kendoGridToolbarTemplate>
+      <div class="row">
+        <div class="col">
+          <h4>
+            <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
+          </h4>
+        </div>
+        <div class="col">
+          <h4 class="float-md-right">
+            Total: {{total$() | async | currency}}
+          </h4>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template kendoGridNoRecordsTemplate>
+      The cart is empty. <a routerLink="/products">Click here to browse products.</a>
+    </ng-template>
+    <kendo-grid-column field="product.name" title="Name">
+      <ng-template kendoGridCellTemplate let-cartProduct>
+        <ng-container *ngIf="cartProduct.productImageThumbnailUri">
+          <img src="{{cartProduct.productImageThumbnailUri}}"
+               alt="{{cartProduct.productName}}"
+               height="25"
+               width="25" />&nbsp;
+        </ng-container><a routerLink="/products/details/{{cartProduct.productId}}">
+          {{cartProduct.productName}}
+        </a>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="product.UnitPrice" title="Price">
+      <ng-template kendoGridCellTemplate let-cartProduct>
+        {{cartProduct.productUnitPrice | currency}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="quantity" title="Quantity">
+      <ng-template kendoGridCellTemplate let-cartProduct>
+        <kendo-numerictextbox [value]="cartProduct.quantity"
+                              [min]="1"
+                              [title]="Quantity"
+                              [decimals]="0"
+                              [format]="'n0'"
+                              [autoCorrect]="true"
+                              (valueChange)="updateQuantity($event, cartProduct)">
+        </kendo-numerictextbox>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column>
+      <ng-template kendoGridCellTemplate let-cartProduct>
+        {{(cartProduct.quantity * cartProduct.productUnitPrice) | currency}}
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column>
+      <ng-template kendoGridCellTemplate let-cartProduct>
+        <a class="text-danger"
+           (click)="removeCartProduct(cartProduct)">
+          <fa-icon [icon]="['fal', 'trash']"></fa-icon>
+        </a>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</div>
+<hr />

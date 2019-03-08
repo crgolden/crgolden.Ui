@@ -22,7 +22,7 @@
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
         </a>
       </li>
-      <li *ngIf="user$() | async" class="nav-item">
+      <li *ngIf="userIsLoggedIn$() | async" class="nav-item">
         <a class="nav-link"
            routerLink="/orders"
            routerLinkActive="active"
@@ -36,10 +36,10 @@
            routerLinkActive="active"
            title="Cart">
           <fa-icon [icon]="['fal', 'shopping-cart']"></fa-icon> Cart
-          (<ng-container *ngIf="cart$() | async as cart; then isCart; else isNotCart"></ng-container>)
+          (<ng-container *ngIf="cartProducts$() | async as cartProducts; then isCart; else isNotCart"></ng-container>)
         </a>
       </li>
-      <ng-container *ngIf="user$() | async; then loggedIn; else loggedOut"></ng-container>
+      <ng-container *ngIf="userIsLoggedIn$() | async; then loggedIn; else loggedOut"></ng-container>
     </ul>
     <ng-template #loggedIn>
       <li class="nav-item">
@@ -77,7 +77,7 @@
         </a>
       </li>
     </ng-template>
-    <ng-template #isCart let-cart>{{cart.cartProducts.length}}</ng-template>
+    <ng-template #isCart let-cartProducts>{{cartProducts.length}}</ng-template>
     <ng-template #isNotCart>0</ng-template>
   </div>
 </nav>

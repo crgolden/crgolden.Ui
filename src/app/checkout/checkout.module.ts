@@ -6,10 +6,9 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CheckoutRoutingModule } from './checkout-routing.module';
 import { SafePipe } from '../app.safe-pipe';
-import { CreateComponent } from './create/create.component';
-import { PaymentStripeComponent } from './payment-stripe/payment-stripe.component';
+import { CheckoutComponent } from './checkout.component';
+import { PaymentComponent } from './payment/payment.component';
 import { ShippingAddressComponent } from './shipping-address/shipping-address.component';
-import { PaymentsService } from '../payments/payments.service';
 
 @NgModule({
   imports: [
@@ -22,16 +21,13 @@ import { PaymentsService } from '../payments/payments.service';
     CheckoutRoutingModule
   ],
   declarations: [
-    CreateComponent,
-    PaymentStripeComponent,
+    CheckoutComponent,
+    PaymentComponent,
     ShippingAddressComponent,
     SafePipe
   ],
-  providers: [
-    PaymentsService
-  ],
   entryComponents: [
-    PaymentStripeComponent,
+    PaymentComponent,
     ShippingAddressComponent
   ]
 })

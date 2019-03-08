@@ -48,11 +48,7 @@ describe('EditComponent', () => {
       unitPrice: 1.00,
       quantityPerUnit: undefined,
       isDownload: false,
-      created: new Date(),
-      cartProducts: new Array<CartProduct>(),
-      orderProducts: new Array<OrderProduct>(),
-      productFiles: new Array<ProductFile>(),
-      productCategories: new Array<ProductCategory>()
+      created: new Date()
     };
     TestBed.configureTestingModule({
       imports: [

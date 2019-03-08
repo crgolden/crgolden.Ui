@@ -32,18 +32,20 @@ export class ShippingAddressComponent {
 
   validateShippingAddress(form: NgForm): void {
     if (!form.valid) { return; }
-    this.addressService.validate(this.shippingAddress).subscribe(
-      (isValid: boolean) => {
-        if (isValid) {
-          this.setFormatted();
-          this.modal.close(this.shippingAddress);
-        } else {
-          this.unableToValidateShippingAddress = true;
-        }
-      },
-      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
-        disableTimeOut: true
-      })));
+    this.addressService
+      .validate(this.shippingAddress)
+      .subscribe(
+        isValid => {
+          if (isValid) {
+            this.setFormatted();
+            this.modal.close(this.shippingAddress);
+          } else {
+            this.unableToValidateShippingAddress = true;
+          }
+        },
+        (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
+          disableTimeOut: true
+        })));
   }
 
   private setFormatted(): void {

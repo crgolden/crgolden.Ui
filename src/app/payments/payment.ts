@@ -1,8 +1,8 @@
-import { Entity } from '@clarity/entities';
+import { Model } from '@clarity/models';
 
-export class Payment extends Entity {
-  id: string;
-  userId: string;
+export class Payment extends Model {
+  id?: string;
+  userId?: string;
   chargeId?: string;
   orderId: string;
   amount: number;
@@ -10,4 +10,16 @@ export class Payment extends Entity {
   description?: string;
   tokenId: string;
   customerCode?: string;
+
+  constructor(
+    orderId: string,
+    amount: number,
+    currency: string,
+    tokenId: string) {
+    super();
+    this.orderId = orderId;
+    this.amount = amount;
+    this.currency = currency;
+    this.tokenId = tokenId;
+  }
 }

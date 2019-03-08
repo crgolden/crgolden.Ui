@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { OrdersResolver } from './orders.resolver';
-import { OrderResolver } from './order.resolver';
+import { IndexResolver } from './index/index.resolver';
+import { DetailsResolver } from './details/details.resolver';
+import { EditResolver } from './edit/edit.resolver';
 import { IndexComponent } from './index/index.component';
 import { DetailsComponent } from './details/details.component';
 import { EditComponent } from './edit/edit.component';
@@ -14,37 +15,29 @@ const routes: Routes = [
     component: IndexComponent,
     canActivate: [AppLoggedIn],
     resolve: {
-      orders: OrdersResolver,
+      orders: IndexResolver,
     }
   },
   {
-    path: 'details/:id',
+    path: 'details/:orderId',
     component: DetailsComponent,
     canActivate: [AppLoggedIn],
     resolve: {
-      order: OrderResolver,
+      details: DetailsResolver
     }
   },
   {
-    path: 'edit/:id',
+    path: 'edit/:orderId',
     component: EditComponent,
     canActivate: [AppIsAdmin],
     resolve: {
-      order: OrderResolver,
+      edit: EditResolver
     }
   }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  exports: [
-    RouterModule
-  ],
-  providers: [
-    OrdersResolver,
-    OrderResolver
-  ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 export class OrdersRoutingModule { }

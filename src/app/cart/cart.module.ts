@@ -6,7 +6,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CartRoutingModule } from './cart-routing.module';
-import { EditComponent } from './edit/edit.component';
+import { CartComponent } from './cart.component';
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { EditComponent } from './edit/edit.component';
     CartRoutingModule
   ],
   declarations: [
-    EditComponent
+    CartComponent
   ]
 })
 export class CartModule {

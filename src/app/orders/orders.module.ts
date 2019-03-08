@@ -6,8 +6,6 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { OrdersRoutingModule } from './orders-routing.module';
-import { OrdersService } from './orders.service';
-import { OrderProductsService } from '../order-products/order-products.service';
 import { IndexComponent } from './index/index.component';
 import { DetailsComponent } from './details/details.component';
 import { EditComponent } from './edit/edit.component';
@@ -27,10 +25,6 @@ import { EditComponent } from './edit/edit.component';
     IndexComponent,
     DetailsComponent,
     EditComponent
-  ],
-  providers: [
-    OrdersService,
-    OrderProductsService
   ]
 })
 export class OrdersModule {

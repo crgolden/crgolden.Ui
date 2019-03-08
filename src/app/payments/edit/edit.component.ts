@@ -38,7 +38,7 @@ export class EditComponent implements OnInit {
         window.sessionStorage.setItem('success', `Payment #${this.payment.chargeId} updated`);
         this.router.navigate([`/payments/details/${this.payment.id}`]);
       },
-      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
       })));
   }

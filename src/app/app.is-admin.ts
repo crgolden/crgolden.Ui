@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router
-} from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AccountService } from './account/account.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppIsAdmin implements CanActivate {
 
   constructor(
@@ -17,13 +14,14 @@ export class AppIsAdmin implements CanActivate {
     private readonly accountService: AccountService) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.accountService.userHasRole$('Admin').pipe(map((response: boolean) => {
-      if (response) {
-        return true;
-      }
-      this.router.navigate(['/access-denied']);
-      return false;
-    }));
+  canActivate(): Observable<boolean> {
+    return this.accountService.userHasRole$('Admin').pipe(map(
+      isAdmin => {
+        if (isAdmin) {
+          return true;
+        }
+        this.router.navigate(['/access-denied']);
+        return false;
+      }));
   }
 }

@@ -67,15 +67,15 @@
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
-            <label>Images</label>
-            <br />
-            <ng-container *ngIf="primaryImageUri">
-              <img src="{{primaryImageUri}}"
+          <ng-container *ngIf="product.imageUri">
+            <div class="form-group">
+              <label>Images</label>
+              <br />
+              <img src="{{product.imageUri}}"
                    alt="Product Image"
                    title="Product Image" />
-            </ng-container>
-          </div>
+            </div>
+          </ng-container>
         </div>
       </div>
       <div class="row">
@@ -116,15 +116,16 @@
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
+          <div class="form-group" *ngIf="files">
             <label>Upload</label>
-            <kendo-upload name="images"
-                          #myUpload="ngModel"
+            <kendo-upload id="filesUpload"
+                          name="filesUpload"
+                          #filesUpload="ngModel"
                           [saveUrl]="uploadSaveUrl"
                           [removeUrl]="uploadRemoveUrl"
                           [restrictions]="uploadTypes"
                           (success)="onSuccess($event)"
-                          [(ngModel)]="product.productFiles">
+                          [(ngModel)]="files">
             </kendo-upload>
           </div>
         </div>

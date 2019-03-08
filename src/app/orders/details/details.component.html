@@ -52,8 +52,8 @@
                 [pageSize]="orderProductsState.take"
                 [skip]="orderProductsState.skip"
                 [sort]="orderProductsState.sort"
-                [sortable]="sortable"
-                [pageable]="pageable"
+                [sortable]="orderProductsSortable"
+                [pageable]="orderProductsPageable"
                 [scrollable]="'none'"
                 [groupable]="false"
                 [group]="orderProductsState.group"
@@ -65,11 +65,11 @@
           <fa-icon [icon]="['fal', 'box']"></fa-icon> Products
         </h4>
       </ng-template>
-      <kendo-grid-column field="productName"
+      <kendo-grid-column field="product.name"
                          title="Name">
         <ng-template kendoGridCellTemplate let-orderProduct>
-          <ng-container *ngIf="orderProduct.thumbnailUri">
-            <img src="{{orderProduct.thumbnailUri}}"
+          <ng-container *ngIf="orderProduct.productImageThumbnailUri">
+            <img src="{{orderProduct.productImageThumbnailUri}}"
                  alt="{{orderProduct.productName}}"
                  height="25"
                  width="25" />&nbsp;
@@ -79,12 +79,13 @@
           </a>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="extendedPrice"
-                         title="Price">
+      <kendo-grid-column title="Price"
+                         [filterable]="false"
+                         [sortable]="false">
         <ng-template kendoGridCellTemplate let-orderProduct>
-          {{orderProduct.extendedPrice | currency}}
+          {{orderProduct.quantity * orderProduct.productUnitPrice | currency}}
           <span *ngIf="orderProduct.quantity > 1">
-            ({{orderProduct.quantity}} @ {{orderProduct.price | currency}})
+            ({{orderProduct.quantity}} @ {{orderProduct.productUnitPrice | currency}})
           </span>
         </ng-template>
       </kendo-grid-column>
@@ -98,8 +99,8 @@
                 [pageSize]="paymentsState.take"
                 [skip]="paymentsState.skip"
                 [sort]="paymentsState.sort"
-                [sortable]="sortable"
-                [pageable]="pageable"
+                [sortable]="paymentsSortable"
+                [pageable]="paymentsPageable"
                 [scrollable]="'none'"
                 [groupable]="false"
                 [group]="paymentsState.group"
@@ -111,12 +112,12 @@
           <fa-icon [icon]="['fal', 'dollar-sign']"></fa-icon> Payments
         </h4>
       </ng-template>
-      <kendo-grid-column field="name"
-                         title="Name"
+      <kendo-grid-column field="chargeId"
+                         title="Charge Id"
                          [filterable]="false">
         <ng-template kendoGridCellTemplate let-payment>
           <a routerLink="/payments/details/{{payment.id}}">
-            {{payment.name}}
+            {{payment.chargeId}}
           </a>
         </ng-template>
       </kendo-grid-column>

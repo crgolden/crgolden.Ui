@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
-import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { GridModule } from '@progress/kendo-angular-grid';
@@ -13,16 +12,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
 import { IndexPage } from '../../test/page-models/products/index-page';
 import { IndexComponent } from './index.component';
-import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../order-products/order-product';
-import { ProductFile } from '../../product-files/product-file';
 import { AccountService } from '../../account/account.service';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
-import { CartService } from '../../cart/cart.service';
-import { Cart } from '../../cart/cart';
+import { CartsService } from '../../carts/carts.service';
+import { Cart } from '../../carts/cart';
 import { CartProductsService } from '../../cart-products/cart-products.service';
-import { ProductCategory } from '../../product-categories/product-category';
 
 let product1: Product;
 let product2: Product;
@@ -34,7 +29,7 @@ let page: IndexPage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let cartService: CartService;
+let cartsService: CartsService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -51,11 +46,7 @@ describe('IndexComponent', () => {
       unitPrice: 1.00,
       quantityPerUnit: undefined,
       isDownload: false,
-      created: new Date(),
-      cartProducts: new Array<CartProduct>(),
-      orderProducts: new Array<OrderProduct>(),
-      productFiles: new Array<ProductFile>(),
-      productCategories: new Array<ProductCategory>()
+      created: new Date()
     };
     product2 = {
       id: '2',
@@ -65,11 +56,7 @@ describe('IndexComponent', () => {
       unitPrice: 2.00,
       quantityPerUnit: undefined,
       isDownload: true,
-      created: new Date(),
-      cartProducts: new Array<CartProduct>(),
-      orderProducts: new Array<OrderProduct>(),
-      productFiles: new Array<ProductFile>(),
-      productCategories: new Array<ProductCategory>()
+      created: new Date()
     };
     products = new Array<Product>(product1, product2);
     productsGridDataResult = {
@@ -112,16 +99,12 @@ describe('IndexComponent', () => {
           useValue: jasmine.createSpyObj('ProductsService', { index: of() })
         },
         {
-          provide: CartService,
-          useValue: jasmine.createSpyObj('CartService', ['cart$, details$, create$'])
+          provide: CartsService,
+          useValue: jasmine.createSpyObj('CartsService', ['cart$, details$, create$'])
         },
         {
           provide: CartProductsService,
           useValue: jasmine.createSpyObj('CartProductsService', ['create$, delete$'])
-        },
-        {
-          provide: CookieService,
-          useValue: jasmine.createSpyObj('CookieService', ['get'])
         }
       ],
       imports: [
@@ -133,8 +116,8 @@ describe('IndexComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    cartService = fixture.debugElement.injector.get(CartService);
-    cartService.cart$ = new BehaviorSubject<Cart>(new Cart());
+    cartsService = fixture.debugElement.injector.get(CartsService);
+    cartsService.cart$ = new BehaviorSubject<Cart>(new Cart());
     fixture.detectChanges();
     page = new IndexPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));

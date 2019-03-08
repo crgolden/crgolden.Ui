@@ -14,19 +14,17 @@ import { IndexPage } from '../../test/page-models/orders/index-page';
 import { IndexComponent } from './index.component';
 import { AccountService } from '../../account/account.service';
 import { Order } from '../order';
-import { OrderProduct } from '../../order-products/order-product';
 import { OrdersService } from '../../orders/orders.service';
-import { Payment } from '../../payments/payment';
 
 let order1: Order;
 let order2: Order;
-let orders: Array<Order>;
+let orders: Order[];
 let ordersGridDataResult: GridDataResult;
 let component: IndexComponent;
 let fixture: ComponentFixture<IndexComponent>;
 let page: IndexPage;
-let routerLinks: Array<RouterLinkDirectiveStub>;
-let routerLinkDebugElements: Array<DebugElement>;
+let routerLinks: RouterLinkDirectiveStub[];
+let routerLinkDebugElements: DebugElement[];
 let accountService: AccountService;
 
 /* tslint:disable-next-line:component-selector */
@@ -41,20 +39,16 @@ describe('IndexComponent', () => {
       userId: '1',
       number: 1,
       total: 1,
-      created: new Date(),
-      orderProducts: new Array<OrderProduct>(),
-      payments: new Array<Payment>()
+      created: new Date()
     };
     order2 = {
       id: '2',
       userId: '1',
       number: 2,
       total: 1,
-      created: new Date(),
-      orderProducts: new Array<OrderProduct>(),
-      payments: new Array<Payment>()
+      created: new Date()
     };
-    orders = new Array<Order>(order1, order2);
+    orders = [order1, order2];
     ordersGridDataResult = {
       data: orders,
       total: orders.length

@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -13,12 +13,7 @@ import {
   SortSettings,
   GridDataResult
 } from '@progress/kendo-angular-grid';
-import {
-  AggregateDescriptor,
-  SortDescriptor,
-  State,
-  process
-} from '@progress/kendo-data-query';
+import { DataSourceRequestState } from '@progress/kendo-data-query';
 import { AccountService } from '../../account/account.service';
 import { OrdersService } from '../orders.service';
 import { Order } from '../order';
@@ -29,8 +24,8 @@ import { Address } from '../../address/address';
 const createFormGroup = (orderProduct: OrderProduct): FormGroup => new FormGroup({
   'orderId': new FormControl(orderProduct.orderId),
   'productId': new FormControl(orderProduct.productId),
-  'productName': new FormControl(orderProduct.productName),
-  'price': new FormControl(orderProduct.price, Validators.compose([
+  'product.name': new FormControl(orderProduct.productName),
+  'product.unitPrice': new FormControl(orderProduct.productUnitPrice, Validators.compose([
     Validators.required,
     Validators.min(0)
   ])),
@@ -38,7 +33,7 @@ const createFormGroup = (orderProduct: OrderProduct): FormGroup => new FormGroup
     Validators.required,
     Validators.min(0)
   ])),
-  'isDownload': new FormControl(orderProduct.isDownload)
+  'product.isDownload': new FormControl(orderProduct.productIsDownload)
 });
 
 @Component({
@@ -52,9 +47,9 @@ export class EditComponent implements OnInit {
   order: Order;
   orderProducts: GridDataResult;
   shippingAddress: Address;
-  orderProductsState: State;
-  pageable: PagerSettings;
-  sortable: SortSettings;
+  orderProductsState: DataSourceRequestState;
+  orderProductsPageable: PagerSettings;
+  orderProductsSortable: SortSettings;
 
   @ViewChild(GridComponent)
   private grid: GridComponent;
@@ -68,31 +63,15 @@ export class EditComponent implements OnInit {
     private readonly accountService: AccountService,
     private readonly ordersService: OrdersService,
     private readonly orderProductsService: OrderProductsService) {
-    this.orderProductsState = {
-      skip: 0,
-      take: 5,
-      sort: new Array<SortDescriptor>({
-        field: 'productName',
-        dir: 'asc'
-      }),
-      aggregates: new Array<AggregateDescriptor>()
-    } as State;
-    this.pageable = {
-      buttonCount: 1,
-      type: 'numeric',
-      info: false,
-      previousNext: true
-    } as PagerSettings;
-    this.sortable = {
-      allowUnsort: false,
-      mode: 'single'
-    } as SortSettings;
+    this.orderProductsState = orderProductsService.state;
+    this.orderProductsPageable = orderProductsService.pageable;
+    this.orderProductsSortable = orderProductsService.sortable;
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Edit Order');
-    this.order = this.route.snapshot.data['order'] as Order;
-    this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
+    this.order = this.route.snapshot.data['edit'][0];
+    this.orderProducts = this.route.snapshot.data['edit'][1];
     if (this.order.shippingAddress != null && this.order.shippingAddress.formatted != null) {
       this.shippingAddress = this.order.shippingAddress;
     }
@@ -112,14 +91,18 @@ export class EditComponent implements OnInit {
         window.sessionStorage.setItem('success', `Order #${this.order.number} updated`);
         this.router.navigate([`/Orders/Details/${this.order.id}`]);
       },
-      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
       })));
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {
-    this.orderProductsState = state;
-    this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
+    this.orderProductsState = this.orderProductsService.state = state;
+    this.orderProductsService.index$().subscribe(
+      result => this.orderProducts = result,
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })));
   }
 
   orderProductsClick(event: CellClickEvent): void {
@@ -136,6 +119,7 @@ export class EditComponent implements OnInit {
 
   private closeEditor(): void {
     this.grid.closeRow(this.editedRowIndex);
+
     this.editedRowIndex = undefined;
     this.formGroup = undefined;
   }
@@ -172,15 +156,17 @@ export class EditComponent implements OnInit {
       return;
     }
     this.orderProductsService.edit$(this.formGroup.value)
-      .pipe(concatMap(
-        () => this.ordersService.details$(new Array<string>(this.order.id))))
+      .pipe(concatMap(() => combineLatest(
+        this.ordersService.details$([this.order.id]),
+        this.orderProductsService.index$())))
       .subscribe(
-        (order: Order) => {
+        latest => {
+          const [order, orderProducts] = latest;
           this.order = order;
-          this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
-          window.sessionStorage.setItem('success', `Order #${this.order.number} updated`);
+          this.orderProducts = orderProducts;
+          this.toastr.success(`Order #${this.order.number} updated`);
         },
-        (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+        (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
         })));
     this.closeEditor();

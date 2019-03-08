@@ -4,10 +4,12 @@ import { Service } from '@clarity/services';
 import { environment } from '../../environments/environment';
 import { File } from './file';
 
-@Injectable()
-export class FilesService extends Service<File, string> {
+@Injectable({
+  providedIn: 'root'
+})
+export class FilesService extends Service<File> {
 
-  constructor(protected readonly http: HttpClient) {
+  constructor(http: HttpClient) {
     super('files', environment.apiUrl, http);
   }
 }

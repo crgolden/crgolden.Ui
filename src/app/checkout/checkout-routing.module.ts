@@ -1,34 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CreateComponent } from './create/create.component';
-import { CheckoutCanActivate } from './checkout.can-activate';
-import { AddressResolver } from '../address/address.resolver';
+import { CheckoutComponent } from './checkout.component';
+import { CheckoutHasCartProducts } from './checkout.has-cart-products';
+import { CheckoutResolver } from './checkout.resolver';
 import { AppLoggedIn } from '../app.logged-in';
 
 const routes: Routes = [
   {
     path: '',
-    component: CreateComponent,
+    component: CheckoutComponent,
     canActivate: [
-      CheckoutCanActivate,
-      AppLoggedIn
+      AppLoggedIn,
+      CheckoutHasCartProducts
     ],
     resolve: {
-      validAddress: AddressResolver
+      checkout: CheckoutResolver
     }
   }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  exports: [
-    RouterModule
-  ],
-  providers: [
-    CheckoutCanActivate,
-    AddressResolver
-  ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 export class CheckoutRoutingModule { }

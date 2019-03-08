@@ -8,8 +8,6 @@ import { ScrollViewModule } from '@progress/kendo-angular-scrollview';
 import { UploadModule } from '@progress/kendo-angular-upload';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ProductsRoutingModule } from './products-routing.module';
-import { ProductsService } from './products.service';
-import { ProductFilesService } from '../product-files/product-files.service';
 import { IndexComponent } from './index/index.component';
 import { CreateComponent } from './create/create.component';
 import { DetailsComponent } from './details/details.component';
@@ -33,10 +31,6 @@ import { EditComponent } from './edit/edit.component';
     CreateComponent,
     DetailsComponent,
     EditComponent
-  ],
-  providers: [
-    ProductsService,
-    ProductFilesService
   ]
 })
 export class ProductsModule {

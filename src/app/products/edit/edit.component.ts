@@ -3,16 +3,16 @@ import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { GridDataResult } from '@progress/kendo-angular-grid';
 import { ToastrService } from 'ngx-toastr';
 import { FileRestrictions, SuccessEvent } from '@progress/kendo-angular-upload';
 import { environment } from '../../../environments/environment';
 import { AccountService } from '../../account/account.service';
 import { ProductsService } from '../products.service';
 import { Product } from '../product';
-import { File } from '../../files/file';
 import { ProductFilesService } from '../../product-files/product-files.service';
-import { ProductFile } from '../../product-files/product-file';
+import { ProductFile, toFile } from '../../product-files/product-file';
+import { File } from '../../files/file';
 
 @Component({
   selector: 'app-products-edit',
@@ -22,13 +22,12 @@ import { ProductFile } from '../../product-files/product-file';
 export class EditComponent implements OnInit {
 
   product: Product;
-  images: Array<File>;
+  files: File[];
   uploadSaveUrl: string;
   uploadRemoveUrl: string;
   uploadTypes: FileRestrictions = {
     allowedExtensions: ['jpg', 'jpeg', 'png', 'gif']
   };
-  primaryImageUri: string;
 
   constructor(
     private readonly titleService: Title,
@@ -43,8 +42,9 @@ export class EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Edit Product');
-    this.product = this.route.snapshot.data['product'] as Product;
-    this.setPrimaryImageUri();
+    const productFiles: GridDataResult = this.route.snapshot.data['edit'][0];
+    this.product = this.route.snapshot.data['edit'][1];
+    this.files = productFiles.data.map(productFile => toFile(productFile));
   }
 
   edit(form: NgForm): void {
@@ -54,50 +54,27 @@ export class EditComponent implements OnInit {
         window.sessionStorage.setItem('success', `${this.product.name} updated`);
         this.router.navigate([`/products/details/${this.product.id}`]);
       },
-      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
       })));
   }
 
   onSuccess(event: SuccessEvent): void {
     if (event.response.body instanceof Array && event.response.body.length > 0) {
-      const productFiles = event.response.body.map((file: any) => {
-        return {
-          productId: this.product.id,
-          productName: this.product.name,
-          fileId: file['id'],
-          fileName: file['name'],
-          created: new Date(file['created']),
-          uri: file['uri'],
-          contentType: file['contentType']
-        } as ProductFile;
-      });
-      if (!this.primaryImageUri) {
-        const imageFiles = productFiles.filter(productFile =>
-          productFile.contentType.includes('image') &&
-          !productFile.uri.includes('thumbnail'));
-        if (imageFiles.length > 0) {
-          imageFiles[0].primary = true;
-        }
-      }
-      this.productFilesService.createRange$(productFiles).pipe(concatMap(
-        () => this.productsService.details$(new Array<string>(this.product.id)))).subscribe(
-          (product: Product) => {
-            this.product = product;
-            this.setPrimaryImageUri();
-            this.toastr.success('Images(s) added');
-          },
-          (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+      this.productFilesService
+        .createRange$(event.response.body.map(file => (new ProductFile(this.product, file, false))))
+        .subscribe(
+          productFiles => productFiles
+            .map(productFile => toFile(productFile))
+            .forEach(file => {
+              this.files.push(file);
+              this.toastr.success(`${file.name} added`);
+            }),
+          (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
             disableTimeOut: true
           })));
     }
   }
 
   showSave$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
-
-  private setPrimaryImageUri(): void {
-    if (this.product.productFiles.some(productFile => productFile.primary)) {
-      this.primaryImageUri = this.product.productFiles.find(productFile => productFile.primary).uri;
-    }
-  }
 }

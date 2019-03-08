@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
       lastName: undefined,
       password: undefined,
       address: new Address(),
-    } as Register;
+    };
   }
 
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
     }
     this.accountService.register$(this.model).subscribe(
       (response: string) => this.success = response,
-      (errors: Array<string>) => errors.forEach(error => this.toastr.error(error, null, {
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
       })));
   }

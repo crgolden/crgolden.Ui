@@ -46,8 +46,8 @@
                    class="form-control"
                    placeholder="Street Address"
                    required
-                   #street="ngModel"
-                   [(ngModel)]="shippingAddress.street_address">
+                   #streetAddress="ngModel"
+                   [(ngModel)]="shippingAddress.streetAddress">
           </div>
           <div class="form-group">
             <label for="city">City</label>
@@ -57,7 +57,7 @@
                    class="form-control"
                    placeholder="City"
                    required
-                   #street="ngModel"
+                   #city="ngModel"
                    [(ngModel)]="shippingAddress.locality">
           </div>
           <div class="row">
@@ -70,7 +70,7 @@
                        class="form-control"
                        placeholder="State"
                        required
-                       #street="ngModel"
+                       #region="ngModel"
                        [(ngModel)]="shippingAddress.region">
               </div>
             </div>
@@ -83,8 +83,8 @@
                        class="form-control"
                        placeholder="ZIP Code"
                        required
-                       #street="ngModel"
-                       [(ngModel)]="shippingAddress.postal_code">
+                       #postalCode="ngModel"
+                       [(ngModel)]="shippingAddress.postalCode">
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@
                    class="form-control"
                    placeholder="Country"
                    required
-                   #street="ngModel"
+                   #country="ngModel"
                    [(ngModel)]="shippingAddress.country">
           </div>
         </div>
@@ -109,8 +109,8 @@
                       [pageSize]="orderProductsState.take"
                       [skip]="orderProductsState.skip"
                       [sort]="orderProductsState.sort"
-                      [sortable]="sortable"
-                      [pageable]="pageable"
+                      [sortable]="orderProductsSortable"
+                      [pageable]="orderProductsPageable"
                       [scrollable]="'none'"
                       [groupable]="false"
                       [group]="orderProductsState.group"
@@ -131,10 +131,12 @@
             </ng-template>
             <kendo-grid-column field="orderId" [hidden]="true"></kendo-grid-column>
             <kendo-grid-column field="productId" [hidden]="true"></kendo-grid-column>
-            <kendo-grid-column field="productName" title="Name" [editable]="false">
+            <kendo-grid-column field="product.name"
+                               title="Name"
+                               [editable]="false">
               <ng-template kendoGridCellTemplate let-orderProduct>
-                <ng-container *ngIf="orderProduct.thumbnailUri">
-                  <img src="{{orderProduct.thumbnailUri}}"
+                <ng-container *ngIf="orderProduct.productImageThumbnailUri">
+                  <img src="{{orderProduct.productImageThumbnailUri}}"
                        alt="{{orderProduct.productName}}"
                        height="25"
                        width="25" />&nbsp;
@@ -144,16 +146,19 @@
                 </a>
               </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="price"
+            <kendo-grid-column field="product.unitPrice"
                                title="Price"
                                editor="numeric"
                                [format]="{ style: 'currency', currency: 'USD' }">
+              <ng-template kendoGridCellTemplate let-orderProduct>
+                {{orderProduct.productUnitPrice}}
+              </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="quantity"
                                title="Quantity"
                                editor="numeric">
             </kendo-grid-column>
-            <kendo-grid-column field="isDownload" [hidden]="true"></kendo-grid-column>
+            <kendo-grid-column field="product.isDownload" [hidden]="true"></kendo-grid-column>
           </kendo-grid>
         </div>
       </div>

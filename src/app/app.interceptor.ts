@@ -10,7 +10,6 @@ import {
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
-import { User } from 'oidc-client';
 import { AccountService } from './account/account.service';
 
 @Injectable()
@@ -24,19 +23,17 @@ export class AppInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.accountService.user$.pipe(
       take(1),
-      switchMap(
-        (user: User) => next.handle(req.clone({
-          setHeaders: {
-            'Authorization': user != null ? `${user.token_type} ${user.access_token}` : ''
-          },
-          withCredentials: true
-        })).pipe(map(
-          (event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-              // placeholder for response handling
-            }
-            return event;
-          }))),
+      switchMap(user => next.handle(req.clone({
+        setHeaders: {
+          'Authorization': user != null ? `${user.token_type} ${user.access_token}` : ''
+        },
+        withCredentials: true
+      })).pipe(map((event: HttpEvent<any>) => {
+        if (event instanceof HttpResponse) {
+          // placeholder for response handling
+        }
+        return event;
+      }))),
       catchError(this.handleError));
   }
 

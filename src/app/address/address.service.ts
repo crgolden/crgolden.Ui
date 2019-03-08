@@ -4,13 +4,15 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Address } from './address';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AddressService {
 
   constructor(private readonly http: HttpClient) {
   }
 
-  protected get headers(): HttpHeaders {
+  private get headers(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json'
     });

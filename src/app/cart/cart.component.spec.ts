@@ -1,32 +1,35 @@
 import { } from 'jasmine';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { GridDataResult } from '@progress/kendo-angular-grid';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
-import { EditPage } from '../../test/page-models/cart/edit-page';
-import { EditComponent } from './edit.component';
-import { CartService } from '../cart.service';
-import { Cart } from '../cart';
-import { CartProductsService } from '../../cart-products/cart-products.service';
-import { CartProduct } from '../../cart-products/cart-product';
+import { RouterLinkDirectiveStub } from '../test/stubs/router-link-directive-stub';
+import { CartPage } from '../test/page-models/cart/cart-page';
+import { CartComponent } from './cart.component';
+import { CartsService } from '../carts/carts.service';
+import { Cart } from '../carts/cart';
+import { CartProductsService } from '../cart-products/cart-products.service';
+import { CartProduct } from '../cart-products/cart-product';
 
 let cartProduct1: CartProduct;
 let cartProduct2: CartProduct;
-let cartProducts: Array<CartProduct>;
+let cartProducts: CartProduct[];
+let cartProductsGridDataResult: GridDataResult;
 let cart: Cart;
-let component: EditComponent;
-let fixture: ComponentFixture<EditComponent>;
-let page: EditPage;
+let component: CartComponent;
+let fixture: ComponentFixture<CartComponent>;
+let page: CartPage;
 let routerLinks: RouterLinkDirectiveStub[];
 let routerLinkDebugElements: DebugElement[];
-let cartService: CartService;
+let cartsService: CartsService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -40,26 +43,29 @@ describe('EditComponent', () => {
       productId: '1',
       productName: 'Product 1',
       created: new Date(),
-      isDownload: false,
+      productIsDownload: false,
       extendedPrice: 1.00,
       quantity: 2,
-      price: 0.50
+      productUnitPrice: 0.50
     };
     cartProduct2 = {
       cartId: '1',
       productId: '2',
       productName: 'Product 2',
       created: new Date(),
-      isDownload: false,
+      productIsDownload: false,
       extendedPrice: 2.00,
       quantity: 2,
-      price: 1.00
+      productUnitPrice: 1.00
     };
-    cartProducts = new Array<CartProduct>(cartProduct1, cartProduct2);
+    cartProducts = [cartProduct1, cartProduct2];
+    cartProductsGridDataResult = {
+      data: cartProducts,
+      total: cartProducts.length
+    };
     cart = {
       id: '1',
       created: new Date(),
-      cartProducts: cartProducts,
       total: cartProducts
         .map((cartProduct: CartProduct) => cartProduct.extendedPrice)
         .reduce((previous: number, current: number) => previous + current)
@@ -72,7 +78,7 @@ describe('EditComponent', () => {
         FontAwesomeModule
       ],
       declarations: [
-        EditComponent,
+        CartComponent,
         RouterLinkDirectiveStub,
         RouterOutletStubComponent
       ],
@@ -82,11 +88,19 @@ describe('EditComponent', () => {
           useValue: jasmine.createSpyObj('Title', ['setTitle'])
         },
         {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: { 'cartProducts': cartProductsGridDataResult }
+            }
+          }
+        },
+        {
           provide: ToastrService,
           useValue: jasmine.createSpyObj('ToastrService', ['error'])
         },
         {
-          provide: CartService,
+          provide: CartsService,
           useValue: jasmine.createSpyObj('CartService', { edit$: of() })
         },
         {
@@ -95,18 +109,18 @@ describe('EditComponent', () => {
         }
       ]
     });
-    fixture = TestBed.createComponent(EditComponent);
+    fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
-    cartService = fixture.debugElement.injector.get(CartService);
-    cartService.cart$ = new BehaviorSubject<Cart>(cart);
-    page = new EditPage(fixture);
+    cartsService = fixture.debugElement.injector.get(CartsService);
+    cartsService.cart$ = new BehaviorSubject<Cart>(cart);
+    page = new CartPage(fixture);
     fixture.detectChanges();
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
     routerLinks = routerLinkDebugElements.map(de => de.injector.get(RouterLinkDirectiveStub));
   });
 
-  it('should have the cart', () => {
-    expect(component.cart$()).toEqual(cartService.cart$);
+  it('should have the cartProducts', () => {
+    expect(component.cartProducts).toEqual(cartProductsGridDataResult);
   });
 
   it('can get RouterLinks from template', () => {
@@ -157,7 +171,7 @@ describe('EditComponent', () => {
     cartProduct2 = undefined;
     cartProducts = undefined;
     component = undefined;
-    cartService = undefined;
+    cartsService = undefined;
     page = undefined;
     routerLinkDebugElements = undefined;
     routerLinks = undefined;

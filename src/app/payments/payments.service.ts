@@ -4,8 +4,10 @@ import { Service } from '@clarity/services';
 import { environment } from '../../environments/environment';
 import { Payment } from './payment';
 
-@Injectable()
-export class PaymentsService extends Service<Payment, string> {
+@Injectable({
+  providedIn: 'root'
+})
+export class PaymentsService extends Service<Payment> {
 
   constructor(protected readonly http: HttpClient) {
     super('payments', environment.apiUrl, http);

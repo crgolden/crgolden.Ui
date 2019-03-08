@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EditComponent } from './edit/edit.component';
+import { CartComponent } from './cart.component';
+import { CartResolver } from './cart.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: EditComponent
+    component: CartComponent,
+    resolve: {
+      cart: CartResolver
+    }
   }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
-  exports: [
-    RouterModule
-  ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
 export class CartRoutingModule { }

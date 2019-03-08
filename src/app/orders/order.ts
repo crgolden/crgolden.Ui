@@ -1,14 +1,24 @@
-import { Entity } from '@clarity/entities';
+import { Model } from '@clarity/models';
 import { Address } from '../address/address';
-import { OrderProduct } from '../order-products/order-product';
-import { Payment } from '../payments/payment';
 
-export class Order extends Entity {
-  id: string;
-  number: number;
-  userId: string;
+export class Order extends Model {
+  id?: string;
+  number?: number;
+  userId?: string;
   shippingAddress?: Address;
+  shipping?: number;
+  tax?: number;
   total: number;
-  orderProducts: Array<OrderProduct>;
-  payments: Array<Payment>;
+
+  constructor(
+    total: number,
+    shippingAddress?: Address,
+    shipping?: number,
+    tax?: number) {
+    super();
+    this.total = total;
+    this.shippingAddress = shippingAddress;
+    this.shipping = shipping;
+    this.tax = tax;
+  }
 }

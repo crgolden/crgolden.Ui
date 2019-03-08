@@ -6,7 +6,6 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LabelModule } from '@progress/kendo-angular-label';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PaymentsRoutingModule } from './payments-routing.module';
-import { PaymentsService } from './payments.service';
 import { DetailsComponent } from './details/details.component';
 import { EditComponent } from './edit/edit.component';
 
@@ -24,9 +23,6 @@ import { EditComponent } from './edit/edit.component';
   declarations: [
     DetailsComponent,
     EditComponent
-  ],
-  providers: [
-    PaymentsService
   ]
 })
 export class PaymentsModule {

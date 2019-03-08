@@ -4,11 +4,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-checkout-payment-stripe',
-  templateUrl: './payment-stripe.component.html',
-  styleUrls: ['./payment-stripe.component.scss']
+  selector: 'app-checkout-payment',
+  templateUrl: './payment.component.html',
+  styleUrls: ['./payment.component.scss']
 })
-export class PaymentStripeComponent implements OnInit {
+export class PaymentComponent implements OnInit {
 
   private readonly stripe: stripe.Stripe;
   private card: stripe.elements.Element;
@@ -29,7 +29,11 @@ export class PaymentStripeComponent implements OnInit {
       this.error = error;
     } else {
       this.error = undefined;
-      this.modal.close(token);
+      this.modal.close({
+        tokenId: token.id,
+        brand: token.card.brand,
+        last4: token.card.last4
+      });
     }
   }
 

@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserManagerSettings, UserManager, User } from 'oidc-client';
 import { environment } from '../../environments/environment';
+import { ActionType } from '../app.action-type';
 import { ConfirmEmail } from './models/confirm-email';
 import { Register } from './models/register';
 import { ForgotPassword } from './models/forgot-password';
 import { ResetPassword } from './models/reset-password';
+import { CartsService } from '../carts/carts.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AccountService {
 
   private readonly scopes = new Array<string>(
@@ -28,10 +33,48 @@ export class AccountService {
   private readonly userManager: UserManager;
   user$: BehaviorSubject<User>;
 
-  constructor(private readonly http: HttpClient) {
+  constructor(
+    private readonly http: HttpClient,
+    private readonly router: Router,
+    private readonly cartsService: CartsService) {
     this.userManager = new UserManager(this.userManagerSettings);
-    this.user$ = new BehaviorSubject<User>(undefined);
-    this.userManager.getUser().then((user: User) => this.user$.next(user));
+    this.user$ = new BehaviorSubject<User>(null);
+  }
+
+  setUser(type: ActionType): void {
+    switch (type) {
+      case ActionType.Load:
+      case ActionType.Login:
+        combineLatest(this.userManager.getUser(), this.cartsService.cart$)
+          .subscribe(latest => {
+            const [user, cart] = latest;
+            this.user$.next(user);
+            switch (type) {
+              case ActionType.Load:
+                if (cart == null || user != null && !user.expired &&
+                  cart.userId !== user.profile['sub']) {
+                  this.cartsService.setCart(type);
+                }
+                break;
+              case ActionType.Login:
+                if (cart == null || cart.userId !== user.profile['sub']) {
+                  this.router.navigate(['/']).then(navigated => {
+                    if (navigated) {
+                      this.cartsService.setCart(type);
+                    }
+                  });
+                } else {
+                  this.router.navigate([this.returnUrl]);
+                }
+                break;
+            }
+          });
+        break;
+      case ActionType.Logout:
+        this.cartsService.setCart(type);
+        this.user$.next(null);
+        break;
+    }
   }
 
   protected get headers(): HttpHeaders {
@@ -88,10 +131,14 @@ export class AccountService {
     return this.userManager.signoutRedirectCallback(url);
   }
 
-  userHasRole$(role: string): Observable<boolean> {
+  userIsLoggedIn$ = (): Observable<boolean> => {
+    return this.user$.pipe(map(user => user != null && user.expires_at > (Date.now() / 1000)));
+  }
+
+  userHasRole$ = (role: string): Observable<boolean> => {
     const roleType = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
     return this.user$.pipe(
-      map((user: User) => user != null
+      map(user => user != null
         ? user.profile[roleType] instanceof Array
           ? user.profile[roleType].includes(role)
           : typeof user.profile[roleType] === 'string'
@@ -108,11 +155,22 @@ export class AccountService {
       redirect_uri: `${domain}/account/login-success`,
       response_type: this.responseTypes.join(' '),
       scope: this.scopes.join(' '),
-      post_logout_redirect_uri: `${domain}/account/logout-success`,
+      post_logout_redirect_uri: `${domain}/logout-success`,
       filterProtocolClaims: true,
       automaticSilentRenew: true,
       silent_redirect_uri: `${domain}/silent-callback.html`
     };
     return userManagerSettings;
   }
+
+  private get returnUrl(): string {
+    let returnUrl = window.sessionStorage.getItem('returnUrl');
+    if (returnUrl != null) {
+      window.sessionStorage.removeItem('returnUrl');
+    } else {
+      returnUrl = '/home';
+    }
+    return returnUrl;
+  }
 }
+

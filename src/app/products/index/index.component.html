@@ -59,8 +59,8 @@
         <kendo-grid-column>
           <ng-template kendoGridCellTemplate let-product>
             <div class="product" (click)="gotToDetails(product.id)">
-              <ng-container *ngIf="thumbnailUri(product) as thumbnailUri">
-                <img src="{{thumbnailUri}}"
+              <ng-container *ngIf="product.imageThumbnailUri">
+                <img src="{{product.imageThumbnailUri}}"
                      alt="{{product.name}}" />
               </ng-container>
               <h3>{{product.name}}</h3>
@@ -85,8 +85,8 @@
                   (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column field="name" title="Name">
           <ng-template kendoGridCellTemplate let-product>
-            <ng-container *ngIf="thumbnailUri(product) as thumbnailUri">
-              <img src="{{thumbnailUri}}"
+            <ng-container *ngIf="product.imageThumbnailUri">
+              <img src="{{product.imageThumbnailUri}}"
                    alt="{{product.name}}"
                    height="25"
                    width="25" />&nbsp;
@@ -96,7 +96,7 @@
             </a>
           </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="price"
+        <kendo-grid-column field="unitPrice"
                            title="Price"
                            filter="numeric"
                            [format]="{ style: 'currency', currency: 'USD' }">
@@ -113,15 +113,15 @@
         </kendo-grid-column>
         <kendo-grid-column>
           <ng-template kendoGridCellTemplate let-product>
-            <ng-container *ngIf="inCart$(product.id) | async; then inCart; else notInCart"></ng-container>
-            <ng-template #inCart>
+            <ng-container *ngIf="inCart(product.id); then removeFromCartLink; else addToCartLink"></ng-container>
+            <ng-template #removeFromCartLink>
               <a class="text-danger"
                  title="Remove from Cart"
                  (click)="removeFromCart(product.id)">
                 <fa-icon [icon]="['fal', 'trash']"></fa-icon>
               </a>
             </ng-template>
-            <ng-template #notInCart>
+            <ng-template #addToCartLink>
               <a (click)="addToCart(product)"
                  title="Add to Cart">
                 <fa-icon [icon]="['fal', 'cart-plus']"></fa-icon>

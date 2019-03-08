@@ -9,13 +9,10 @@ import {
   SortSettings,
   GridDataResult
 } from '@progress/kendo-angular-grid';
-import {
-  AggregateDescriptor,
-  SortDescriptor,
-  State,
-  process
-} from '@progress/kendo-data-query';
+import { DataSourceRequestState } from '@progress/kendo-data-query';
 import { AccountService } from '../../account/account.service';
+import { OrderProductsService } from '../../order-products/order-products.service';
+import { PaymentsService } from '../../payments/payments.service';
 import { Order } from '../order';
 import { Address } from '../../address/address';
 
@@ -31,51 +28,33 @@ export class DetailsComponent implements OnInit {
   payments: GridDataResult;
   shippingAddress: Address;
   formattedShippingAddress: string;
-  orderProductsState: State;
-  paymentsState: State;
-  pageable: PagerSettings;
-  sortable: SortSettings;
+  orderProductsState: DataSourceRequestState;
+  orderProductsPageable: PagerSettings;
+  orderProductsSortable: SortSettings;
+  paymentsState: DataSourceRequestState;
+  paymentsPageable: PagerSettings;
+  paymentsSortable: SortSettings;
 
   constructor(
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
-    private readonly accountService: AccountService) {
-    this.orderProductsState = {
-      skip: 0,
-      take: 5,
-      sort: new Array<SortDescriptor>({
-        field: 'productName',
-        dir: 'asc'
-      }),
-      aggregates: new Array<AggregateDescriptor>()
-    } as State;
-    this.paymentsState = {
-      skip: 0,
-      take: 5,
-      sort: new Array<SortDescriptor>({
-        field: 'created',
-        dir: 'desc'
-      }),
-      aggregates: new Array<AggregateDescriptor>()
-    } as State;
-    this.pageable = {
-      buttonCount: 1,
-      type: 'numeric',
-      info: false,
-      previousNext: true
-    } as PagerSettings;
-    this.sortable = {
-      allowUnsort: false,
-      mode: 'single'
-    } as SortSettings;
+    private readonly accountService: AccountService,
+    private readonly orderProductsService: OrderProductsService,
+    private readonly paymentsService: PaymentsService) {
+    this.orderProductsState = orderProductsService.state;
+    this.orderProductsPageable = orderProductsService.pageable;
+    this.orderProductsSortable = orderProductsService.sortable;
+    this.paymentsState = paymentsService.state;
+    this.paymentsPageable = paymentsService.pageable;
+    this.paymentsSortable = paymentsService.sortable;
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Order Details');
-    this.order = this.route.snapshot.data['order'] as Order;
-    this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
-    this.payments = process(this.order.payments, this.paymentsState);
+    this.order = this.route.snapshot.data['details'][0];
+    this.orderProducts = this.route.snapshot.data['details'][1];
+    this.payments = this.route.snapshot.data['details'][2];
     this.setFormattedShippingAddress();
     const message = window.sessionStorage.getItem('success');
     if (message != null) {
@@ -85,13 +64,21 @@ export class DetailsComponent implements OnInit {
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {
-    this.orderProductsState = state;
-    this.orderProducts = process(this.order.orderProducts, this.orderProductsState);
+    this.orderProductsState = this.orderProductsService.state = state;
+    this.orderProductsService.index$().subscribe(
+      orderProducts => this.orderProducts = orderProducts,
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })));
   }
 
   paymentsStateChange(state: DataStateChangeEvent): void {
-    this.paymentsState = state;
-    this.payments = process(this.order.payments, this.paymentsState);
+    this.paymentsState = this.paymentsService.state = state;
+    this.paymentsService.index$().subscribe(
+      payments => this.payments = payments,
+      (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
+        disableTimeOut: true
+      })));
   }
 
   showEdit$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

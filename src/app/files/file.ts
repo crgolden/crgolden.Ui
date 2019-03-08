@@ -1,11 +1,8 @@
-import { Entity } from '@clarity/entities';
-import { ProductFile } from '../product-files/product-file';
+import { Model } from '@clarity/models';
 
-export class File extends Entity {
-  id: string;
+export class File extends Model {
+  id?: string;
   uri: string;
   name: string;
-  fileName: string;
   contentType: string;
-  productFiles: Array<ProductFile>;
 }

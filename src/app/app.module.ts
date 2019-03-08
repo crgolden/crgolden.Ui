@@ -46,20 +46,12 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { AppInterceptor } from './app.interceptor';
-import { AppLoggedIn } from './app.logged-in';
-import { AppNotLoggedIn } from './app.not-logged-in';
-import { AppIsAdmin } from './app.is-admin';
 import { LowerCaseUrlSerializer } from './app.lower-case.serializer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AccountService } from './account/account.service';
-import { AddressService } from './address/address.service';
-import { CartService } from './cart/cart.service';
-import { CartProductsService } from './cart-products/cart-products.service';
-import { OrdersService } from './orders/orders.service';
-import { FilesService } from './files/files.service';
 import { HomeComponent } from './home/home.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
+import { LogoutSuccessComponent } from './logout-success/logout-success.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -102,6 +94,7 @@ library.add(
     AppComponent,
     HomeComponent,
     AccessDeniedComponent,
+    LogoutSuccessComponent,
     HeaderComponent,
     FooterComponent
   ],
@@ -128,16 +121,7 @@ library.add(
       useClass: LowerCaseUrlSerializer
     },
     NgbActiveModal,
-    CookieService,
-    AppLoggedIn,
-    AppNotLoggedIn,
-    AppIsAdmin,
-    AccountService,
-    AddressService,
-    CartService,
-    CartProductsService,
-    OrdersService,
-    FilesService
+    CookieService
   ],
   bootstrap: [
     AppComponent

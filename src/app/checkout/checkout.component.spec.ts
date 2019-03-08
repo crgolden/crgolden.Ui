@@ -9,33 +9,33 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CreateComponent } from './create.component';
-import { AccountService } from '../../account/account.service';
-import { CartService } from '../../cart/cart.service';
-import { Cart } from '../../cart/cart';
-import { OrdersService } from '../../orders/orders.service';
-import { Order } from '../../orders/order';
-import { OrderProduct } from '../../order-products/order-product';
-import { CartProduct } from '../../cart-products/cart-product';
-import { Address } from '../../address/address';
-import { Payment } from '../../payments/payment';
+import { CheckoutComponent } from './checkout.component';
+import { AccountService } from '../account/account.service';
+import { CartsService } from '../carts/carts.service';
+import { Cart } from '../carts/cart';
+import { OrdersService } from '../orders/orders.service';
+import { Order } from '../orders/order';
+import { OrderProduct } from '../order-products/order-product';
+import { CartProduct } from '../cart-products/cart-product';
+import { Address } from '../address/address';
+import { Payment } from '../payments/payment';
 
 let address: Address;
 let user: User;
 let cartProduct1: CartProduct;
 let cartProduct2: CartProduct;
-let cartProducts: Array<CartProduct>;
+let cartProducts: CartProduct[];
 let cart: Cart;
 let order: Order;
-let component: CreateComponent;
-let fixture: ComponentFixture<CreateComponent>;
+let component: CheckoutComponent;
+let fixture: ComponentFixture<CheckoutComponent>;
 let accountService: AccountService;
-let cartService: CartService;
+let cartsService: CartsService;
 let ordersService: OrdersService;
 
 describe('CreateComponent', () => {
 
-  beforeEach(() => {
+  const setup = (data: any) => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -43,7 +43,7 @@ describe('CreateComponent', () => {
         FontAwesomeModule
       ],
       declarations: [
-        CreateComponent
+        CheckoutComponent
       ],
       providers: [
         {
@@ -63,8 +63,8 @@ describe('CreateComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$'])
         },
         {
-          provide: CartService,
-          useValue: jasmine.createSpyObj('CartService', ['cart$'])
+          provide: CartsService,
+          useValue: jasmine.createSpyObj('CartsService', ['cart$'])
         },
         {
           provide: OrdersService,
@@ -74,7 +74,7 @@ describe('CreateComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              data: { 'validAddress': true }
+              data: data
             }
           }
         },
@@ -84,7 +84,7 @@ describe('CreateComponent', () => {
         }
       ]
     });
-    fixture = TestBed.createComponent(CreateComponent);
+    fixture = TestBed.createComponent(CheckoutComponent);
     component = fixture.componentInstance;
     component.validPayment = true;
     component.validShippingAddress = true;
@@ -106,9 +106,9 @@ describe('CreateComponent', () => {
       cartId: '1',
       productId: '1',
       productName: 'Product 1',
-      price: 1.00,
+      productUnitPrice: 1.00,
       extendedPrice: 1.00,
-      isDownload: false,
+      productIsDownload: false,
       created: new Date(),
       quantity: 1
     };
@@ -116,70 +116,89 @@ describe('CreateComponent', () => {
       cartId: '1',
       productId: '2',
       productName: 'Product 2',
-      price: 2.00,
+      productUnitPrice: 2.00,
       extendedPrice: 2.00,
-      isDownload: true,
+      productIsDownload: true,
       created: new Date(),
       quantity: 1
     };
-    cartProducts = new Array<CartProduct>(cartProduct1, cartProduct2);
+    cartProducts = [cartProduct1, cartProduct2];
     cart = {
       id: '1',
       userId: user.profile['sub'],
       created: new Date(),
       total: cartProducts
         .map((cartProduct: CartProduct) => cartProduct.extendedPrice)
-        .reduce((previous: number, current: number) => previous + current),
-      cartProducts: cartProducts
+        .reduce((previous: number, current: number) => previous + current)
     };
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.user$ = new BehaviorSubject<User>(user);
-    cartService = fixture.debugElement.injector.get(CartService);
-    cartService.cart$ = new BehaviorSubject<Cart>(cart);
+    cartsService = fixture.debugElement.injector.get(CartsService);
+    cartsService.cart$ = new BehaviorSubject<Cart>(cart);
     ordersService = fixture.debugElement.injector.get(OrdersService);
     fixture.detectChanges();
-  });
+  };
 
   it('should call create for valid shipping address and zero price', () => {
-    component.validPayment = false;
-    cart.total = 0;
-    cartService.cart$.next(cart);
+    setup({
+      'validAddress': true,
+      'cartProducts': cartProducts.map(cartProduct => {
+        cartProduct.productUnitPrice = 0;
+        return cartProduct;
+      })
+    });
     setOrder();
-    component.create();
+    component.checkout();
     expect(ordersService.create$).toHaveBeenCalledWith(order);
   });
 
   it('should call create for all downloads and valid payment', () => {
-    component.validShippingAddress = false;
-    cart.cartProducts.forEach((cartProduct: CartProduct) => cartProduct.isDownload = true);
-    cartService.cart$.next(cart);
+    setup({
+      'validAddress': false,
+      'cartProducts': cartProducts.map(cartProduct => {
+        cartProduct.productIsDownload = true;
+        return cartProduct;
+      })
+    });
     setOrder();
-    component.create();
+    component.checkout();
     expect(ordersService.create$).toHaveBeenCalledWith(order);
   });
 
   it('should call create for valid shipping address and valid payment', () => {
+    setup({
+      'validAddress': true,
+      'cartProducts': cartProducts
+    });
     setOrder();
-    component.create();
+    component.checkout();
     expect(ordersService.create$).toHaveBeenCalledWith(order);
   });
 
   it('should not call create for empty cart', () => {
-    cart.cartProducts = new Array<CartProduct>();
-    cartService.cart$.next(cart);
-    component.create();
+    setup({
+      'validAddress': true,
+      'cartProducts': []
+    });
+    component.checkout();
     expect(ordersService.create$).not.toHaveBeenCalled();
   });
 
   it('should not call create for invalid shipping address and valid payment', () => {
-    component.validShippingAddress = false;
-    component.create();
+    setup({
+      'validAddress': false,
+      'cartProducts': cartProducts
+    });
+    component.checkout();
     expect(ordersService.create$).not.toHaveBeenCalled();
   });
 
   it('should not call create for valid shipping address and invalid payment', () => {
-    component.validPayment = false;
-    component.create();
+    setup({
+      'validAddress': true,
+      'cartProducts': cartProducts
+    });
+    component.checkout();
     expect(ordersService.create$).not.toHaveBeenCalled();
   });
 
@@ -192,7 +211,7 @@ describe('CreateComponent', () => {
     cart = undefined;
     component = undefined;
     accountService = undefined;
-    cartService = undefined;
+    cartsService = undefined;
     ordersService = undefined;
     order = undefined;
     fixture.destroy();
@@ -207,19 +226,6 @@ function setOrder(): void {
     created: undefined,
     userId: cart.userId,
     total: cart.total,
-    orderProducts: cartProducts.map((cartProduct: CartProduct) => {
-      return {
-        orderId: undefined,
-        productId: cartProduct.productId,
-        productName: cartProduct.productName,
-        price: cartProduct.price,
-        extendedPrice: undefined,
-        quantity: cartProduct.quantity,
-        created: undefined,
-        isDownload: cartProduct.isDownload
-      } as OrderProduct;
-    }),
-    payments: new Array<Payment>(),
     shippingAddress: address
   }
 }

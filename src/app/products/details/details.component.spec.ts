@@ -9,17 +9,12 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
 import { ToastrService } from 'ngx-toastr';
-import { CookieService } from 'ngx-cookie-service';
 import { DetailsPage } from '../../test/page-models/products/details-page';
 import { DetailsComponent } from './details.component';
 import { Product } from '../product';
-import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../order-products/order-product';
-import { ProductFile } from '../../product-files/product-file';
-import { ProductCategory } from '../../product-categories/product-category';
 import { AccountService } from '../../account/account.service';
-import { CartService } from '../../cart/cart.service';
-import { Cart } from '../../cart/cart';
+import { CartsService } from '../../carts/carts.service';
+import { Cart } from '../../carts/cart';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 
 let product: Product;
@@ -29,7 +24,7 @@ let page: DetailsPage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let cartService: CartService;
+let cartsService: CartsService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -46,11 +41,7 @@ describe('DetailsComponent', () => {
       unitPrice: 1.00,
       quantityPerUnit: undefined,
       isDownload: false,
-      created: new Date(),
-      cartProducts: new Array<CartProduct>(),
-      orderProducts: new Array<OrderProduct>(),
-      productFiles: new Array<ProductFile>(),
-      productCategories: new Array<ProductCategory>()
+      created: new Date()
     };
     TestBed.configureTestingModule({
       declarations: [
@@ -80,8 +71,8 @@ describe('DetailsComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$'])
         },
         {
-          provide: CartService,
-          useValue: jasmine.createSpyObj('CartService', ['cart$'])
+          provide: CartsService,
+          useValue: jasmine.createSpyObj('CartsService', ['cart$'])
         },
         {
           provide: CartProductsService,
@@ -90,10 +81,6 @@ describe('DetailsComponent', () => {
         {
           provide: Router,
           useValue: jasmine.createSpyObj('Router', ['navigate'])
-        },
-        {
-          provide: CookieService,
-          useValue: jasmine.createSpyObj('CookieService', ['get'])
         }
       ],
       imports: [
@@ -105,8 +92,8 @@ describe('DetailsComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    cartService = fixture.debugElement.injector.get(CartService);
-    cartService.cart$ = new BehaviorSubject<Cart>(undefined);
+    cartsService = fixture.debugElement.injector.get(CartsService);
+    cartsService.cart$ = new BehaviorSubject<Cart>(undefined);
     fixture.detectChanges();
     page = new DetailsPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));

@@ -9,7 +9,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { LoginSuccessComponent } from './login-success/login-success.component';
-import { LogoutSuccessComponent } from './logout-success/logout-success.component';
 import { RegisterComponent } from './register/register.component';
 import { ManageModule } from './manage/manage.module';
 
@@ -29,7 +28,6 @@ import { ManageModule } from './manage/manage.module';
     LoginComponent,
     LogoutComponent,
     LoginSuccessComponent,
-    LogoutSuccessComponent,
     RegisterComponent
   ]
 })

@@ -1,9 +1,7 @@
-import { Entity } from '@clarity/entities';
-import { ProductCategory } from '../product-categories/product-category';
+import { Model } from '@clarity/models';
 
-export class Category extends Entity {
-  id: string;
+export class Category extends Model {
+  id?: string;
   name: string;
-  description: string;
-  productCategories: Array<ProductCategory>;
+  description?: string;
 }

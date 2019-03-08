@@ -8,8 +8,8 @@
         </h2>
       </div>
       <div class="col">
-        <ng-container *ngIf="inCart$() | async; then inCart; else notInCart"></ng-container>
-        <ng-template #inCart>
+        <ng-container *ngIf="inCart(); then removeFromCartLink; else addToCartLink"></ng-container>
+        <ng-template #removeFromCartLink>
           <h2>
             <a class="float-md-right text-danger"
                title="Remove from Cart"
@@ -18,7 +18,7 @@
             </a>
           </h2>
         </ng-template>
-        <ng-template #notInCart>
+        <ng-template #addToCartLink>
           <h2>
             <a class="float-md-right"
                title="Add to Cart"
@@ -105,8 +105,8 @@
             <img src="{{image.uri}}" alt="{{image.name}}" [ngStyle]="{minWidth: width}" draggable="false" />
           </ng-template>
         </kendo-scrollview>-->
-        <ng-container *ngIf="primaryImageUri">
-          <img src="{{primaryImageUri}}"
+        <ng-container *ngIf="product.imageUri">
+          <img src="{{product.imageUri}}"
                alt="Product Image"
                title="Product Image"/>
         </ng-container>

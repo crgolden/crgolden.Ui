@@ -11,7 +11,7 @@
     <hr />
     <div class="row">
       <div class="col">
-        <ng-container *ngIf="needsShippingAddress$() | async">
+        <ng-container *ngIf="needsShippingAddress()">
           <ng-container *ngIf="validShippingAddress; then showShipping; else enterShipping"></ng-container>
           <ng-template #showShipping>
             <h4>
@@ -31,14 +31,14 @@
           </ng-template>
           <hr />
         </ng-container>
-        <ng-container *ngIf="(!needsShippingAddress$() | async) || validShippingAddress">
-          <ng-container *ngIf="needsPayment$() | async">
+        <ng-container *ngIf="!invalidShippingAddress()">
+          <ng-container *ngIf="needsPayment()">
             <ng-container *ngIf="validPayment; then showPayment; else enterPayment"></ng-container>
             <ng-template #showPayment>
               <h4>
                 Payment Information:
               </h4>
-              <p *ngIf="token && token.type === 'card'" [ngSwitch]="token.card.brand">
+              <p *ngIf="brand" [ngSwitch]="brand">
                 <span *ngSwitchCase="'Visa'">
                   <fa-icon [icon]="['fab', 'cc-visa']"></fa-icon>
                 </span>
@@ -60,7 +60,7 @@
                 <span *ngSwitchCase="'Unknown'">
                   <fa-icon [icon]="['fab', 'cc-stripe']"></fa-icon>
                 </span>
-                <span> **** **** **** {{token.card.last4}}</span>
+                <span> **** **** **** {{last4}}</span>
               </p>
               <button class="btn btn-primary"
                       (click)="openPaymentInformationModal()">
@@ -78,14 +78,14 @@
         </ng-container>
         <button class="btn btn-primary"
                 type="button"
-                (click)="create()"
-                [disabled]="(invalidShippingAddress$() | async) || (invalidPayment$() | async)">
+                (click)="checkout()"
+                [disabled]="invalidShippingAddress() || invalidPayment()">
           Submit Checkout
         </button>
       </div>
       <div class="col">
         <h4>
-          Total: {{total$() | async | currency}}
+          Total: {{total() | currency}}
         </h4>
       </div>
     </div>
