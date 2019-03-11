@@ -31,11 +31,12 @@ export class CheckoutResolver implements Resolve<[
     boolean,
     User
   ]> {
-    debugger;
+    console.log('resolving');
     return this.accountService.user$.pipe(
       skipWhile(user => user == null),
       concatMap((user: User) => {
         const address = JSON.parse(user.profile['address']) as Address;
+        console.log(address);
         return combineLatest(
           of(address),
           this.cartProductsService.cartProducts$
