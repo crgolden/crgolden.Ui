@@ -93,7 +93,7 @@ describe('DetailsComponent', () => {
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
     cartsService = fixture.debugElement.injector.get(CartsService);
-    cartsService.cart$ = new BehaviorSubject<Cart>(undefined);
+    cartsService.cart$ = new BehaviorSubject<Cart>(undefined as Cart);
     fixture.detectChanges();
     page = new DetailsPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));

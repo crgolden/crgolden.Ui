@@ -33,7 +33,7 @@ export class CheckoutResolver implements Resolve<[
   ]> {
     return this.accountService.user$.pipe(
       skipWhile(user => user == null),
-      concatMap(user => {
+      concatMap((user: User) => {
         const address = JSON.parse(user.profile['address']) as Address;
         return combineLatest(
           of(address),

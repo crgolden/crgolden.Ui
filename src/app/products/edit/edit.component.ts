@@ -2,17 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpEventType } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { ToastrService } from 'ngx-toastr';
-import { FileRestrictions, SuccessEvent } from '@progress/kendo-angular-upload';
+import {
+  FileRestrictions,
+  RemoveEvent,
+  SelectEvent,
+  SuccessEvent
+} from '@progress/kendo-angular-upload';
 import { environment } from '../../../environments/environment';
 import { AccountService } from '../../account/account.service';
 import { ProductsService } from '../products.service';
-import { Product } from '../product';
 import { ProductFilesService } from '../../product-files/product-files.service';
-import { ProductFile, toFile } from '../../product-files/product-file';
+import { Product } from '../product';
 import { File } from '../../files/file';
+import { ProductFile, toFile } from '../../product-files/product-file';
 
 @Component({
   selector: 'app-products-edit',
@@ -23,6 +29,7 @@ export class EditComponent implements OnInit {
 
   product: Product;
   files: File[];
+  productFiles: GridDataResult;
   uploadSaveUrl: string;
   uploadRemoveUrl: string;
   uploadTypes: FileRestrictions = {
@@ -37,14 +44,15 @@ export class EditComponent implements OnInit {
     private readonly accountService: AccountService,
     private readonly productsService: ProductsService,
     private readonly productFilesService: ProductFilesService) {
-    this.uploadSaveUrl = `${environment.apiUrl}/Images/Upload`;
+    this.uploadRemoveUrl = `${environment.apiUrl}/files/remove`;
+    this.uploadSaveUrl = `${environment.apiUrl}/files/upload`;
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Edit Product');
-    const productFiles: GridDataResult = this.route.snapshot.data['edit'][0];
+    this.productFiles = this.route.snapshot.data['edit'][0];
     this.product = this.route.snapshot.data['edit'][1];
-    this.files = productFiles.data.map(productFile => toFile(productFile));
+    this.files = this.productFiles.data.map(productFile => toFile(productFile));
   }
 
   edit(form: NgForm): void {
@@ -60,19 +68,56 @@ export class EditComponent implements OnInit {
   }
 
   onSuccess(event: SuccessEvent): void {
+    if (event.response.type !== HttpEventType.Response) {
+      return;
+    }
+    if (!event.response.ok) {
+      event.preventDefault();
+      this.toastr.error('Something went wrong. Please try again later.');
+      return;
+    }
     if (event.response.body instanceof Array && event.response.body.length > 0) {
-      this.productFilesService
-        .createRange$(event.response.body.map(file => (new ProductFile(this.product, file, false))))
-        .subscribe(
-          productFiles => productFiles
-            .map(productFile => toFile(productFile))
-            .forEach(file => {
-              this.files.push(file);
-              this.toastr.success(`${file.name} added`);
-            }),
-          (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
-            disableTimeOut: true
-          })));
+      switch (event.operation) {
+        case 'upload':
+          event.response.body.forEach((file: File) => this.productFilesService
+            .create$(new ProductFile(this.product, file, false))
+            .subscribe(
+              productFile => {
+                this.productFiles.data.push(productFile);
+                this.toastr.success(`${file.name} added.`);
+              },
+              (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
+                disableTimeOut: true
+              }))));
+          break;
+        case 'remove':
+          event.response.body.forEach(keyValuePair => {
+            const index = this.productFiles.data.findIndex(x => x.fileId === keyValuePair.value[0]);
+            this.productFiles.data.splice(index, 1);
+            this.toastr.success(`${keyValuePair.key} removed.`);
+          });
+          break;
+      }
+    }
+  }
+
+  onSelect(event: SelectEvent): void {
+    const errors: string[] = event.files.reduce((previous, current) => {
+      if (this.files.some(file => file.name === current.name)) {
+        errors.push(`This product already has an image named ${current.name}.`);
+      }
+      return previous;
+    }, []);
+    if (errors.length === 0) {
+      return;
+    }
+    event.preventDefault();
+    errors.forEach(error => this.toastr.error(error));
+  }
+
+  onRemove(event: RemoveEvent): void {
+    event.data = {
+      keys: event.files.map((file: File) => [file.id])
     }
   }
 

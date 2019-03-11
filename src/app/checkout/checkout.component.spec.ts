@@ -15,10 +15,8 @@ import { CartsService } from '../carts/carts.service';
 import { Cart } from '../carts/cart';
 import { OrdersService } from '../orders/orders.service';
 import { Order } from '../orders/order';
-import { OrderProduct } from '../order-products/order-product';
 import { CartProduct } from '../cart-products/cart-product';
 import { Address } from '../address/address';
-import { Payment } from '../payments/payment';
 
 let address: Address;
 let user: User;
@@ -107,8 +105,10 @@ describe('CreateComponent', () => {
       productId: '1',
       productName: 'Product 1',
       productUnitPrice: 1.00,
-      extendedPrice: 1.00,
       productIsDownload: false,
+      productActive: true,
+      productQuantityPerUnit: undefined,
+      productImageThumbnailUri: undefined,
       created: new Date(),
       quantity: 1
     };
@@ -117,8 +117,10 @@ describe('CreateComponent', () => {
       productId: '2',
       productName: 'Product 2',
       productUnitPrice: 2.00,
-      extendedPrice: 2.00,
       productIsDownload: true,
+      productActive: true,
+      productQuantityPerUnit: undefined,
+      productImageThumbnailUri: undefined,
       created: new Date(),
       quantity: 1
     };
@@ -126,10 +128,7 @@ describe('CreateComponent', () => {
     cart = {
       id: '1',
       userId: user.profile['sub'],
-      created: new Date(),
-      total: cartProducts
-        .map((cartProduct: CartProduct) => cartProduct.extendedPrice)
-        .reduce((previous: number, current: number) => previous + current)
+      created: new Date()
     };
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.user$ = new BehaviorSubject<User>(user);
@@ -208,7 +207,7 @@ describe('CreateComponent', () => {
     cartProduct1 = undefined;
     cartProduct2 = undefined;
     cartProducts = undefined;
-    cart = undefined;
+    cart = undefined as Cart;
     component = undefined;
     accountService = undefined;
     cartsService = undefined;
@@ -225,7 +224,9 @@ function setOrder(): void {
     number: undefined,
     created: undefined,
     userId: cart.userId,
-    total: cart.total,
+    total: cartProducts
+      .map(cartProduct => cartProduct.quantity * cartProduct.productUnitPrice)
+      .reduce((previous, current) => previous + current, 0),
     shippingAddress: address
   }
 }

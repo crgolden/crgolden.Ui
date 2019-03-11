@@ -57,15 +57,15 @@ export class AccountService {
                 }
                 break;
               case ActionType.Login:
-                if (cart == null || cart.userId !== user.profile['sub']) {
-                  this.router.navigate(['/']).then(navigated => {
-                    if (navigated) {
-                      this.cartsService.setCart(type);
-                    }
-                  });
-                } else {
-                  this.router.navigate([this.returnUrl]);
+                if (cart != null && cart.userId === user.profile['sub']) {
+                  return;
                 }
+                const returnUrl = window.sessionStorage.getItem('returnUrl') || '/home';
+                this.router.navigate(['/']).then(navigated => {
+                  if (navigated) {
+                    this.cartsService.setCart(type, returnUrl);
+                  }
+                });
                 break;
             }
           });
@@ -138,7 +138,7 @@ export class AccountService {
   userHasRole$ = (role: string): Observable<boolean> => {
     const roleType = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
     return this.user$.pipe(
-      map(user => user != null
+      map((user: User) => user != null
         ? user.profile[roleType] instanceof Array
           ? user.profile[roleType].includes(role)
           : typeof user.profile[roleType] === 'string'
@@ -161,16 +161,6 @@ export class AccountService {
       silent_redirect_uri: `${domain}/silent-callback.html`
     };
     return userManagerSettings;
-  }
-
-  private get returnUrl(): string {
-    let returnUrl = window.sessionStorage.getItem('returnUrl');
-    if (returnUrl != null) {
-      window.sessionStorage.removeItem('returnUrl');
-    } else {
-      returnUrl = '/home';
-    }
-    return returnUrl;
   }
 }
 

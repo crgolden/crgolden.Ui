@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { LogoutSuccessComponent } from './logout-success/logout-success.component';
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'access-denied',
     component: AccessDeniedComponent
+  },
+  {
+    path: 'not-found',
+    component: NotFoundComponent
   },
   {
     path: 'logout-success',

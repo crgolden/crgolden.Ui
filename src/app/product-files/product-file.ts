@@ -12,9 +12,12 @@ export class ProductFile extends Model {
   productIsDownload: boolean;
   productUnitPrice: number;
   fileId: string;
-  fileName: string;
-  fileUri: string;
   fileContentType: string;
+  fileContentDisposition: string;
+  fileExtension: string;
+  fileName: string;
+  fileSize: number;
+  fileUri: string;
 
   constructor(
     product: Product,
@@ -30,9 +33,12 @@ export class ProductFile extends Model {
     this.productIsDownload = product.isDownload;
     this.productUnitPrice = product.unitPrice;
     this.fileId = file.id;
-    this.fileName = file.name;
-    this.fileUri = file.uri;
     this.fileContentType = file.contentType;
+    this.fileContentDisposition = file.contentDisposition;
+    this.fileExtension = file.extension;
+    this.fileName = file.name;
+    this.fileSize = file.size;
+    this.fileUri = file.uri;
   }
 }
 
@@ -52,6 +58,7 @@ export function toFile(productFile: ProductFile): File {
     id: productFile.fileId,
     uri: productFile.fileUri,
     name: productFile.fileName,
-    contentType: productFile.fileContentType
+    contentType: productFile.fileContentType,
+    size: productFile.fileSize
   }
 }

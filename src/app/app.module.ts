@@ -32,7 +32,8 @@ import {
   faCashRegister,
   faShoppingBag,
   faDollarSign,
-  faExclamation
+  faExclamation,
+  faQuestion
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faFacebook,
@@ -51,6 +52,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AccessDeniedComponent } from './access-denied/access-denied.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { LogoutSuccessComponent } from './logout-success/logout-success.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -86,7 +88,8 @@ library.add(
   faCcStripe,
   faShoppingBag,
   faDollarSign,
-  faExclamation
+  faExclamation,
+  faQuestion
 );
 
 @NgModule({
@@ -94,6 +97,7 @@ library.add(
     AppComponent,
     HomeComponent,
     AccessDeniedComponent,
+    NotFoundComponent,
     LogoutSuccessComponent,
     HeaderComponent,
     FooterComponent

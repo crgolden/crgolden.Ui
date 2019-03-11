@@ -57,6 +57,29 @@ export class DetailsResolver implements Resolve<[
       }
     }
 
+    if (this.paymentsService.state.filter == null) {
+      this.paymentsService.state.filter = {
+        logic: 'and',
+        filters: [{
+          operator: 'eq',
+          field: 'orderId',
+          value: orderId
+        }]
+      }
+    } else {
+      const orderIdFilter = this.paymentsService.state.filter.filters.find(
+        (filter: FilterDescriptor) => filter.field === 'orderId');
+      if (orderIdFilter != null) {
+        (orderIdFilter as FilterDescriptor).value = orderId;
+      } else {
+        this.paymentsService.state.filter.filters.push({
+          operator: 'eq',
+          field: 'orderId',
+          value: orderId
+        });
+      }
+    }
+
     return combineLatest(
       this.ordersService.details$([orderId]),
       this.orderProductsService.index$(),

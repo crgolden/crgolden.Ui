@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Params, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -18,9 +18,10 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Login');
-    this.route.queryParams.subscribe((params: Params) => {
-      if (params['returnUrl'] != null) {
-        window.sessionStorage.setItem('returnUrl', params['returnUrl']);
+    this.route.queryParamMap.subscribe(params => {
+      const returnUrl = params.get('returnUrl');
+      if (returnUrl != null) {
+        window.sessionStorage.setItem('returnUrl', returnUrl);
       }
       this.accountService.signinRedirect();
     });

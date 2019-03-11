@@ -26,7 +26,7 @@ export class ConfirmEmailComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Confirm Email');
-    this.route.queryParams.pipe(concatMap(
+    this.route.queryParamMap.pipe(concatMap(
       (params: Params) => {
         const model: ConfirmEmail = {
           code: params['code'],

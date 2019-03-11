@@ -16,13 +16,9 @@ import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-
 import { EditPage } from '../../test/page-models/products/edit-page';
 import { EditComponent } from './edit.component';
 import { AccountService } from '../../account/account.service';
-import { CartProduct } from '../../cart-products/cart-product';
-import { OrderProduct } from '../../order-products/order-product';
 import { ProductsService } from '../../products/products.service';
 import { Product } from '../product';
 import { ProductFilesService } from '../../product-files/product-files.service';
-import { ProductFile } from '../../product-files/product-file';
-import { ProductCategory } from '../../product-categories/product-category';
 
 let product: Product;
 let component: EditComponent;

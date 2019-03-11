@@ -22,10 +22,10 @@ export class CartsService extends Service<Cart> {
     private readonly cartProductsService: CartProductsService,
     http: HttpClient) {
     super('carts', environment.apiUrl, http);
-    this.cart$ = new BehaviorSubject<Cart>(undefined);
+    this.cart$ = new BehaviorSubject<Cart>(undefined as Cart);
   }
 
-  setCart(type: ActionType): void {
+  setCart(type: ActionType, returnUrl?: string): void {
     const cartId = this.cookieService.get('CartId');
     const cartContinue = (cart: Cart) => {
       this.cookieService.set('CartId', cart.id, null, '/', `${environment.cookieDomain}`);
@@ -41,7 +41,11 @@ export class CartsService extends Service<Cart> {
       case ActionType.Login:
         const loginContinue = (cart: Cart) => {
           cartContinue(cart);
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate([returnUrl || '/home']).then(navigated => {
+            if (navigated) {
+              window.sessionStorage.removeItem('returnUrl');
+            }
+          });
         }
         cartId.length > 0
           ? this.details$([cartId]).subscribe(cart => loginContinue(cart))
@@ -52,15 +56,5 @@ export class CartsService extends Service<Cart> {
         this.cartProductsService.cartProducts$.next(null);
         break;
     }
-  }
-
-  private get returnUrl(): string {
-    let returnUrl = window.sessionStorage.getItem('returnUrl');
-    if (returnUrl != null) {
-      window.sessionStorage.removeItem('returnUrl');
-    } else {
-      returnUrl = '/home';
-    }
-    return returnUrl;
   }
 }

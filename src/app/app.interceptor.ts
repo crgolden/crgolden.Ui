@@ -51,6 +51,9 @@ export class AppInterceptor implements HttpInterceptor {
         case 403:
           this.router.navigate(['/access-denied']);
           break;
+        case 404:
+          this.router.navigate(['/not-found']);
+          break;
       }
       if (response.error) {
         if (typeof response.error === 'string') {

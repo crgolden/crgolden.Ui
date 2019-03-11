@@ -15,7 +15,6 @@ import { EditComponent } from './edit.component';
 import { AccountService } from '../../account/account.service';
 import { Payment } from '../payment';
 import { Order } from '../../orders/order';
-import { OrderProduct } from '../../order-products/order-product';
 import { PaymentsService } from '../../payments/payments.service';
 
 let order: Order;

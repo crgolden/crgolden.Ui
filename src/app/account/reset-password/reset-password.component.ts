@@ -26,7 +26,7 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Reset Password');
-    this.route.queryParams.subscribe(
+    this.route.queryParamMap.subscribe(
       (params: Params) => this.model.code = params['code']);
   }
 

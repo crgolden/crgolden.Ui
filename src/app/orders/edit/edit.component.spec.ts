@@ -14,10 +14,8 @@ import { EditPage } from '../../test/page-models/orders/edit-page';
 import { EditComponent } from './edit.component';
 import { AccountService } from '../../account/account.service';
 import { Order } from '../order';
-import { OrderProduct } from '../../order-products/order-product';
 import { OrdersService } from '../../orders/orders.service';
 import { OrderProductsService } from '../../order-products/order-products.service';
-import { Payment } from '../../payments/payment';
 import { Address } from '../../address/address';
 
 let order: Order;

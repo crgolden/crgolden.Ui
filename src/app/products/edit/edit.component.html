@@ -116,7 +116,7 @@
           </div>
         </div>
         <div class="col">
-          <div class="form-group" *ngIf="files">
+          <div class="form-group">
             <label>Upload</label>
             <kendo-upload id="filesUpload"
                           name="filesUpload"
@@ -124,6 +124,8 @@
                           [saveUrl]="uploadSaveUrl"
                           [removeUrl]="uploadRemoveUrl"
                           [restrictions]="uploadTypes"
+                          (remove)="onRemove($event)"
+                          (select)="onSelect($event)"
                           (success)="onSuccess($event)"
                           [(ngModel)]="files">
             </kendo-upload>

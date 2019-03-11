@@ -44,7 +44,9 @@ describe('EditComponent', () => {
       productName: 'Product 1',
       created: new Date(),
       productIsDownload: false,
-      extendedPrice: 1.00,
+      productActive: true,
+      productQuantityPerUnit: '',
+      productImageThumbnailUri: undefined,
       quantity: 2,
       productUnitPrice: 0.50
     };
@@ -54,7 +56,9 @@ describe('EditComponent', () => {
       productName: 'Product 2',
       created: new Date(),
       productIsDownload: false,
-      extendedPrice: 2.00,
+      productActive: true,
+      productQuantityPerUnit: undefined,
+      productImageThumbnailUri: undefined,
       quantity: 2,
       productUnitPrice: 1.00
     };
@@ -65,10 +69,7 @@ describe('EditComponent', () => {
     };
     cart = {
       id: '1',
-      created: new Date(),
-      total: cartProducts
-        .map((cartProduct: CartProduct) => cartProduct.extendedPrice)
-        .reduce((previous: number, current: number) => previous + current)
+      created: new Date()
     };
     TestBed.configureTestingModule({
       imports: [
@@ -120,7 +121,7 @@ describe('EditComponent', () => {
   });
 
   it('should have the cartProducts', () => {
-    expect(component.cartProducts).toEqual(cartProductsGridDataResult);
+    expect(component.cartProductsData).toEqual(cartProductsGridDataResult);
   });
 
   it('can get RouterLinks from template', () => {

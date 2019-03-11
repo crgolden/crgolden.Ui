@@ -43,7 +43,7 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Products');
-    this.cart = this.route.snapshot.data['index'][0];
+    this.cart = this.route.snapshot.data['index'][0] as Cart;
     this.cartProducts = this.route.snapshot.data['index'][1];
     this.products = this.route.snapshot.data['index'][2];
     this.state = this.productsService.state;

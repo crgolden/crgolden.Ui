@@ -50,7 +50,7 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Clarity: Checkout');
-    this.shippingAddress = this.route.snapshot.data['checkout'][0];
+    this.shippingAddress = this.route.snapshot.data['checkout'][0] as Address;
     this.cartProducts = this.route.snapshot.data['checkout'][1];
     this.validShippingAddress = this.route.snapshot.data['checkout'][2];
     this.user = this.route.snapshot.data['checkout'][3];
@@ -103,7 +103,7 @@ export class CheckoutComponent implements OnInit {
         .create$(new Order(this.total(), this.shippingAddress))
         .pipe(
           filter(order => order != null),
-          exhaustMap(order => combineLatest(
+          exhaustMap((order: Order) => combineLatest(
             of(order),
             this.paymentsService.create$(new Payment(order.id, order.total, 'USD', this.tokenId)),
             this.orderProductsService.createRange$(this.orderProducts(order)))))
