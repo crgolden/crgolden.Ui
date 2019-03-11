@@ -62,29 +62,35 @@ export class CheckoutComponent implements OnInit {
       ariaLabelledBy: 'shippingAddressModalTitle'
     });
     this.modalRef.componentInstance['shippingAddress'] = this.shippingAddress;
-    this.modalRef.result.then((value: Address) => {
-      this.validShippingAddress = true;
-      this.shippingAddress = value;
-      this.setFormattedShippingAddress();
-    });
+    this.modalRef.result.then(
+      (value: Address) => {
+        this.validShippingAddress = true;
+        this.shippingAddress = value;
+        this.setFormattedShippingAddress();
+      },
+      (reason: any) => {
+      });
   }
 
   openPaymentInformationModal(): void {
     this.modalRef = this.modalService.open(PaymentComponent, {
       ariaLabelledBy: 'paymentInformationModalTitle'
     });
-    this.modalRef.result.then((value: {
-      tokenId: string;
-      brand: string;
-      last4: string,
-    }) => {
-      if (value != null) {
-        this.tokenId = value.tokenId;
-        this.brand = value.brand;
-        this.last4 = value.last4;
-      }
-      this.validPayment = this.tokenId != null;
-    });
+    this.modalRef.result.then(
+      (value: {
+        tokenId: string;
+        brand: string;
+        last4: string,
+      }) => {
+        if (value != null) {
+          this.tokenId = value.tokenId;
+          this.brand = value.brand;
+          this.last4 = value.last4;
+        }
+        this.validPayment = this.tokenId != null;
+      },
+      (reason: any) => {
+      });
   }
 
   checkout(): void {
