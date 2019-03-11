@@ -31,17 +31,17 @@ export class CheckoutResolver implements Resolve<[
     boolean,
     User
   ]> {
-    console.log('resolving');
     return this.accountService.user$.pipe(
       skipWhile(user => user == null),
       concatMap((user: User) => {
-        const address = JSON.parse(user.profile['address']) as Address;
-        console.log(address);
+        const address = user.profile['address'];
         return combineLatest(
-          of(address),
+          of(address || new Address()),
           this.cartProductsService.cartProducts$
             .pipe(skipWhile(cartProducts => cartProducts == null)),
-          this.addressService.validate(address),
+          address != null
+            ? this.addressService.validate(JSON.parse(address) as Address)
+            : of(false),
           of(user));
       }),
       take(1));

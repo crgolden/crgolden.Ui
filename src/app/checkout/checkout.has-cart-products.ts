@@ -15,15 +15,12 @@ export class CheckoutHasCartProducts implements CanActivate {
   }
 
   canActivate(): Observable<boolean> {
-    console.log('has-cart-products-starting');
     return this.cartProductsService.cartProducts$.pipe(
       skipWhile(cartProducts => cartProducts == null),
       map(cartProducts => {
         if (cartProducts.length > 0) {
-          console.log('has-cart-products-true');
           return true;
         } else {
-          console.log('has-cart-products-false');
           this.router.navigate(['/cart']);
           return false;
         }
