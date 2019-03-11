@@ -41,11 +41,15 @@ export class HeaderComponent implements OnInit {
       this.accountService.setUser(ActionType.Load);
     }
     this.router.events
-      .pipe(filter((event: Event) => event instanceof NavigationEnd && event.url !== '/'))
-      .subscribe((event: NavigationEnd) => {
-        if (!event.url.includes('logout')) {
-          this.returnUrl = event.url;
-        }
-      });
+      .pipe(filter((event: Event) =>
+        event instanceof NavigationEnd &&
+        event.url !== '/' &&
+        [
+          'logout',
+          'login',
+          'not-found',
+          'access-denied'
+        ].every(route => !event.url.includes(route))))
+      .subscribe((event: NavigationEnd) => this.returnUrl = event.url);
   }
 }
