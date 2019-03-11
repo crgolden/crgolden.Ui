@@ -57,15 +57,9 @@ export class AccountService {
                 }
                 break;
               case ActionType.Login:
-                if (cart != null && cart.userId === user.profile['sub']) {
-                  return;
-                }
+                if (cart != null && cart.userId === user.profile['sub']) { return; }
                 const returnUrl = window.sessionStorage.getItem('returnUrl') || '/home';
-                this.router.navigate(['/']).then(navigated => {
-                  if (navigated) {
-                    this.cartsService.setCart(type, returnUrl);
-                  }
-                });
+                this.cartsService.setCart(type, returnUrl);
                 break;
             }
           });
