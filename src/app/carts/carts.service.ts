@@ -39,21 +39,18 @@ export class CartsService extends Service<Cart> {
           : this.create$({}).subscribe(cart => cartContinue(cart));
         break;
       case ActionType.Login:
-        const loginContinue = (cart: Cart) => {
+        const loginContinue = (cart: Cart) => this.router.navigate(['/']).then(() => {
           cartContinue(cart);
-          this.router.navigate([returnUrl || '/home']).then(navigated => {
-            if (navigated) {
-              window.sessionStorage.removeItem('returnUrl');
-            }
-          });
-        };
+          this.router.navigate([returnUrl || '/home'])
+            .then(() => window.sessionStorage.removeItem('returnUrl'));
+        });
         cartId.length > 0
           ? this.details$([cartId]).subscribe(cart => loginContinue(cart))
           : this.create$({}).subscribe(cart => loginContinue(cart));
         break;
       case ActionType.Logout:
         this.cookieService.delete('CartId', '/', `${environment.cookieDomain}`);
-        this.cartProductsService.cartProducts$.next(null);
+        this.create$({}).subscribe((cart) => cartContinue(cart));
         break;
     }
   }
