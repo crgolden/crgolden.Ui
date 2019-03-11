@@ -228,5 +228,5 @@ function setOrder(): void {
       .map(cartProduct => cartProduct.quantity * cartProduct.productUnitPrice)
       .reduce((previous, current) => previous + current, 0),
     shippingAddress: address
-  }
+  };
 }

@@ -6,7 +6,7 @@ import { GridDataResult } from '@progress/kendo-angular-grid';
 import { CartsService } from '../../carts/carts.service';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 import { ProductsService } from '../products.service';
-import { Cart } from '../../carts/cart'
+import { Cart } from '../../carts/cart';
 import { CartProduct } from '../../cart-products/cart-product';
 
 @Injectable({

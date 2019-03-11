@@ -39,7 +39,7 @@ describe('DetailsComponent', () => {
       amount: 1.00,
       created: new Date(),
       orderId: '1'
-    }
+    };
     TestBed.configureTestingModule({
       declarations: [
         DetailsComponent,

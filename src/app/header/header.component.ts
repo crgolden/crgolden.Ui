@@ -16,11 +16,17 @@ import { CartProduct } from '../cart-products/cart-product';
 export class HeaderComponent implements OnInit {
 
   returnUrl: string;
-  userIsLoggedIn$ = (): Observable<boolean> => this.accountService.user$
-    .pipe(map(user => user != null && !user.expired));
-  cartProducts$ = (): Observable<CartProduct[]> => this.cartProductsService.cartProducts$
-    .pipe(skipWhile(cartProducts => cartProducts == null))
-    .pipe(map(cartProducts => cartProducts));
+
+  userIsLoggedIn$(): Observable<boolean> {
+    return this.accountService.user$
+      .pipe(map(user => user != null && !user.expired));
+  }
+
+  cartProducts$(): Observable<CartProduct[]> {
+    return this.cartProductsService.cartProducts$
+      .pipe(skipWhile(cartProducts => cartProducts == null))
+      .pipe(map(cartProducts => cartProducts));
+  }
 
   constructor(
     private readonly location: Location,

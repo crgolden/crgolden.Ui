@@ -5,8 +5,8 @@ import { skipWhile, take } from 'rxjs/operators';
 import { CartsService } from '../../carts/carts.service';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 import { ProductsService } from '../products.service';
-import { Cart } from '../../carts/cart'
-import { Product } from '../product'
+import { Cart } from '../../carts/cart';
+import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
 
 @Injectable({

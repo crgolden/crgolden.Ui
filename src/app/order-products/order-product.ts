@@ -39,7 +39,7 @@ export function toOrder(orderProduct: OrderProduct): Order {
     id: orderProduct.orderId,
     number: orderProduct.orderNumber,
     total: orderProduct.orderTotal
-  }
+  };
 }
 
 export function toProduct(orderProduct: OrderProduct): Product {
@@ -51,5 +51,5 @@ export function toProduct(orderProduct: OrderProduct): Product {
     quantityPerUnit: orderProduct.productQuantityPerUnit,
     unitPrice: orderProduct.productUnitPrice,
     imageThumbnailUri: orderProduct.productImageThumbnailUri
-  }
+  };
 }

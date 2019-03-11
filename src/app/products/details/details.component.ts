@@ -40,8 +40,9 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-  inCart = (): boolean =>
-    this.cartProducts.some(cartProduct => cartProduct.productId === this.product.id);
+  inCart(): boolean {
+    return this.cartProducts.some(cartProduct => cartProduct.productId === this.product.id);
+  }
 
   addToCart(): void {
     this.cartProductsService

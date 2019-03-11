@@ -42,7 +42,7 @@ export class DetailsResolver implements Resolve<[
           field: 'orderId',
           value: orderId
         }]
-      }
+      };
     } else {
       const orderIdFilter = this.orderProductsService.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'orderId');
@@ -65,7 +65,7 @@ export class DetailsResolver implements Resolve<[
           field: 'orderId',
           value: orderId
         }]
-      }
+      };
     } else {
       const orderIdFilter = this.paymentsService.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'orderId');

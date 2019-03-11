@@ -38,7 +38,7 @@ export class EditResolver implements Resolve<[
           field: 'orderId',
           value: orderId
         }]
-      }
+      };
     } else {
       const orderIdFilter = this.orderProductsService.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'orderId');

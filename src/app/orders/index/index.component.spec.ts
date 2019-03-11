@@ -105,7 +105,13 @@ describe('IndexComponent', () => {
   });
 
   it('should display orders', () => {
-    const cleanText = (text: string): number => text == null ? undefined : parseInt(text.trim());
+    const cleanText = (text: string): number => {
+      if (text == null) {
+        return undefined;
+      } else {
+        return parseInt(text.trim(), 10);
+      }
+    };
     const orderRow1 = page.rows[2];
     const orderRow2 = page.rows[3];
     const orderRow1Number = cleanText(orderRow1.children[0].textContent);

@@ -34,12 +34,12 @@ export function toProduct(productCategory: ProductCategory): Product {
     active: productCategory.productActive,
     quantityPerUnit: productCategory.productQuantityPerUnit,
     unitPrice: productCategory.productUnitPrice
-  }
+  };
 }
 
 export function toCategory(productCategory: ProductCategory): Category {
   return {
     id: productCategory.categoryId,
     name: productCategory.categoryName
-  }
+  };
 }

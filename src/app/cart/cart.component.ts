@@ -75,13 +75,17 @@ export class CartComponent implements OnInit {
         })));
   }
 
-  total$ = (): Observable<number> => this.cartProductsService.cartProducts$
-    .pipe(map(cartProducts => cartProducts
-      .map(cartProduct => cartProduct.productUnitPrice * cartProduct.quantity)
-      .reduce((previous, current) => previous + current, 0)));
+  total$(): Observable<number> {
+    return this.cartProductsService.cartProducts$
+      .pipe(map(cartProducts => cartProducts
+        .map(cartProduct => cartProduct.productUnitPrice * cartProduct.quantity)
+        .reduce((previous, current) => previous + current, 0)));
+  }
 
-  quantity$ = (): Observable<number> => this.cartProductsService.cartProducts$
-    .pipe(map(cartProducts => cartProducts.length));
+  quantity$(): Observable<number> {
+    return this.cartProductsService.cartProducts$
+      .pipe(map(cartProducts => cartProducts.length));
+  }
 
   dataStateChange(state: DataSourceRequestState): void {
     this.cartProductsState = this.cartProductsService.state = state;

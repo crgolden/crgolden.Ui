@@ -64,17 +64,6 @@
                       [(ngModel)]="product.description"></textarea>
           </div>
         </div>
-        <div class="col">
-          <div class="form-group">
-            <label>Images</label>
-            <br />
-            <ng-container *ngIf="primaryImageUri">
-              <img src="{{primaryImageUri}}"
-                   alt="Product Image"
-                   title="Product Image" />
-            </ng-container>
-          </div>
-        </div>
       </div>
       <div class="row">
         <div class="col">

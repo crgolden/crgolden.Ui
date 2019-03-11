@@ -83,6 +83,7 @@
     "ts-node": "latest",
     "tslint": "latest",
     "typescript": "~3.2.4",
+    "webpack-dev-server": "latest",
     "zone.js": "latest"
   }
 }

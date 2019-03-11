@@ -122,16 +122,19 @@ export class CheckoutComponent implements OnInit {
 
   needsPayment = (): boolean => this.total() > 0;
 
-  needsShippingAddress = (): boolean => this.cartProducts.some(
-    cartProduct => !cartProduct.productIsDownload);
+  needsShippingAddress(): boolean {
+    return this.cartProducts.some(cartProduct => !cartProduct.productIsDownload);
+  }
 
   invalidPayment = (): boolean => this.needsPayment && !this.validPayment;
 
   invalidShippingAddress = (): boolean => this.needsShippingAddress && !this.validShippingAddress;
 
-  total = (): number => this.cartProducts
-    .map(cartProduct => cartProduct.productUnitPrice * cartProduct.quantity)
-    .reduce((previous, current) => previous + current, 0);
+  total(): number {
+    return this.cartProducts
+      .map(cartProduct => cartProduct.productUnitPrice * cartProduct.quantity)
+      .reduce((previous, current) => previous + current, 0);
+  }
 
   private setFormattedShippingAddress(): void {
     if (this.shippingAddress == null || this.shippingAddress.formatted == null) {
@@ -140,6 +143,8 @@ export class CheckoutComponent implements OnInit {
     this.formattedShippingAddress = this.shippingAddress.formatted.replace(/\r\n/g, '<br />');
   }
 
-  private orderProducts = (order: Order): OrderProduct[] => this.cartProducts.map(
-    cartProduct => new OrderProduct(order, toProduct(cartProduct), cartProduct.quantity));
+  private orderProducts(order: Order): OrderProduct[] {
+    return this.cartProducts.map(
+      cartProduct => new OrderProduct(order, toProduct(cartProduct), cartProduct.quantity));
+  }
 }

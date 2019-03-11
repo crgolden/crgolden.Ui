@@ -118,7 +118,7 @@ export class EditComponent implements OnInit {
   onRemove(event: RemoveEvent): void {
     event.data = {
       keys: event.files.map((file: File) => [file.id])
-    }
+    };
   }
 
   showSave$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');

@@ -102,7 +102,8 @@ describe('DetailsComponent', () => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     const created = component.order.created.toLocaleDateString('en-US', options);
 
-    expect(parseInt(page.number.textContent.trim())).toBe(component.order.number);
+    const orderNumber = parseInt(page.number.textContent.trim(), 10);
+    expect(orderNumber).toBe(component.order.number);
     expect(page.total.textContent.trim()).toBe(`$${component.order.total.toFixed(2)}`);
     expect(page.created.textContent.trim()).toBe(created);
   });

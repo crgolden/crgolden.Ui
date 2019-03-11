@@ -50,7 +50,7 @@ export function toProduct(productFile: ProductFile): Product {
     active: productFile.productActive,
     quantityPerUnit: productFile.productQuantityPerUnit,
     unitPrice: productFile.productUnitPrice
-  }
+  };
 }
 
 export function toFile(productFile: ProductFile): File {
@@ -60,5 +60,5 @@ export function toFile(productFile: ProductFile): File {
     name: productFile.fileName,
     contentType: productFile.fileContentType,
     size: productFile.fileSize
-  }
+  };
 }

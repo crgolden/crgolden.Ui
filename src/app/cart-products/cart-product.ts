@@ -30,7 +30,7 @@ export class CartProduct extends Model {
 export function toCart(cartProduct: CartProduct): Cart {
   return {
     id: cartProduct.cartId
-  }
+  };
 }
 
 export function toProduct(cartProduct: CartProduct): Product {
@@ -42,5 +42,5 @@ export function toProduct(cartProduct: CartProduct): Product {
     quantityPerUnit: cartProduct.productQuantityPerUnit,
     unitPrice: cartProduct.productUnitPrice,
     imageThumbnailUri: cartProduct.productImageThumbnailUri
-  }
+  };
 }

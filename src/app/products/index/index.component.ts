@@ -52,8 +52,9 @@ export class IndexComponent implements OnInit {
     this.isList = this.productsService.isList;
   }
 
-  inCart = (productId: string): boolean =>
-    this.cartProducts.some(cartProduct => cartProduct.productId === productId);
+  inCart(productId: string): boolean {
+    return this.cartProducts.some(cartProduct => cartProduct.productId === productId);
+  }
 
   addToCart(product: Product): void {
     this.cartProductsService

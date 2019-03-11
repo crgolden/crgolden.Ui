@@ -31,7 +31,7 @@ export class CartsService extends Service<Cart> {
       this.cookieService.set('CartId', cart.id, null, '/', `${environment.cookieDomain}`);
       this.cart$.next(cart);
       this.cartProductsService.setCartProducts(cart.id);
-    }
+    };
     switch (type) {
       case ActionType.Load:
         cartId.length > 0
@@ -46,7 +46,7 @@ export class CartsService extends Service<Cart> {
               window.sessionStorage.removeItem('returnUrl');
             }
           });
-        }
+        };
         cartId.length > 0
           ? this.details$([cartId]).subscribe(cart => loginContinue(cart))
           : this.create$({}).subscribe(cart => loginContinue(cart));
