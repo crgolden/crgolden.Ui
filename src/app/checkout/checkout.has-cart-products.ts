@@ -15,6 +15,7 @@ export class CheckoutHasCartProducts implements CanActivate {
   }
 
   canActivate(): Observable<boolean> {
+    debugger;
     return this.cartProductsService.cartProducts$.pipe(
       skipWhile(cartProducts => cartProducts == null),
       map(cartProducts => {

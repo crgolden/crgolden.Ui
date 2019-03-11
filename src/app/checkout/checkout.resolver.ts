@@ -31,6 +31,7 @@ export class CheckoutResolver implements Resolve<[
     boolean,
     User
   ]> {
+    debugger;
     return this.accountService.user$.pipe(
       skipWhile(user => user == null),
       concatMap((user: User) => {
