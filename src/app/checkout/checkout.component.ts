@@ -78,9 +78,11 @@ export class CheckoutComponent implements OnInit {
       brand: string;
       last4: string,
     }) => {
-      this.tokenId = value.tokenId;
-      this.brand = value.brand;
-      this.last4 = value.last4;
+      if (value != null) {
+        this.tokenId = value.tokenId;
+        this.brand = value.brand;
+        this.last4 = value.last4;
+      }
       this.validPayment = this.tokenId != null;
     });
   }
