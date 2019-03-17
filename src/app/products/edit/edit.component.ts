@@ -83,6 +83,7 @@ export class EditComponent implements OnInit {
             .create$(new ProductFile(this.product, file, false))
             .subscribe(
               productFile => {
+                this.files.find(x => x.name === file.name).id = file.id;
                 this.productFiles.data.push(productFile);
                 this.toastr.success(`${file.name} added.`);
               },
