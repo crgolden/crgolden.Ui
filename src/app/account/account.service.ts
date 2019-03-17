@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'oidc-client';
-import { AccountControllerBase } from '@clarity/oidc-controllers';
+import { AccountController } from '@clarity/oidc-controllers';
 import { environment } from '../../environments/environment';
 import { ActionType } from '../app.action-type';
 import { CartService } from '../cart/cart.service';
@@ -11,7 +11,7 @@ import { CartService } from '../cart/cart.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService extends AccountControllerBase {
+export class AccountService extends AccountController {
 
   user$: BehaviorSubject<User>;
 
