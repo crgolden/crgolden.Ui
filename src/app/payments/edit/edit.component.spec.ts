@@ -15,7 +15,7 @@ import { EditComponent } from './edit.component';
 import { AccountService } from '../../account/account.service';
 import { Payment } from '../payment';
 import { Order } from '../../orders/order';
-import { PaymentsService } from '../../payments/payments.service';
+import { PaymentsController } from '../../payments/payments.controller';
 
 let order: Order;
 let payment: Payment;
@@ -25,7 +25,7 @@ let page: EditPage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let paymentsService: PaymentsService;
+let paymentsController: PaymentsController;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -99,8 +99,8 @@ describe('EditComponent', () => {
           useValue: jasmine.createSpyObj('Router', ['navigate'])
         },
         {
-          provide: PaymentsService,
-          useValue: jasmine.createSpyObj('PaymentsService', { edit$: of() })
+          provide: PaymentsController,
+          useValue: jasmine.createSpyObj('PaymentsController', { edit$: of() })
         }
       ]
     });
@@ -108,7 +108,7 @@ describe('EditComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    paymentsService = fixture.debugElement.injector.get(PaymentsService);
+    paymentsController = fixture.debugElement.injector.get(PaymentsController);
     fixture.detectChanges();
     page = new EditPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
@@ -131,14 +131,14 @@ describe('EditComponent', () => {
     const form = { valid: true } as NgForm;
 
     component.edit(form);
-    expect(paymentsService.edit$).toHaveBeenCalled();
+    expect(paymentsController.update$).toHaveBeenCalled();
   });
 
   it('should not call edit for invalid form', () => {
     const form = { valid: false } as NgForm;
 
     component.edit(form);
-    expect(paymentsService.edit$).not.toHaveBeenCalled();
+    expect(paymentsController.update$).not.toHaveBeenCalled();
   });
 
   it('can get RouterLinks from template', () => {
@@ -175,7 +175,7 @@ describe('EditComponent', () => {
     order = undefined;
     payment = undefined;
     component = undefined;
-    paymentsService = undefined;
+    paymentsController = undefined;
     page = undefined;
     routerLinkDebugElements = undefined;
     routerLinks = undefined;

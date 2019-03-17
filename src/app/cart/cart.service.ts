@@ -1,27 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Service } from '@clarity/services';
 import { BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../environments/environment';
 import { ActionType } from '../app.action-type';
+import { CartsController } from '../carts/carts.controller';
 import { CartProductsService } from '../cart-products/cart-products.service';
-import { Cart } from './cart';
+import { Cart } from '../carts/cart';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartsService extends Service<Cart> {
+export class CartService {
 
   cart$: BehaviorSubject<Cart>;
 
   constructor(
     private readonly router: Router,
     private readonly cookieService: CookieService,
-    private readonly cartProductsService: CartProductsService,
-    http: HttpClient) {
-    super('carts', environment.apiUrl, http);
+    private readonly cartsController: CartsController,
+    private readonly cartProductsService: CartProductsService) {
     this.cart$ = new BehaviorSubject<Cart>(undefined as Cart);
   }
 
@@ -35,8 +33,8 @@ export class CartsService extends Service<Cart> {
     switch (type) {
       case ActionType.Load:
         cartId.length > 0
-          ? this.details$([cartId]).subscribe(cart => cartContinue(cart))
-          : this.create$({}).subscribe(cart => cartContinue(cart));
+          ? this.cartsController.read$([cartId]).subscribe(cart => cartContinue(cart))
+          : this.cartsController.create$({}).subscribe(cart => cartContinue(cart));
         break;
       case ActionType.Login:
         const loginContinue = (cart: Cart) => this.router.navigate(['/']).then(() => {
@@ -45,12 +43,12 @@ export class CartsService extends Service<Cart> {
             .then(() => window.sessionStorage.removeItem('returnUrl'));
         });
         cartId.length > 0
-          ? this.details$([cartId]).subscribe(cart => loginContinue(cart))
-          : this.create$({}).subscribe(cart => loginContinue(cart));
+          ? this.cartsController.read$([cartId]).subscribe(cart => loginContinue(cart))
+          : this.cartsController.create$({}).subscribe(cart => loginContinue(cart));
         break;
       case ActionType.Logout:
         this.cookieService.delete('CartId', '/', `${environment.cookieDomain}`);
-        this.create$({}).subscribe((cart) => cartContinue(cart));
+        this.cartsController.create$({}).subscribe((cart) => cartContinue(cart));
         break;
     }
   }

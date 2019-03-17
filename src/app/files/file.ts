@@ -1,4 +1,4 @@
-import { Model } from '@clarity/models';
+import { Model } from '@clarity/core-models';
 import { Subscription } from 'rxjs';
 import { FileInfo, FileState } from '@progress/kendo-angular-upload';
 

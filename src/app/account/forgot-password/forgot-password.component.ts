@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ForgotPassword } from '../models/forgot-password';
+import { ForgotPassword } from '@clarity/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({

@@ -10,6 +10,7 @@ import {
   SortSettings
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
+import { CartProductsController } from '../cart-products/cart-products.controller';
 import { CartProductsService } from '../cart-products/cart-products.service';
 import { CartProduct } from '../cart-products/cart-product';
 
@@ -30,10 +31,11 @@ export class CartComponent implements OnInit {
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
+    private readonly cartProductsController: CartProductsController,
     private readonly cartProductsService: CartProductsService) {
-    this.cartProductsState = cartProductsService.state;
-    this.cartProductsPageable = cartProductsService.pageable;
-    this.cartProductsSortable = cartProductsService.sortable;
+    this.cartProductsState = cartProductsController.state;
+    this.cartProductsPageable = cartProductsController.pageable;
+    this.cartProductsSortable = cartProductsController.sortable;
   }
 
   ngOnInit(): void {
@@ -44,8 +46,8 @@ export class CartComponent implements OnInit {
 
   updateQuantity(quantity: number, cartProduct: CartProduct): void {
     cartProduct.quantity = quantity;
-    this.cartProductsService
-      .edit$(cartProduct)
+    this.cartProductsController
+      .update$(cartProduct)
       .subscribe(
         () => {
           this.cartProducts.find(
@@ -58,7 +60,7 @@ export class CartComponent implements OnInit {
   }
 
   removeCartProduct(cartProduct: CartProduct): void {
-    this.cartProductsService
+    this.cartProductsController
       .delete$([
         cartProduct.cartId,
         cartProduct.productId
@@ -68,7 +70,7 @@ export class CartComponent implements OnInit {
           const index = this.cartProducts.findIndex(x => x.productId === cartProduct.productId);
           this.cartProducts.splice(index, 1);
           this.cartProductsService.cartProducts$.next(this.cartProducts);
-          this.dataStateChange(this.cartProductsService.state);
+          this.dataStateChange(this.cartProductsController.state);
         },
         (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
           disableTimeOut: true
@@ -88,8 +90,8 @@ export class CartComponent implements OnInit {
   }
 
   dataStateChange(state: DataSourceRequestState): void {
-    this.cartProductsState = this.cartProductsService.state = state;
-    this.cartProductsService.index$().subscribe(
+    this.cartProductsState = this.cartProductsController.state = state;
+    this.cartProductsController.list$().subscribe(
       cartProducts => this.cartProductsData = cartProducts,
       (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true

@@ -3,9 +3,9 @@ import { Resolve } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { skipWhile, take } from 'rxjs/operators';
 import { GridDataResult } from '@progress/kendo-angular-grid';
-import { CartsService } from '../../carts/carts.service';
+import { CartService } from '../../cart/cart.service';
 import { CartProductsService } from '../../cart-products/cart-products.service';
-import { ProductsService } from '../products.service';
+import { ProductsController } from '../products.controller';
 import { Cart } from '../../carts/cart';
 import { CartProduct } from '../../cart-products/cart-product';
 
@@ -19,9 +19,9 @@ export class IndexResolver implements Resolve<[
 ]> {
 
   constructor(
-    private readonly cartsService: CartsService,
+    private readonly cartService: CartService,
     private readonly cartProductsService: CartProductsService,
-    private readonly productsService: ProductsService) {
+    private readonly productsController: ProductsController) {
   }
 
   resolve(): Observable<[
@@ -30,11 +30,11 @@ export class IndexResolver implements Resolve<[
     GridDataResult
   ]> {
     return combineLatest(
-      this.cartsService.cart$
+      this.cartService.cart$
         .pipe(skipWhile(cart => cart == null)),
       this.cartProductsService.cartProducts$
         .pipe(skipWhile(cartProducts => cartProducts == null)),
-      this.productsService.index$())
+      this.productsController.list$())
       .pipe(take(1));
   }
 }

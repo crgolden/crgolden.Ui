@@ -9,14 +9,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Address } from '@clarity/core-claims';
 import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
 import { EditPage } from '../../test/page-models/orders/edit-page';
 import { EditComponent } from './edit.component';
 import { AccountService } from '../../account/account.service';
 import { Order } from '../order';
-import { OrdersService } from '../../orders/orders.service';
-import { OrderProductsService } from '../../order-products/order-products.service';
-import { Address } from '../../address/address';
+import { OrdersController } from '../orders.controller';
+import { OrderProductsController } from '../../order-products/order-products.controller';
 
 let order: Order;
 let shippingAddress: Address;
@@ -26,7 +26,7 @@ let page: EditPage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let ordersService: OrdersService;
+let ordersController: OrdersController;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -90,18 +90,18 @@ describe('EditComponent', () => {
           useValue: jasmine.createSpyObj('Router', ['navigate'])
         },
         {
-          provide: OrdersService,
-          useValue: jasmine.createSpyObj('ProductsService', { edit$: of() })
+          provide: OrdersController,
+          useValue: jasmine.createSpyObj('OrdersController', { edit$: of() })
         },
         {
-          provide: OrderProductsService,
-          useValue: jasmine.createSpyObj('OrderProductsService', ['edit$'])
+          provide: OrderProductsController,
+          useValue: jasmine.createSpyObj('OrderProductsController', ['edit$'])
         }
       ]
     });
     fixture = TestBed.createComponent(EditComponent);
     component = fixture.componentInstance;
-    ordersService = fixture.debugElement.injector.get(OrdersService);
+    ordersController = fixture.debugElement.injector.get(OrdersController);
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
     fixture.detectChanges();
@@ -129,14 +129,14 @@ describe('EditComponent', () => {
     const form = { valid: true } as NgForm;
 
     component.edit(form);
-    expect(ordersService.edit$).toHaveBeenCalled();
+    expect(ordersController.update$).toHaveBeenCalled();
   });
 
   it('should not call edit for invalid form', () => {
     const form = { valid: false } as NgForm;
 
     component.edit(form);
-    expect(ordersService.edit$).not.toHaveBeenCalled();
+    expect(ordersController.update$).not.toHaveBeenCalled();
   });
 
   it('can get RouterLinks from template', () => {
@@ -172,7 +172,7 @@ describe('EditComponent', () => {
   afterEach(() => {
     order = undefined;
     component = undefined;
-    ordersService = undefined;
+    ordersController = undefined;
     accountService = undefined;
     page = undefined;
     routerLinkDebugElements = undefined;

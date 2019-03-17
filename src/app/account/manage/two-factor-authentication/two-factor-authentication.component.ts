@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TwoFactorAuthentication } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { TwoFactorAuthentication } from '../models/two-factor-authentication';
 
 @Component({
   selector: 'app-account-manage-two-factor-authentication',

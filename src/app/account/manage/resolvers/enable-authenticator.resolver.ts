@@ -8,8 +8,8 @@ import {
 import { Observable, of } from 'rxjs';
 import { concatMap, map, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { EnableAuthenticator } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { EnableAuthenticator } from '../models/enable-authenticator';
 
 @Injectable()
 export class EnableAuthenticatorResolver implements Resolve<EnableAuthenticator> {

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddressService } from '../../address/address.service';
-import { Address } from '../../address/address';
+import { Address } from '@clarity/core-claims';
+import { AddressController } from '../../address/address.controller';
 
 @Component({
   selector: 'app-checkout-shipping-address',
@@ -18,7 +18,7 @@ export class ShippingAddressComponent {
   constructor(
     readonly modal: NgbActiveModal,
     private readonly toastr: ToastrService,
-    private readonly addressService: AddressService) {
+    private readonly addressController: AddressController) {
   }
 
   useAnyway(useAnyway: boolean): void {
@@ -32,7 +32,7 @@ export class ShippingAddressComponent {
 
   validateShippingAddress(form: NgForm): void {
     if (!form.valid) { return; }
-    this.addressService
+    this.addressController
       .validate(this.shippingAddress)
       .subscribe(
         isValid => {

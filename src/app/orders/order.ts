@@ -1,5 +1,5 @@
-import { Model } from '@clarity/models';
-import { Address } from '../address/address';
+import { Model } from '@clarity/core-models';
+import { Address } from '@clarity/core-claims';
 
 export class Order extends Model {
   id?: string;

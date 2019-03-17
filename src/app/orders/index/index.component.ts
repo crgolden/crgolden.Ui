@@ -8,7 +8,7 @@ import {
   SortSettings
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
-import { OrdersService } from '../orders.service';
+import { OrdersController } from '../orders.controller';
 
 @Component({
   selector: 'app-orders-index',
@@ -26,10 +26,10 @@ export class IndexComponent implements OnInit {
     private readonly titleService: Title,
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
-    private readonly ordersService: OrdersService) {
-    this.state = ordersService.state;
-    this.pageable = ordersService.pageable;
-    this.sortable = ordersService.sortable;
+    private readonly ordersController: OrdersController) {
+    this.state = ordersController.state;
+    this.pageable = ordersController.pageable;
+    this.sortable = ordersController.sortable;
   }
 
   ngOnInit(): void {
@@ -38,8 +38,8 @@ export class IndexComponent implements OnInit {
   }
 
   dataStateChange(state: DataSourceRequestState): void {
-    this.state = this.ordersService.state = state;
-    this.ordersService.index$().subscribe(
+    this.state = this.ordersController.state = state;
+    this.ordersController.list$().subscribe(
       result => this.orders = result,
       (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true

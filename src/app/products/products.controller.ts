@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Service } from '@clarity/services';
+import { ModelController } from '@clarity/core-controllers';
 import { environment } from '../../environments/environment';
 import { Product } from './product';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService extends Service<Product> {
+export class ProductsController extends ModelController<Product> {
 
   isList: boolean;
 
-  constructor(protected readonly http: HttpClient) {
+  constructor(http: HttpClient) {
     super('products', environment.apiUrl, http);
     this.state.sort = [{
       field: 'name',

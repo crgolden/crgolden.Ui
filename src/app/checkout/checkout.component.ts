@@ -6,17 +6,17 @@ import { exhaustMap, filter } from 'rxjs/operators';
 import { User } from 'oidc-client';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Address } from '@clarity/core-claims';
 import { PaymentComponent } from './payment/payment.component';
 import { ShippingAddressComponent } from './shipping-address/shipping-address.component';
-import { OrdersService } from '../orders/orders.service';
-import { OrderProductsService } from '../order-products/order-products.service';
-import { PaymentsService } from '../payments/payments.service';
+import { OrdersController } from '../orders/orders.controller';
+import { OrderProductsController } from '../order-products/order-products.controller';
+import { PaymentsController} from '../payments/payments.controller';
 import { CartProductsService } from '../cart-products/cart-products.service';
 import { CartProduct, toProduct } from '../cart-products/cart-product';
 import { Order } from '../orders/order';
 import { OrderProduct } from '../order-products/order-product';
 import { Payment } from '../payments/payment';
-import { Address } from '../address/address';
 
 @Component({
   selector: 'app-checkout',
@@ -40,9 +40,9 @@ export class CheckoutComponent implements OnInit {
     private readonly titleService: Title,
     private readonly modalService: NgbModal,
     private readonly toastr: ToastrService,
-    private readonly ordersService: OrdersService,
-    private readonly orderProductsService: OrderProductsService,
-    private readonly paymentsService: PaymentsService,
+    private readonly ordersController: OrdersController,
+    private readonly orderProductsController: OrderProductsController,
+    private readonly paymentsController: PaymentsController,
     private readonly cartProductsService: CartProductsService,
     private readonly route: ActivatedRoute,
     private readonly router: Router) {
@@ -99,14 +99,14 @@ export class CheckoutComponent implements OnInit {
         }
       });
     } else {
-      this.ordersService
+      this.ordersController
         .create$(new Order(this.total(), this.shippingAddress))
         .pipe(
           filter(order => order != null),
           exhaustMap((order: Order) => combineLatest(
             of(order),
-            this.paymentsService.create$(new Payment(order.id, order.total, 'USD', this.tokenId)),
-            this.orderProductsService.createRange$(this.orderProducts(order)))))
+            this.paymentsController.create$(new Payment(order.id, order.total, 'USD', this.tokenId)),
+            this.orderProductsController.createRange$(this.orderProducts(order)))))
         .subscribe(
           latest => {
             const [order] = latest;

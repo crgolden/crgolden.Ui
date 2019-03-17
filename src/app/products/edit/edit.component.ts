@@ -14,8 +14,8 @@ import {
 } from '@progress/kendo-angular-upload';
 import { environment } from '../../../environments/environment';
 import { AccountService } from '../../account/account.service';
-import { ProductsService } from '../products.service';
-import { ProductFilesService } from '../../product-files/product-files.service';
+import { ProductsController } from '../products.controller';
+import { ProductFilesController } from '../../product-files/product-files.controller';
 import { Product } from '../product';
 import { File } from '../../files/file';
 import { ProductFile, toFile } from '../../product-files/product-file';
@@ -42,8 +42,8 @@ export class EditComponent implements OnInit {
     private readonly router: Router,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly productsService: ProductsService,
-    private readonly productFilesService: ProductFilesService) {
+    private readonly productsController: ProductsController,
+    private readonly productFilesController: ProductFilesController) {
     this.uploadRemoveUrl = `${environment.apiUrl}/files/remove`;
     this.uploadSaveUrl = `${environment.apiUrl}/files/upload`;
   }
@@ -57,7 +57,7 @@ export class EditComponent implements OnInit {
 
   edit(form: NgForm): void {
     if (!form.valid) { return; }
-    this.productsService.edit$(this.product).subscribe(
+    this.productsController.update$(this.product).subscribe(
       () => {
         window.sessionStorage.setItem('success', `${this.product.name} updated`);
         this.router.navigate([`/products/details/${this.product.id}`]);
@@ -79,7 +79,7 @@ export class EditComponent implements OnInit {
     if (event.response.body instanceof Array && event.response.body.length > 0) {
       switch (event.operation) {
         case 'upload':
-          event.response.body.forEach((file: File) => this.productFilesService
+          event.response.body.forEach((file: File) => this.productFilesController
             .create$(new ProductFile(this.product, file, false))
             .subscribe(
               productFile => {

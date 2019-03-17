@@ -14,7 +14,7 @@ import { IndexPage } from '../../test/page-models/orders/index-page';
 import { IndexComponent } from './index.component';
 import { AccountService } from '../../account/account.service';
 import { Order } from '../order';
-import { OrdersService } from '../../orders/orders.service';
+import { OrdersController } from '../../orders/orders.controller';
 
 let order1: Order;
 let order2: Order;
@@ -81,8 +81,8 @@ describe('IndexComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$, userHasRole$'])
         },
         {
-          provide: OrdersService,
-          useValue: jasmine.createSpyObj('ordersService', { index: of() })
+          provide: OrdersController,
+          useValue: jasmine.createSpyObj('ordersController', { index: of() })
         }
       ],
       imports: [

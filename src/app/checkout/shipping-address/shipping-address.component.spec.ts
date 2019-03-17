@@ -2,9 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AddressService } from '../../address/address.service';
+import { Address } from '@clarity/core-claims';
+import { AddressController } from '../../address/address.controller';
 import { ShippingAddressComponent } from './shipping-address.component';
-import { Address } from '../../address/address';
 
 describe('ShippingAddressComponent', () => {
   let component: ShippingAddressComponent;
@@ -28,7 +28,7 @@ describe('ShippingAddressComponent', () => {
           useValue: jasmine.createSpyObj('ToastrService', ['error'])
         },
         {
-          provide: AddressService,
+          provide: AddressController,
           useValue: jasmine.createSpyObj('AddressService', ['validate'])
         }
       ]

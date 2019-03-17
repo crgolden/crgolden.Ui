@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account/account.service';
-import { PaymentsService } from '../payments.service';
+import { PaymentsController } from '../payments.controller';
 import { Payment } from '../payment';
 
 @Component({
@@ -23,7 +23,7 @@ export class EditComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly paymentsService: PaymentsService) {
+    private readonly paymentsController: PaymentsController) {
   }
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class EditComponent implements OnInit {
 
   edit(form: NgForm): void {
     if (!form.valid) { return; }
-    this.paymentsService.edit$(this.payment).subscribe(
+    this.paymentsController.update$(this.payment).subscribe(
       () => {
         window.sessionStorage.setItem('success', `Payment #${this.payment.chargeId} updated`);
         this.router.navigate([`/payments/details/${this.payment.id}`]);

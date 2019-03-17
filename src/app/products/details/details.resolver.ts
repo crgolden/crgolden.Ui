@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { skipWhile, take } from 'rxjs/operators';
-import { CartsService } from '../../carts/carts.service';
+import { CartService } from '../../cart/cart.service';
 import { CartProductsService } from '../../cart-products/cart-products.service';
-import { ProductsService } from '../products.service';
+import { ProductsController } from '../products.controller';
 import { Cart } from '../../carts/cart';
 import { Product } from '../product';
 import { CartProduct } from '../../cart-products/cart-product';
@@ -19,9 +19,9 @@ export class DetailsResolver implements Resolve<[
 ]> {
 
   constructor(
-    private readonly cartsService: CartsService,
+    private readonly cartService: CartService,
     private readonly cartProductsService: CartProductsService,
-    private readonly productsService: ProductsService) {
+    private readonly productsController: ProductsController) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<[
@@ -35,11 +35,11 @@ export class DetailsResolver implements Resolve<[
     }
 
     return combineLatest(
-      this.cartsService.cart$
+      this.cartService.cart$
         .pipe(skipWhile(cart => cart == null)),
       this.cartProductsService.cartProducts$
         .pipe((skipWhile(cartProducts => cartProducts == null))),
-      this.productsService.details$([productId]))
+      this.productsController.read$([productId]))
       .pipe(take(1));
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account/account.service';
+import { CartProductsController } from '../../cart-products/cart-products.controller';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 import { Product } from '../product';
 import { Cart } from '../../carts/cart';
@@ -25,6 +26,7 @@ export class DetailsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
+    private readonly cartProductsController: CartProductsController,
     private readonly cartProductsService: CartProductsService) {
   }
 
@@ -45,7 +47,7 @@ export class DetailsComponent implements OnInit {
   }
 
   addToCart(): void {
-    this.cartProductsService
+    this.cartProductsController
       .create$(new CartProduct(this.cart, this.product, 1))
       .subscribe(
         cartProduct => {
@@ -58,7 +60,7 @@ export class DetailsComponent implements OnInit {
   }
 
   removeFromCart(): void {
-    this.cartProductsService
+    this.cartProductsController
       .delete$([
         this.cart.id,
         this.product.id

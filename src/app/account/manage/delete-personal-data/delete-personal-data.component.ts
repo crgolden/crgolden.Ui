@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { DeletePersonalData } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { DeletePersonalData } from '../models/delete-personal-data';
 
 @Component({
   selector: 'app-account-manage-delete-personal-data',

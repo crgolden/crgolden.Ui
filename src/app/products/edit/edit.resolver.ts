@@ -4,8 +4,8 @@ import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { FilterDescriptor } from '@progress/kendo-data-query';
-import { ProductFilesService } from '../../product-files/product-files.service';
-import { ProductsService } from '../products.service';
+import { ProductFilesController } from '../../product-files/product-files.controller';
+import { ProductsController } from '../products.controller';
 import { Product } from '../product';
 
 @Injectable({
@@ -17,8 +17,8 @@ export class EditResolver implements Resolve<[
 ]> {
 
   constructor(
-    private readonly productFilesService: ProductFilesService,
-    private readonly productsService: ProductsService) {
+    private readonly productFilesController: ProductFilesController,
+    private readonly productsController: ProductsController) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<[
@@ -30,10 +30,10 @@ export class EditResolver implements Resolve<[
       return undefined;
     }
 
-    const state = this.productFilesService.state;
-    this.productFilesService.state.take = undefined;
-    if (this.productFilesService.state.filter == null) {
-      this.productFilesService.state.filter = {
+    const state = this.productFilesController.state;
+    this.productFilesController.state.take = undefined;
+    if (this.productFilesController.state.filter == null) {
+      this.productFilesController.state.filter = {
         logic: 'and',
         filters: [{
           operator: 'eq',
@@ -42,12 +42,12 @@ export class EditResolver implements Resolve<[
         }]
       };
     } else {
-      const productIdFilter = this.productFilesService.state.filter.filters.find(
+      const productIdFilter = this.productFilesController.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'productId');
       if (productIdFilter != null) {
         (productIdFilter as FilterDescriptor).value = productId;
       } else {
-        this.productFilesService.state.filter.filters.push({
+        this.productFilesController.state.filter.filters.push({
           operator: 'eq',
           field: 'productId',
           value: productId
@@ -55,12 +55,12 @@ export class EditResolver implements Resolve<[
       }
     }
     return combineLatest(
-      this.productFilesService.index$()
+      this.productFilesController.list$()
         .pipe(map(productFiles => {
-          this.productFilesService.state = state;
+          this.productFilesController.state = state;
           return productFiles;
         })),
-      this.productsService.details$([productId]))
+      this.productsController.read$([productId]))
       .pipe(take(1));
   }
 }

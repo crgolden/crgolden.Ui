@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ChangePassword } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { ChangePassword } from '../models/change-password';
 
 @Component({
   selector: 'app-account-manage-change-password',

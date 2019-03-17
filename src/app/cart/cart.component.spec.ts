@@ -14,7 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLinkDirectiveStub } from '../test/stubs/router-link-directive-stub';
 import { CartPage } from '../test/page-models/cart/cart-page';
 import { CartComponent } from './cart.component';
-import { CartsService } from '../carts/carts.service';
+import { CartService } from '../cart/cart.service';
 import { Cart } from '../carts/cart';
 import { CartProductsService } from '../cart-products/cart-products.service';
 import { CartProduct } from '../cart-products/cart-product';
@@ -29,7 +29,7 @@ let fixture: ComponentFixture<CartComponent>;
 let page: CartPage;
 let routerLinks: RouterLinkDirectiveStub[];
 let routerLinkDebugElements: DebugElement[];
-let cartsService: CartsService;
+let cartService: CartService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -101,7 +101,7 @@ describe('EditComponent', () => {
           useValue: jasmine.createSpyObj('ToastrService', ['error'])
         },
         {
-          provide: CartsService,
+          provide: CartService,
           useValue: jasmine.createSpyObj('CartService', { edit$: of() })
         },
         {
@@ -112,8 +112,8 @@ describe('EditComponent', () => {
     });
     fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
-    cartsService = fixture.debugElement.injector.get(CartsService);
-    cartsService.cart$ = new BehaviorSubject<Cart>(cart);
+    cartService = fixture.debugElement.injector.get(CartService);
+    cartService.cart$ = new BehaviorSubject<Cart>(cart);
     page = new CartPage(fixture);
     fixture.detectChanges();
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
@@ -172,7 +172,7 @@ describe('EditComponent', () => {
     cartProduct2 = undefined;
     cartProducts = undefined;
     component = undefined;
-    cartsService = undefined;
+    cartService = undefined;
     page = undefined;
     routerLinkDebugElements = undefined;
     routerLinks = undefined;

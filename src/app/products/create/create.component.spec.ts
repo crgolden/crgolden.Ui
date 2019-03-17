@@ -14,7 +14,7 @@ import { RouterLinkDirectiveStub } from '../../test//stubs/router-link-directive
 import { CreatePage } from '../../test/page-models/products/create-page';
 import { CreateComponent } from './create.component';
 import { AccountService } from '../../account/account.service';
-import { ProductsService } from '../../products/products.service';
+import { ProductsController } from '../../products/products.controller';
 
 let component: CreateComponent;
 let fixture: ComponentFixture<CreateComponent>;
@@ -22,7 +22,7 @@ let page: CreatePage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let productsService: ProductsService;
+let productsController: ProductsController;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -61,8 +61,8 @@ describe('CreateComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$'])
         },
         {
-          provide: ProductsService,
-          useValue: jasmine.createSpyObj('ProductsService', { create$: of() })
+          provide: ProductsController,
+          useValue: jasmine.createSpyObj('ProductsController', { create$: of() })
         }
       ]
     });
@@ -70,7 +70,7 @@ describe('CreateComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    productsService = fixture.debugElement.injector.get(ProductsService);
+    productsController = fixture.debugElement.injector.get(ProductsController);
     fixture.detectChanges();
     page = new CreatePage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
@@ -102,14 +102,14 @@ describe('CreateComponent', () => {
     const form = { valid: true } as NgForm;
 
     component.create(form);
-    expect(productsService.create$).toHaveBeenCalled();
+    expect(productsController.create$).toHaveBeenCalled();
   });
 
   it('should not call create for invalid form', () => {
     const form = { valid: false } as NgForm;
 
     component.create(form);
-    expect(productsService.create$).not.toHaveBeenCalled();
+    expect(productsController.create$).not.toHaveBeenCalled();
   });
 
   it('can get RouterLinks from template', () => {
@@ -132,7 +132,7 @@ describe('CreateComponent', () => {
   afterEach(() => {
     component = undefined;
     accountService = undefined;
-    productsService = undefined;
+    productsController = undefined;
     page = undefined;
     routerLinkDebugElements = undefined;
     routerLinks = undefined;

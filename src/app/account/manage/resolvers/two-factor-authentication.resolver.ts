@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { concatMap, map, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { TwoFactorAuthentication } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { TwoFactorAuthentication } from '../models/two-factor-authentication';
 
 @Injectable()
 export class TwoFactorAuthenticationResolver implements Resolve<TwoFactorAuthentication> {

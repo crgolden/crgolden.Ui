@@ -3,10 +3,10 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { User } from 'oidc-client';
 import { ToastrService } from 'ngx-toastr';
+import { Address } from '@clarity/core-claims';
+import { Profile } from '@clarity/oidc-models';
 import { AccountService } from '../../account.service';
 import { ManageService } from '../manage.service';
-import { Profile } from '../models/profile';
-import { Address } from '../../../address/address';
 
 @Component({
   selector: 'app-account-manage-profile',

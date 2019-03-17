@@ -4,9 +4,9 @@ import { combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { FilterDescriptor } from '@progress/kendo-data-query';
-import { OrdersService } from '../orders.service';
-import { OrderProductsService } from '../../order-products/order-products.service';
-import { PaymentsService } from '../../payments/payments.service';
+import { OrdersController } from '../orders.controller';
+import { OrderProductsController } from '../../order-products/order-products.controller';
+import { PaymentsController } from '../../payments/payments.controller';
 import { Order } from '../order';
 
 @Injectable({
@@ -19,9 +19,9 @@ export class DetailsResolver implements Resolve<[
 ]> {
 
   constructor(
-    private readonly ordersService: OrdersService,
-    private readonly orderProductsService: OrderProductsService,
-    private readonly paymentsService: PaymentsService) {
+    private readonly ordersController: OrdersController,
+    private readonly orderProductsController: OrderProductsController,
+    private readonly paymentsController: PaymentsController) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<[
@@ -34,8 +34,8 @@ export class DetailsResolver implements Resolve<[
       return undefined;
     }
 
-    if (this.orderProductsService.state.filter == null) {
-      this.orderProductsService.state.filter = {
+    if (this.orderProductsController.state.filter == null) {
+      this.orderProductsController.state.filter = {
         logic: 'and',
         filters: [{
           operator: 'eq',
@@ -44,12 +44,12 @@ export class DetailsResolver implements Resolve<[
         }]
       };
     } else {
-      const orderIdFilter = this.orderProductsService.state.filter.filters.find(
+      const orderIdFilter = this.orderProductsController.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'orderId');
       if (orderIdFilter != null) {
         (orderIdFilter as FilterDescriptor).value = orderId;
       } else {
-        this.orderProductsService.state.filter.filters.push({
+        this.orderProductsController.state.filter.filters.push({
           operator: 'eq',
           field: 'orderId',
           value: orderId
@@ -57,8 +57,8 @@ export class DetailsResolver implements Resolve<[
       }
     }
 
-    if (this.paymentsService.state.filter == null) {
-      this.paymentsService.state.filter = {
+    if (this.paymentsController.state.filter == null) {
+      this.paymentsController.state.filter = {
         logic: 'and',
         filters: [{
           operator: 'eq',
@@ -67,12 +67,12 @@ export class DetailsResolver implements Resolve<[
         }]
       };
     } else {
-      const orderIdFilter = this.paymentsService.state.filter.filters.find(
+      const orderIdFilter = this.paymentsController.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'orderId');
       if (orderIdFilter != null) {
         (orderIdFilter as FilterDescriptor).value = orderId;
       } else {
-        this.paymentsService.state.filter.filters.push({
+        this.paymentsController.state.filter.filters.push({
           operator: 'eq',
           field: 'orderId',
           value: orderId
@@ -81,9 +81,9 @@ export class DetailsResolver implements Resolve<[
     }
 
     return combineLatest(
-      this.ordersService.details$([orderId]),
-      this.orderProductsService.index$(),
-      this.paymentsService.index$())
+      this.ordersController.read$([orderId]),
+      this.orderProductsController.list$(),
+      this.paymentsController.list$())
       .pipe(take(1));
   }
 }

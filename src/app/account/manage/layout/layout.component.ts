@@ -3,8 +3,8 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Event, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { ExternalLogins } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { ExternalLogins } from '../models/external-logins';
 
 @Component({
   selector: 'app-account-manage-layout',

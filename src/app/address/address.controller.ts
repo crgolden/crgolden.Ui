@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Service } from '@clarity/services';
+import { ValidationController } from '@clarity/core-controllers';
 import { environment } from '../../environments/environment';
-import { File } from './file';
+import { Address } from '@clarity/core-claims';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FilesService extends Service<File> {
+export class AddressController extends ValidationController<Address> {
 
   constructor(http: HttpClient) {
-    super('files', environment.apiUrl, http);
+    super('addresses', environment.apiUrl, http);
   }
 }

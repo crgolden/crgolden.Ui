@@ -1,4 +1,4 @@
-import { Model } from '@clarity/models';
+import { Model } from '@clarity/core-models';
 
 export class Product extends Model {
   id?: string;

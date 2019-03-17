@@ -14,12 +14,12 @@ import {
   GridDataResult
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
+import { Address } from '@clarity/core-claims';
 import { AccountService } from '../../account/account.service';
-import { OrdersService } from '../orders.service';
+import { OrdersController } from '../orders.controller';
 import { Order } from '../order';
-import { OrderProductsService } from '../../order-products/order-products.service';
+import { OrderProductsController } from '../../order-products/order-products.controller';
 import { OrderProduct } from '../../order-products/order-product';
-import { Address } from '../../address/address';
 
 const createFormGroup = (orderProduct: OrderProduct): FormGroup => new FormGroup({
   'orderId': new FormControl(orderProduct.orderId),
@@ -61,11 +61,11 @@ export class EditComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly ordersService: OrdersService,
-    private readonly orderProductsService: OrderProductsService) {
-    this.orderProductsState = orderProductsService.state;
-    this.orderProductsPageable = orderProductsService.pageable;
-    this.orderProductsSortable = orderProductsService.sortable;
+    private readonly ordersController: OrdersController,
+    private readonly orderProductsController: OrderProductsController) {
+    this.orderProductsState = orderProductsController.state;
+    this.orderProductsPageable = orderProductsController.pageable;
+    this.orderProductsSortable = orderProductsController.sortable;
   }
 
   ngOnInit(): void {
@@ -86,7 +86,7 @@ export class EditComponent implements OnInit {
     if (this.shippingAddress != null) {
       this.order.shippingAddress = this.shippingAddress;
     }
-    this.ordersService.edit$(this.order).subscribe(
+    this.ordersController.update$(this.order).subscribe(
       () => {
         window.sessionStorage.setItem('success', `Order #${this.order.number} updated`);
         this.router.navigate([`/Orders/Details/${this.order.id}`]);
@@ -97,8 +97,8 @@ export class EditComponent implements OnInit {
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {
-    this.orderProductsState = this.orderProductsService.state = state;
-    this.orderProductsService.index$().subscribe(
+    this.orderProductsState = this.orderProductsController.state = state;
+    this.orderProductsController.list$().subscribe(
       result => this.orderProducts = result,
       (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
@@ -155,10 +155,10 @@ export class EditComponent implements OnInit {
       this.closeEditor();
       return;
     }
-    this.orderProductsService.edit$(this.formGroup.value)
+    this.orderProductsController.update$(this.formGroup.value)
       .pipe(concatMap(() => combineLatest(
-        this.ordersService.details$([this.order.id]),
-        this.orderProductsService.index$())))
+        this.ordersController.read$([this.order.id]),
+        this.orderProductsController.list$())))
       .subscribe(
         latest => {
           const [order, orderProducts] = latest;

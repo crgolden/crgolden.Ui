@@ -8,8 +8,8 @@ import {
 import { Observable, of } from 'rxjs';
 import { concatMap, map, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { ExternalLogins } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { ExternalLogins } from '../models/external-logins';
 
 @Injectable()
 export class ExternalLoginsResolver implements Resolve<ExternalLogins> {

@@ -4,8 +4,8 @@ import { combineLatest, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { FilterDescriptor } from '@progress/kendo-data-query';
-import { OrdersService } from '../orders.service';
-import { OrderProductsService } from '../../order-products/order-products.service';
+import { OrdersController } from '../orders.controller';
+import { OrderProductsController } from '../../order-products/order-products.controller';
 import { Order } from '../order';
 
 @Injectable({
@@ -17,8 +17,8 @@ export class EditResolver implements Resolve<[
 ]> {
 
   constructor(
-    private readonly ordersService: OrdersService,
-    private readonly orderProductsService: OrderProductsService) {
+    private readonly ordersController: OrdersController,
+    private readonly orderProductsController: OrderProductsController) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<[
@@ -30,8 +30,8 @@ export class EditResolver implements Resolve<[
       return undefined;
     }
 
-    if (this.orderProductsService.state.filter == null) {
-      this.orderProductsService.state.filter = {
+    if (this.orderProductsController.state.filter == null) {
+      this.orderProductsController.state.filter = {
         logic: 'and',
         filters: [{
           operator: 'eq',
@@ -40,12 +40,12 @@ export class EditResolver implements Resolve<[
         }]
       };
     } else {
-      const orderIdFilter = this.orderProductsService.state.filter.filters.find(
+      const orderIdFilter = this.orderProductsController.state.filter.filters.find(
         (filter: FilterDescriptor) => filter.field === 'orderId');
       if (orderIdFilter != null) {
         (orderIdFilter as FilterDescriptor).value = orderId;
       } else {
-        this.orderProductsService.state.filter.filters.push({
+        this.orderProductsController.state.filter.filters.push({
           operator: 'eq',
           field: 'orderId',
           value: orderId
@@ -54,8 +54,8 @@ export class EditResolver implements Resolve<[
     }
 
     return combineLatest(
-      this.ordersService.details$([orderId]),
-      this.orderProductsService.index$())
+      this.ordersController.read$([orderId]),
+      this.orderProductsController.list$())
       .pipe(take(1));
   }
 }

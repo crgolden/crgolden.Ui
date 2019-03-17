@@ -10,11 +10,11 @@ import {
   GridDataResult
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
+import { Address } from '@clarity/core-claims';
 import { AccountService } from '../../account/account.service';
-import { OrderProductsService } from '../../order-products/order-products.service';
-import { PaymentsService } from '../../payments/payments.service';
+import { OrderProductsController } from '../../order-products/order-products.controller';
+import { PaymentsController } from '../../payments/payments.controller';
 import { Order } from '../order';
-import { Address } from '../../address/address';
 
 @Component({
   selector: 'app-orders-details',
@@ -40,14 +40,14 @@ export class DetailsComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly orderProductsService: OrderProductsService,
-    private readonly paymentsService: PaymentsService) {
-    this.orderProductsState = orderProductsService.state;
-    this.orderProductsPageable = orderProductsService.pageable;
-    this.orderProductsSortable = orderProductsService.sortable;
-    this.paymentsState = paymentsService.state;
-    this.paymentsPageable = paymentsService.pageable;
-    this.paymentsSortable = paymentsService.sortable;
+    private readonly orderProductsController: OrderProductsController,
+    private readonly paymentsController: PaymentsController) {
+    this.orderProductsState = orderProductsController.state;
+    this.orderProductsPageable = orderProductsController.pageable;
+    this.orderProductsSortable = orderProductsController.sortable;
+    this.paymentsState = paymentsController.state;
+    this.paymentsPageable = paymentsController.pageable;
+    this.paymentsSortable = paymentsController.sortable;
   }
 
   ngOnInit(): void {
@@ -64,8 +64,8 @@ export class DetailsComponent implements OnInit {
   }
 
   orderProductsStateChange(state: DataStateChangeEvent): void {
-    this.orderProductsState = this.orderProductsService.state = state;
-    this.orderProductsService.index$().subscribe(
+    this.orderProductsState = this.orderProductsController.state = state;
+    this.orderProductsController.list$().subscribe(
       orderProducts => this.orderProducts = orderProducts,
       (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
@@ -73,8 +73,8 @@ export class DetailsComponent implements OnInit {
   }
 
   paymentsStateChange(state: DataStateChangeEvent): void {
-    this.paymentsState = this.paymentsService.state = state;
-    this.paymentsService.index$().subscribe(
+    this.paymentsState = this.paymentsController.state = state;
+    this.paymentsController.list$().subscribe(
       payments => this.payments = payments,
       (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true

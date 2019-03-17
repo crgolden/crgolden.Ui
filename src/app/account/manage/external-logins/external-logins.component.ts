@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ExternalLogins } from '../models/external-logins';
+import { ExternalLogins } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({

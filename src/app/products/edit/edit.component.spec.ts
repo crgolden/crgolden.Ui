@@ -16,9 +16,9 @@ import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-
 import { EditPage } from '../../test/page-models/products/edit-page';
 import { EditComponent } from './edit.component';
 import { AccountService } from '../../account/account.service';
-import { ProductsService } from '../../products/products.service';
+import { ProductsController } from '../../products/products.controller';
 import { Product } from '../product';
-import { ProductFilesService } from '../../product-files/product-files.service';
+import { ProductFilesController } from '../../product-files/product-files.controller';
 
 let product: Product;
 let component: EditComponent;
@@ -27,7 +27,7 @@ let page: EditPage;
 let routerLinks: RouterLinkDirectiveStub[];
 let routerLinkDebugElements: DebugElement[];
 let accountService: AccountService;
-let productsService: ProductsService;
+let productsController: ProductsController;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -88,12 +88,12 @@ describe('EditComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$'])
         },
         {
-          provide: ProductsService,
-          useValue: jasmine.createSpyObj('ProductsService', { edit$: of() })
+          provide: ProductsController,
+          useValue: jasmine.createSpyObj('ProductsController', { edit$: of() })
         },
         {
-          provide: ProductFilesService,
-          useValue: jasmine.createSpyObj('ProductFilesService', ['createRange$'])
+          provide: ProductFilesController,
+          useValue: jasmine.createSpyObj('ProductFilesController', ['createRange$'])
         }
       ]
     });
@@ -101,7 +101,7 @@ describe('EditComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    productsService = fixture.debugElement.injector.get(ProductsService);
+    productsController = fixture.debugElement.injector.get(ProductsController);
     fixture.detectChanges();
     page = new EditPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
@@ -127,14 +127,14 @@ describe('EditComponent', () => {
     const form = { valid: true } as NgForm;
 
     component.edit(form);
-    expect(productsService.edit$).toHaveBeenCalled();
+    expect(productsController.update$).toHaveBeenCalled();
   });
 
   it('should not call edit for invalid form', () => {
     const form = { valid: false } as NgForm;
 
     component.edit(form);
-    expect(productsService.edit$).not.toHaveBeenCalled();
+    expect(productsController.update$).not.toHaveBeenCalled();
   });
 
   it('can get RouterLinks from template', () => {
@@ -170,7 +170,7 @@ describe('EditComponent', () => {
   afterEach(() => {
     product = undefined;
     component = undefined;
-    productsService = undefined;
+    productsController = undefined;
     page = undefined;
     routerLinkDebugElements = undefined;
     routerLinks = undefined;

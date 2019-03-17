@@ -1,4 +1,4 @@
-import { Model } from '@clarity/models';
+import { Model } from '@clarity/core-models';
 
 export class Cart extends Model {
   id?: string;

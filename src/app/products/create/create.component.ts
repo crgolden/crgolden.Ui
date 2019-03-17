@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../account/account.service';
-import { ProductsService } from '../products.service';
+import { ProductsController } from '../products.controller';
 import { Product } from '../product';
 
 @Component({
@@ -22,7 +22,7 @@ export class CreateComponent implements OnInit {
     private readonly router: Router,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly productsService: ProductsService) {
+    private readonly productsController: ProductsController) {
   }
 
   ngOnInit(): void {
@@ -32,7 +32,7 @@ export class CreateComponent implements OnInit {
 
   create(form: NgForm): void {
     if (!form.valid) { return; }
-    this.productsService.create$(this.product).subscribe(
+    this.productsController.create$(this.product).subscribe(
       product => {
         window.sessionStorage.setItem('success', `${this.product.name} created`);
         this.router.navigate([`/products/details/${product.id}`]);

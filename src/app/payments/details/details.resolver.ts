@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { PaymentsService } from '../payments.service';
+import { PaymentsController } from '../payments.controller';
 import { Payment } from '../payment';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Payment } from '../payment';
 })
 export class DetailsResolver implements Resolve<Payment> {
 
-  constructor(private readonly paymentsService: PaymentsService) {
+  constructor(private readonly paymentsController: PaymentsController) {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Payment> {
@@ -18,6 +18,6 @@ export class DetailsResolver implements Resolve<Payment> {
       return undefined;
     }
 
-    return this.paymentsService.details$([paymentId]);
+    return this.paymentsController.read$([paymentId]);
   }
 }

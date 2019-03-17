@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Params, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ResetPassword } from '../models/reset-password';
+import { ResetPassword } from '@clarity/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({

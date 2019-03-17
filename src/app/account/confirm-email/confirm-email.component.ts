@@ -4,7 +4,7 @@ import { Params, ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmEmail } from '../models/confirm-email';
+import { ConfirmEmail } from '@clarity/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({

@@ -10,7 +10,8 @@ import {
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
 import { AccountService } from '../../account/account.service';
-import { ProductsService } from '../products.service';
+import { ProductsController } from '../products.controller';
+import { CartProductsController } from '../../cart-products/cart-products.controller';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 import { Cart } from '../../carts/cart';
 import { CartProduct } from '../../cart-products/cart-product';
@@ -37,7 +38,8 @@ export class IndexComponent implements OnInit {
     private readonly router: Router,
     private readonly toastr: ToastrService,
     private readonly accountService: AccountService,
-    private readonly productsService: ProductsService,
+    private readonly productsController: ProductsController,
+    private readonly cartProductsController: CartProductsController,
     private readonly cartProductsService: CartProductsService) {
   }
 
@@ -46,10 +48,10 @@ export class IndexComponent implements OnInit {
     this.cart = this.route.snapshot.data['index'][0] as Cart;
     this.cartProducts = this.route.snapshot.data['index'][1];
     this.products = this.route.snapshot.data['index'][2];
-    this.state = this.productsService.state;
-    this.pageable = this.productsService.pageable;
-    this.sortable = this.productsService.sortable;
-    this.isList = this.productsService.isList;
+    this.state = this.productsController.state;
+    this.pageable = this.productsController.pageable;
+    this.sortable = this.productsController.sortable;
+    this.isList = this.productsController.isList;
   }
 
   inCart(productId: string): boolean {
@@ -57,7 +59,7 @@ export class IndexComponent implements OnInit {
   }
 
   addToCart(product: Product): void {
-    this.cartProductsService
+    this.cartProductsController
       .create$(new CartProduct(this.cart, product, 1))
       .subscribe(
         cartProduct => {
@@ -70,7 +72,7 @@ export class IndexComponent implements OnInit {
   }
 
   removeFromCart(productId: string): void {
-    this.cartProductsService
+    this.cartProductsController
       .delete$([
         this.cart.id,
         productId
@@ -88,8 +90,8 @@ export class IndexComponent implements OnInit {
   }
 
   dataStateChange(state: DataSourceRequestState): void {
-    this.state = this.productsService.state = state;
-    this.productsService.index$().subscribe(
+    this.state = this.productsController.state = state;
+    this.productsController.list$().subscribe(
       products => this.products = products,
       (errors: string[]) => errors.forEach(error => this.toastr.error(error, null, {
         disableTimeOut: true
@@ -105,10 +107,10 @@ export class IndexComponent implements OnInit {
   showActive$ = (): Observable<boolean> => this.accountService.userHasRole$('Admin');
 
   showGrid(): void {
-    this.isList = this.productsService.isList = false;
+    this.isList = this.productsController.isList = false;
   }
 
   showList(): void {
-    this.isList = this.productsService.isList = true;
+    this.isList = this.productsController.isList = true;
   }
 }

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Register } from '../models/register';
-import { Address } from '../../address/address';
+import { Address } from '@clarity/core-claims';
+import { Register } from '@clarity/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({

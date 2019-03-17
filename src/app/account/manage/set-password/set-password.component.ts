@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { SetPassword } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { SetPassword } from '../models/set-password';
 
 @Component({
   selector: 'app-account-manage-set-password',

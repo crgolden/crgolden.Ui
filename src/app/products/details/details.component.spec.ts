@@ -13,7 +13,7 @@ import { DetailsPage } from '../../test/page-models/products/details-page';
 import { DetailsComponent } from './details.component';
 import { Product } from '../product';
 import { AccountService } from '../../account/account.service';
-import { CartsService } from '../../carts/carts.service';
+import { CartService } from '../../cart/cart.service';
 import { Cart } from '../../carts/cart';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 
@@ -24,7 +24,7 @@ let page: DetailsPage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let cartsService: CartsService;
+let cartService: CartService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -71,8 +71,8 @@ describe('DetailsComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$'])
         },
         {
-          provide: CartsService,
-          useValue: jasmine.createSpyObj('CartsService', ['cart$'])
+          provide: CartService,
+          useValue: jasmine.createSpyObj('CartService', ['cart$'])
         },
         {
           provide: CartProductsService,
@@ -92,8 +92,8 @@ describe('DetailsComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    cartsService = fixture.debugElement.injector.get(CartsService);
-    cartsService.cart$ = new BehaviorSubject<Cart>(undefined as Cart);
+    cartService = fixture.debugElement.injector.get(CartService);
+    cartService.cart$ = new BehaviorSubject<Cart>(undefined as Cart);
     fixture.detectChanges();
     page = new DetailsPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));

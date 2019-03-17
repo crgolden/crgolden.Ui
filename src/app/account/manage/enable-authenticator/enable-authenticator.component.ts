@@ -3,8 +3,9 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { EnableAuthenticator } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { EnableAuthenticator } from '../models/enable-authenticator';
+
 
 @Component({
   selector: 'app-account-manage-enable-authenticator',

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
+import { GenerateRecoveryCodes } from '@clarity/oidc-models';
 import { ManageService } from '../manage.service';
-import { GenerateRecoveryCodes } from '../models/generate-recovery-codes';
 
 @Component({
   selector: 'app-account-manage-generate-recovery-codes',

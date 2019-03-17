@@ -13,9 +13,9 @@ import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-
 import { IndexPage } from '../../test/page-models/products/index-page';
 import { IndexComponent } from './index.component';
 import { AccountService } from '../../account/account.service';
-import { ProductsService } from '../products.service';
+import { ProductsController } from '../products.controller';
 import { Product } from '../product';
-import { CartsService } from '../../carts/carts.service';
+import { CartService } from '../../cart/cart.service';
 import { Cart } from '../../carts/cart';
 import { CartProductsService } from '../../cart-products/cart-products.service';
 
@@ -29,7 +29,7 @@ let page: IndexPage;
 let routerLinks: Array<RouterLinkDirectiveStub>;
 let routerLinkDebugElements: Array<DebugElement>;
 let accountService: AccountService;
-let cartsService: CartsService;
+let cartService: CartService;
 
 /* tslint:disable-next-line:component-selector */
 @Component({ selector: 'router-outlet', template: '' })
@@ -95,12 +95,12 @@ describe('IndexComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['userHasRole$'])
         },
         {
-          provide: ProductsService,
-          useValue: jasmine.createSpyObj('ProductsService', { index: of() })
+          provide: ProductsController,
+          useValue: jasmine.createSpyObj('ProductsController', { index: of() })
         },
         {
-          provide: CartsService,
-          useValue: jasmine.createSpyObj('CartsService', ['cart$, details$, create$'])
+          provide: CartService,
+          useValue: jasmine.createSpyObj('CartService', ['cart$, details$, create$'])
         },
         {
           provide: CartProductsService,
@@ -116,8 +116,8 @@ describe('IndexComponent', () => {
     component = fixture.componentInstance;
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.userHasRole$ = (): Observable<boolean> => of(true);
-    cartsService = fixture.debugElement.injector.get(CartsService);
-    cartsService.cart$ = new BehaviorSubject<Cart>(new Cart());
+    cartService = fixture.debugElement.injector.get(CartService);
+    cartService.cart$ = new BehaviorSubject<Cart>(new Cart());
     fixture.detectChanges();
     page = new IndexPage(fixture);
     routerLinkDebugElements = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));

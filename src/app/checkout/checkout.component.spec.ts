@@ -9,14 +9,14 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Address } from '@clarity/core-claims';
 import { CheckoutComponent } from './checkout.component';
 import { AccountService } from '../account/account.service';
-import { CartsService } from '../carts/carts.service';
+import { CartService } from '../cart/cart.service';
 import { Cart } from '../carts/cart';
-import { OrdersService } from '../orders/orders.service';
+import { OrdersController } from '../orders/orders.controller';
 import { Order } from '../orders/order';
 import { CartProduct } from '../cart-products/cart-product';
-import { Address } from '../address/address';
 
 let address: Address;
 let user: User;
@@ -28,8 +28,8 @@ let order: Order;
 let component: CheckoutComponent;
 let fixture: ComponentFixture<CheckoutComponent>;
 let accountService: AccountService;
-let cartsService: CartsService;
-let ordersService: OrdersService;
+let cartService: CartService;
+let ordersController: OrdersController;
 
 describe('CreateComponent', () => {
 
@@ -61,12 +61,12 @@ describe('CreateComponent', () => {
           useValue: jasmine.createSpyObj('AccountService', ['user$'])
         },
         {
-          provide: CartsService,
-          useValue: jasmine.createSpyObj('CartsService', ['cart$'])
+          provide: CartService,
+          useValue: jasmine.createSpyObj('CartService', ['cart$'])
         },
         {
-          provide: OrdersService,
-          useValue: jasmine.createSpyObj('OrdersService', { create$: of() })
+          provide: OrdersController,
+          useValue: jasmine.createSpyObj('OrdersController', { create$: of() })
         },
         {
           provide: ActivatedRoute,
@@ -132,9 +132,9 @@ describe('CreateComponent', () => {
     };
     accountService = fixture.debugElement.injector.get(AccountService);
     accountService.user$ = new BehaviorSubject<User>(user);
-    cartsService = fixture.debugElement.injector.get(CartsService);
-    cartsService.cart$ = new BehaviorSubject<Cart>(cart);
-    ordersService = fixture.debugElement.injector.get(OrdersService);
+    cartService = fixture.debugElement.injector.get(CartService);
+    cartService.cart$ = new BehaviorSubject<Cart>(cart);
+    ordersController = fixture.debugElement.injector.get(OrdersController);
     fixture.detectChanges();
   };
 
@@ -148,7 +148,7 @@ describe('CreateComponent', () => {
     });
     setOrder();
     component.checkout();
-    expect(ordersService.create$).toHaveBeenCalledWith(order);
+    expect(ordersController.create$).toHaveBeenCalledWith(order);
   });
 
   it('should call create for all downloads and valid payment', () => {
@@ -161,7 +161,7 @@ describe('CreateComponent', () => {
     });
     setOrder();
     component.checkout();
-    expect(ordersService.create$).toHaveBeenCalledWith(order);
+    expect(ordersController.create$).toHaveBeenCalledWith(order);
   });
 
   it('should call create for valid shipping address and valid payment', () => {
@@ -171,7 +171,7 @@ describe('CreateComponent', () => {
     });
     setOrder();
     component.checkout();
-    expect(ordersService.create$).toHaveBeenCalledWith(order);
+    expect(ordersController.create$).toHaveBeenCalledWith(order);
   });
 
   it('should not call create for empty cart', () => {
@@ -180,7 +180,7 @@ describe('CreateComponent', () => {
       'cartProducts': []
     });
     component.checkout();
-    expect(ordersService.create$).not.toHaveBeenCalled();
+    expect(ordersController.create$).not.toHaveBeenCalled();
   });
 
   it('should not call create for invalid shipping address and valid payment', () => {
@@ -189,7 +189,7 @@ describe('CreateComponent', () => {
       'cartProducts': cartProducts
     });
     component.checkout();
-    expect(ordersService.create$).not.toHaveBeenCalled();
+    expect(ordersController.create$).not.toHaveBeenCalled();
   });
 
   it('should not call create for valid shipping address and invalid payment', () => {
@@ -198,7 +198,7 @@ describe('CreateComponent', () => {
       'cartProducts': cartProducts
     });
     component.checkout();
-    expect(ordersService.create$).not.toHaveBeenCalled();
+    expect(ordersController.create$).not.toHaveBeenCalled();
   });
 
   afterEach(() => {
@@ -210,8 +210,8 @@ describe('CreateComponent', () => {
     cart = undefined as Cart;
     component = undefined;
     accountService = undefined;
-    cartsService = undefined;
-    ordersService = undefined;
+    cartService = undefined;
+    ordersController = undefined;
     order = undefined;
     fixture.destroy();
   });
