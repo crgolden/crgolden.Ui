@@ -12,6 +12,6 @@ export class AccessDeniedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Access Denied');
+    this.titleService.setTitle('crgolden: Access Denied');
   }
 }

@@ -19,7 +19,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Personal Data');
+    this.titleService.setTitle('crgolden: Personal Data');
   }
 
   downloadPersonalData(): void {

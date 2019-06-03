@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ExternalLogins } from '@clarity/oidc-models';
+import { ExternalLogins } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class ExternalLoginsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: External Logins');
+    this.titleService.setTitle('crgolden: External Logins');
     this.model = this.route.snapshot.data['externalLogins'] as ExternalLogins;
     const hasPassword = this.route.snapshot.data['hasPassword'] as boolean;
     if (this.model.currentLogins.length === 0) {

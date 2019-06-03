@@ -10,7 +10,7 @@ import {
   GridDataResult
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { AccountService } from '../../account/account.service';
 import { OrderProductsController } from '../../order-products/order-products.controller';
 import { PaymentsController } from '../../payments/payments.controller';
@@ -51,7 +51,7 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Order Details');
+    this.titleService.setTitle('crgolden: Order Details');
     this.order = this.route.snapshot.data['details'][0];
     this.orderProducts = this.route.snapshot.data['details'][1];
     this.payments = this.route.snapshot.data['details'][2];

@@ -14,7 +14,7 @@ import {
   GridDataResult
 } from '@progress/kendo-angular-grid';
 import { DataSourceRequestState } from '@progress/kendo-data-query';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { AccountService } from '../../account/account.service';
 import { OrdersController } from '../orders.controller';
 import { Order } from '../order';
@@ -69,7 +69,7 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Edit Order');
+    this.titleService.setTitle('crgolden: Edit Order');
     this.order = this.route.snapshot.data['edit'][0];
     this.orderProducts = this.route.snapshot.data['edit'][1];
     if (this.order.shippingAddress != null && this.order.shippingAddress.formatted != null) {

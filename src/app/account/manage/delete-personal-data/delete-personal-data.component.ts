@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { DeletePersonalData } from '@clarity/oidc-models';
+import { DeletePersonalData } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class DeletePersonalDataComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Delete Personal Data');
+    this.titleService.setTitle('crgolden: Delete Personal Data');
     this.requirePassword = this.route.snapshot.data['hasPassword'] as boolean;
     this.manageService.hasPassword.subscribe(
       (hasPassword: boolean) => this.requirePassword = hasPassword);

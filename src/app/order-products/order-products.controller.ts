@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RangedModelController } from '@clarity/core-controllers';
+import { RangedModelController } from '@crgolden/core-controllers';
 import { environment } from '../../environments/environment';
 import { OrderProduct } from './order-product';
 

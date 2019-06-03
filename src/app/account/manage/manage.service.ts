@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ManageController } from '@clarity/oidc-controllers';
-import { ExternalLogins } from '@clarity/oidc-models';
-import { TwoFactorAuthentication } from '@clarity/oidc-models';
-import { EnableAuthenticator } from '@clarity/oidc-models';
+import { ManageController } from '@crgolden/oidc-controllers';
+import { ExternalLogins } from '@crgolden/oidc-models';
+import { TwoFactorAuthentication } from '@crgolden/oidc-models';
+import { EnableAuthenticator } from '@crgolden/oidc-models';
 
 @Injectable()
 export class ManageService extends ManageController {

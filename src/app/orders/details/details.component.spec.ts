@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { DetailsPage } from '../../test/page-models/orders/details-page';
 import { DetailsComponent } from './details.component';
 import { AccountService } from '../../account/account.service';

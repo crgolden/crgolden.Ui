@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ChangePassword } from '@clarity/oidc-models';
+import { ChangePassword } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Change Password');
+    this.titleService.setTitle('crgolden: Change Password');
     const hasPassword = this.route.snapshot.data['hasPassword'] as boolean;
     if (!hasPassword) {
       this.router.navigate(['/account/manage/set-password']);

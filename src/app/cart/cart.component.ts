@@ -39,7 +39,7 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Cart');
+    this.titleService.setTitle('crgolden: Cart');
     this.cartProducts = this.route.snapshot.data['cart'][0];
     this.cartProductsData = this.route.snapshot.data['cart'][1];
   }

@@ -4,7 +4,7 @@ import { Params, ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { ConfirmEmail } from '@clarity/oidc-models';
+import { ConfirmEmail } from '@crgolden/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class ConfirmEmailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Confirm Email');
+    this.titleService.setTitle('crgolden: Confirm Email');
     this.route.queryParamMap.pipe(concatMap(
       (params: Params) => {
         const model: ConfirmEmail = {

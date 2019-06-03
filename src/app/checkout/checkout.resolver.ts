@@ -3,7 +3,7 @@ import { Resolve } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
 import { concatMap, skipWhile, take } from 'rxjs/operators';
 import { User } from 'oidc-client';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { AccountService } from '../account/account.service';
 import { CartProductsService } from '../cart-products/cart-products.service';
 import { AddressController } from '../address/address.controller';

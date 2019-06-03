@@ -1,4 +1,4 @@
-import { Model } from '@clarity/core-models';
+import { Model } from '@crgolden/core-models';
 
 export class Category extends Model {
   id?: string;

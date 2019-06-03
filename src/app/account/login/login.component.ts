@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Login');
+    this.titleService.setTitle('crgolden: Login');
     this.route.queryParamMap.subscribe(params => {
       const returnUrl = params.get('returnUrl');
       if (returnUrl != null) {

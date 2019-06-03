@@ -12,6 +12,6 @@ export class NotFoundComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Not Found');
+    this.titleService.setTitle('crgolden: Not Found');
   }
 }

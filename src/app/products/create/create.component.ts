@@ -26,7 +26,7 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Create Product');
+    this.titleService.setTitle('crgolden: Create Product');
     this.product = new Product();
   }
 

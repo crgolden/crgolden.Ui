@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'oidc-client';
-import { AccountController } from '@clarity/oidc-controllers';
+import { AccountController } from '@crgolden/oidc-controllers';
 import { environment } from '../../environments/environment';
 import { ActionType } from '../app.action-type';
 import { CartService } from '../cart/cart.service';

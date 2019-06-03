@@ -1,4 +1,4 @@
-import { Model } from '@clarity/core-models';
+import { Model } from '@crgolden/core-models';
 import { Order } from '../orders/order';
 import { Product } from '../products/product';
 

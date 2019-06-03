@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { AddressController } from '../../address/address.controller';
 
 @Component({

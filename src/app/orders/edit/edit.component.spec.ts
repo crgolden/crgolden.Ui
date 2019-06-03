@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { RouterLinkDirectiveStub } from '../../test/stubs/router-link-directive-stub';
 import { EditPage } from '../../test/page-models/orders/edit-page';
 import { EditComponent } from './edit.component';

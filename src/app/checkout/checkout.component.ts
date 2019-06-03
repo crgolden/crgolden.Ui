@@ -6,7 +6,7 @@ import { exhaustMap, filter } from 'rxjs/operators';
 import { User } from 'oidc-client';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { PaymentComponent } from './payment/payment.component';
 import { ShippingAddressComponent } from './shipping-address/shipping-address.component';
 import { OrdersController } from '../orders/orders.controller';
@@ -49,7 +49,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Checkout');
+    this.titleService.setTitle('crgolden: Checkout');
     this.shippingAddress = this.route.snapshot.data['checkout'][0] as Address;
     this.cartProducts = this.route.snapshot.data['checkout'][1];
     this.validShippingAddress = this.route.snapshot.data['checkout'][2];

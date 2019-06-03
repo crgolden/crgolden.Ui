@@ -21,7 +21,7 @@ export class Disable2faComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Disable two-factor authentication (2FA)');
+    this.titleService.setTitle('crgolden: Disable two-factor authentication (2FA)');
   }
 
   disable2fa(): void {

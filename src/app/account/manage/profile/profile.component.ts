@@ -3,8 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { User } from 'oidc-client';
 import { ToastrService } from 'ngx-toastr';
-import { Address } from '@clarity/core-claims';
-import { Profile } from '@clarity/oidc-models';
+import { Address } from '@crgolden/core-claims';
+import { Profile } from '@crgolden/oidc-models';
 import { AccountService } from '../../account.service';
 import { ManageService } from '../manage.service';
 
@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Profile');
+    this.titleService.setTitle('crgolden: Profile');
     this.accountService.user$.subscribe((user: User) => this.setProfile(user));
     const message = window.sessionStorage.getItem('success');
     if (message != null) {

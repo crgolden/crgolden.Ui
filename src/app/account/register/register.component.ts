@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Address } from '@clarity/core-claims';
-import { Register } from '@clarity/oidc-models';
+import { Address } from '@crgolden/core-claims';
+import { Register } from '@crgolden/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Register');
+    this.titleService.setTitle('crgolden: Register');
   }
 
   register(form: NgForm) {

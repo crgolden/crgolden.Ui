@@ -23,7 +23,7 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Payment Details');
+    this.titleService.setTitle('crgolden: Payment Details');
     this.payment = this.route.snapshot.data['payment'];
     const message = window.sessionStorage.getItem('success');
     if (message != null) {

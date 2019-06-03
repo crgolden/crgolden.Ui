@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ValidationController } from '@clarity/core-controllers';
+import { ValidationController } from '@crgolden/core-controllers';
 import { environment } from '../../environments/environment';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 
 @Injectable({
   providedIn: 'root'

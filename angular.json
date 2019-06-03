@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Clarity-Ui": {
+    "crgolden-Ui": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/Clarity-Ui",
+            "outputPath": "dist/crgolden-Ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -72,21 +72,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Clarity-Ui:build",
+            "browserTarget": "crgolden-Ui:build",
             "ssl": true,
             "sslKey": "ssl/server.key",
             "sslCert": "ssl/server.crt"
           },
           "configurations": {
             "production": {
-              "browserTarget": "Clarity-Ui:build:production"
+              "browserTarget": "crgolden-Ui:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Clarity-Ui:build"
+            "browserTarget": "crgolden-Ui:build"
           }
         },
         "test": {
@@ -120,7 +120,7 @@
         }
       }
     },
-    "Clarity-Ui-e2e": {
+    "crgolden-Ui-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -129,11 +129,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Clarity-Ui:serve"
+            "devServerTarget": "crgolden-Ui:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "Clarity-Ui:serve:production"
+              "devServerTarget": "crgolden-Ui:serve:production"
             }
           }
         },
@@ -149,5 +149,5 @@
       }
     }
   },
-  "defaultProject": "Clarity-Ui"
+  "defaultProject": "crgolden-Ui"
 }

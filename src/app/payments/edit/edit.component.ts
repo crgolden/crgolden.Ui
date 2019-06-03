@@ -27,7 +27,7 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Edit Payment');
+    this.titleService.setTitle('crgolden: Edit Payment');
     this.payment = this.route.snapshot.data['payment'] as Payment;
   }
 

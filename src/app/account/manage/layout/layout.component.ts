@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, Event, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ExternalLogins } from '@clarity/oidc-models';
+import { ExternalLogins } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Account');
+    this.titleService.setTitle('crgolden: Account');
     this.hasPassword = this.route.snapshot.data['hasPassword'] as boolean;
     this.externalLogins = this.route.snapshot.data['externalLogins'] as ExternalLogins;
     this.manageService.hasPassword.subscribe(

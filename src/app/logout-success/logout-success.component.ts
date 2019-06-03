@@ -16,7 +16,7 @@ export class LogoutSuccessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Logout');
+    this.titleService.setTitle('crgolden: Logout');
     this.accountService.signoutRedirectCallback$()
       .then(() => this.accountService.setUser(ActionType.Logout));
   }

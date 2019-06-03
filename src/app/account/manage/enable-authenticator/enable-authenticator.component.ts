@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { EnableAuthenticator } from '@clarity/oidc-models';
+import { EnableAuthenticator } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 
@@ -26,7 +26,7 @@ export class EnableAuthenticatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Configure authenticator app');
+    this.titleService.setTitle('crgolden: Configure authenticator app');
     this.model = this.route.snapshot.data['enableAuthenticator'];
     const message = window.sessionStorage.getItem('success');
     if (message != null) {

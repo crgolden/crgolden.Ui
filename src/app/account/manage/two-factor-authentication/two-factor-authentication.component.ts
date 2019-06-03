@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { TwoFactorAuthentication } from '@clarity/oidc-models';
+import { TwoFactorAuthentication } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class TwoFactorAuthenticationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Two-factor authentication (2FA)');
+    this.titleService.setTitle('crgolden: Two-factor authentication (2FA)');
     this.model = this.route.snapshot.data['twoFactorAuthentication'];
     const message = window.sessionStorage.getItem('success');
     if (message != null) {

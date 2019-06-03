@@ -12,6 +12,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Home');
+    this.titleService.setTitle('crgolden: Home');
   }
 }

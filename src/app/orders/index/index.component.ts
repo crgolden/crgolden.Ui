@@ -33,7 +33,7 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Orders');
+    this.titleService.setTitle('crgolden: Orders');
     this.orders = this.route.snapshot.data['orders'] as GridDataResult;
   }
 

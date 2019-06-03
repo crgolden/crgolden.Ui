@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ForgotPassword } from '@clarity/oidc-models';
+import { ForgotPassword } from '@crgolden/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Forgot Password');
+    this.titleService.setTitle('crgolden: Forgot Password');
   }
 
   forgotPassword(form: NgForm): void {

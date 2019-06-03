@@ -19,7 +19,7 @@ export class ResetAuthenticatorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Reset authenticator key');
+    this.titleService.setTitle('crgolden: Reset authenticator key');
   }
 
   resetAuthenticator(): void {

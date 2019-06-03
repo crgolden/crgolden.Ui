@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ToastrService } from 'ngx-toastr';
-import { GenerateRecoveryCodes } from '@clarity/oidc-models';
+import { GenerateRecoveryCodes } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class GenerateRecoveryCodesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Generate two-factor authentication (2FA) recovery codes');
+    this.titleService.setTitle('crgolden: Generate two-factor authentication (2FA) recovery codes');
   }
 
   generateRecoveryCodes(): void {

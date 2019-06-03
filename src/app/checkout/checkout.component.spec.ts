@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Address } from '@clarity/core-claims';
+import { Address } from '@crgolden/core-claims';
 import { CheckoutComponent } from './checkout.component';
 import { AccountService } from '../account/account.service';
 import { CartService } from '../cart/cart.service';

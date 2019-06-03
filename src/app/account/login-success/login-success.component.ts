@@ -16,7 +16,7 @@ export class LoginSuccessComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Login');
+    this.titleService.setTitle('crgolden: Login');
     this.accountService.signinRedirectCallback$()
       .then(() => this.accountService.setUser(ActionType.Login));
   }

@@ -8,7 +8,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { concatMap, map, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { ExternalLogins } from '@clarity/oidc-models';
+import { ExternalLogins } from '@crgolden/oidc-models';
 import { ManageService } from '../manage.service';
 
 @Injectable()

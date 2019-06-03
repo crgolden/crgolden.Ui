@@ -49,7 +49,7 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Edit Product');
+    this.titleService.setTitle('crgolden: Edit Product');
     this.productFiles = this.route.snapshot.data['edit'][0];
     this.product = this.route.snapshot.data['edit'][1];
     this.files = this.productFiles.data.map(productFile => toFile(productFile));

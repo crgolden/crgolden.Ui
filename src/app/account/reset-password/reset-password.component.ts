@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { NgForm } from '@angular/forms';
 import { Params, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ResetPassword } from '@clarity/oidc-models';
+import { ResetPassword } from '@crgolden/oidc-models';
 import { AccountService } from '../account.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Clarity: Reset Password');
+    this.titleService.setTitle('crgolden: Reset Password');
     this.route.queryParamMap.subscribe(
       (params: Params) => this.model.code = params['code']);
   }
