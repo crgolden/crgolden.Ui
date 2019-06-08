@@ -37,14 +37,14 @@ describe('IndexComponent', () => {
     order1 = {
       id: '1',
       userId: '1',
-      number: 1,
+      number: '1',
       total: 1,
       created: new Date()
     };
     order2 = {
       id: '2',
       userId: '1',
-      number: 2,
+      number: '2',
       total: 1,
       created: new Date()
     };

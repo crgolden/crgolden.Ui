@@ -5,7 +5,7 @@ import { Product } from '../products/product';
 export class OrderProduct extends Model {
   quantity: number;
   orderId: string;
-  orderNumber: number;
+  orderNumber: string;
   orderTotal: number;
   productId: string;
   productName: string;

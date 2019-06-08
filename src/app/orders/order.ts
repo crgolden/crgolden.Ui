@@ -3,7 +3,7 @@ import { Address } from '@crgolden/core-claims';
 
 export class Order extends Model {
   id?: string;
-  number?: number;
+  number?: string;
   userId?: string;
   shippingAddress?: Address;
   shipping?: number;

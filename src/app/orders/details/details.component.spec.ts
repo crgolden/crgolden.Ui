@@ -42,7 +42,7 @@ describe('DetailsComponent', () => {
     order = {
       id: '1',
       userId: '1',
-      number: 1,
+      number: '1',
       total: 1,
       created: new Date(),
       shippingAddress: shippingAddress
