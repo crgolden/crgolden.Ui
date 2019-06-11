@@ -51,7 +51,9 @@ export class EditComponent implements OnInit {
   orderProductsPageable: PagerSettings;
   orderProductsSortable: SortSettings;
 
-  @ViewChild(GridComponent)
+  @ViewChild(GridComponent, {
+    static: false
+  })
   private grid: GridComponent;
   private editedRowIndex: number;
 
