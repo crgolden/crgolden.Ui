@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Params, ActivatedRoute, Router } from '@angular/router';
+import { Params, ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -27,10 +27,10 @@ export class ConfirmEmailComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('crgolden: Confirm Email');
     this.route.queryParamMap.pipe(concatMap(
-      (params: Params) => {
+      (params: ParamMap) => {
         const model: ConfirmEmail = {
-          code: params['code'],
-          userId: params['userId']
+          code: params.get('code'),
+          userId: params.get('userId')
         };
         if (model.userId != null && model.code != null) {
           return this.accountService.confirmEmail$(model);
